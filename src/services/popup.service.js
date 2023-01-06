@@ -3,16 +3,16 @@ const { Popup } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
- * Create a user
- * @param {Object} userBody
- * @returns {Promise<User>}
+ * Create a popup
+ * @param {Object} popupBody
+ * @returns {Promise<Popup>}
  */
 const createPopup = async (popupBody) => {
   return Popup.create(popupBody);
 };
 
 /**
- * Query for users
+ * Query for popups
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
@@ -26,19 +26,19 @@ const queryPopups = async () => {
 };
 
 /**
- * Get user by id
+ * Get popup by id
  * @param {ObjectId} id
- * @returns {Promise<User>}
+ * @returns {Promise<Popup>}
  */
 const getPopupById = async (id) => {
   return Popup.findById(id);
 };
 
 /**
- * Update user by id
- * @param {ObjectId} userId
+ * Update popup by id
+ * @param {ObjectId} popupId
  * @param {Object} updateBody
- * @returns {Promise<User>}
+ * @returns {Promise<Popup>}
  */
 const updatePopupById = async (popupId, updateBody) => {
   const popup = await getPopupById(popupId);
@@ -51,14 +51,14 @@ const updatePopupById = async (popupId, updateBody) => {
 };
 
 /**
- * Delete user by id
- * @param {ObjectId} userId
- * @returns {Promise<User>}
+ * Delete popup by id
+ * @param {ObjectId} popupId
+ * @returns {Promise<Popup>}
  */
 const deletePopupById = async (popupId) => {
   const popup = await getPopupById(popupId);
   if (!popup) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Popup not found');
   }
   await popup.remove();
   return popup;
