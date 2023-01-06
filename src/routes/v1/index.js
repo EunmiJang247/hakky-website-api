@@ -2,6 +2,7 @@ const express = require('express');
 const popupRouter = require('./popup.route');
 const counselorRouter = require('./counselor.route');
 const noticeRouter = require('./notice.route');
+const faqRouter = require('./faq.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 
@@ -19,6 +20,10 @@ const defaultRoutes = [
   {
     path: '/notice',
     route: noticeRouter,
+  },
+  {
+    path: '/faq',
+    route: faqRouter,
   },
 ];
 
