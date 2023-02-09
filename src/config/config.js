@@ -23,6 +23,11 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+
+    S3_ACCESS_KEY_ID: Joi.string().required().description('S3 access key id'),
+    S3_SECRET_ACCESS_KEY: Joi.string().required().description('S3 secret access key'),
+    S3_REGION: Joi.string().required().description('S3 region'),
+    S3_BUCKET: Joi.string().required().description('S3 bucket'),
   })
   .unknown();
 
@@ -60,5 +65,11 @@ module.exports = {
       },
     },
     from: envVars.EMAIL_FROM,
+  },
+  s3: {
+    accessKeyId: envVars.S3_ACCESS_KEY_ID,
+    secretAccessKey: envVars.S3_SECRET_ACCESS_KEY,
+    region: envVars.S3_REGION,
+    bucket: envVars.S3_BUCKET,
   },
 };

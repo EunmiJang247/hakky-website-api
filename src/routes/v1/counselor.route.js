@@ -13,7 +13,7 @@ router
 
 router
   .route('/:counselorId')
-  .get(auth('manageUsers'), validate(counselorValidation.getCounselor), counselorController.getCounselor)
+  .get(validate(counselorValidation.getCounselor), counselorController.getCounselor)
   .patch(auth('manageUsers'), validate(counselorValidation.updateCounselor), counselorController.updateCounselor)
   .delete(auth('manageUsers'), validate(counselorValidation.deleteCounselor), counselorController.deleteCounselor);
 

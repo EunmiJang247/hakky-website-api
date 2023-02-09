@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Counselor } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { preSignS3Object } = require('../utils/upload');
 
 /**
  * Create a counselor

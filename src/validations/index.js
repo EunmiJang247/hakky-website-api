@@ -5,3 +5,4 @@ module.exports.counselorValidation = require('./counselor.validation');
 module.exports.noticeValidation = require('./notice.validation');
 module.exports.faqValidation = require('./faq.validation');
 module.exports.contactValidation = require('./contact.validation');
+module.exports.reviewValidation = require('./review.validation');

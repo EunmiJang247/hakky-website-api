@@ -13,7 +13,7 @@ router
 
 router
   .route('/:noticeId')
-  .get(auth('manageUsers'), validate(noticeValidation.getNotice), noticeController.getNotice)
+  .get(validate(noticeValidation.getNotice), noticeController.getNotice)
   .patch(auth('manageUsers'), validate(noticeValidation.updateNotice), noticeController.updateNotice)
   .delete(auth('manageUsers'), validate(noticeValidation.deleteNotice), noticeController.deleteNotice);
 

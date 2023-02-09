@@ -5,3 +5,4 @@ module.exports.counselorController = require('./counselor.controller');
 module.exports.noticeController = require('./notice.controller');
 module.exports.faqController = require('./faq.controller');
 module.exports.contactController = require('./contact.controller');
+module.exports.fileController = require('./file.controller');

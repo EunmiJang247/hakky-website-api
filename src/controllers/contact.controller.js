@@ -16,7 +16,7 @@ const getContacts = catchAsync(async (req, res) => {
 });
 
 const getContact = catchAsync(async (req, res) => {
-  const user = await contactService.getUserById(req.params.userId);
+  const user = await contactService.getContactById(req.params.contactId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Contact not found');
   }
@@ -24,12 +24,12 @@ const getContact = catchAsync(async (req, res) => {
 });
 
 const updateContact = catchAsync(async (req, res) => {
-  const user = await contactService.updateContactById(req.params.userId, req.body);
+  const user = await contactService.updateContactById(req.params.contactId, req.body);
   res.send(user);
 });
 
 const deleteContact = catchAsync(async (req, res) => {
-  await contactService.deleteContactById(req.params.userId);
+  await contactService.deleteContactById(req.params.contactId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

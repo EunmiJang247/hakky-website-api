@@ -16,7 +16,7 @@ const getFaqs = catchAsync(async (req, res) => {
 });
 
 const getFaq = catchAsync(async (req, res) => {
-  const user = await faqService.getUserById(req.params.userId);
+  const user = await faqService.getFaqById(req.params.faqId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Faq not found');
   }
@@ -24,12 +24,12 @@ const getFaq = catchAsync(async (req, res) => {
 });
 
 const updateFaq = catchAsync(async (req, res) => {
-  const user = await faqService.updateFaqById(req.params.userId, req.body);
+  const user = await faqService.updateFaqById(req.params.faqId, req.body);
   res.send(user);
 });
 
 const deleteFaq = catchAsync(async (req, res) => {
-  await faqService.deleteFaqById(req.params.userId);
+  await faqService.deleteFaqById(req.params.faqId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

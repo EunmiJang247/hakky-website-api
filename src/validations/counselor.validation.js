@@ -5,7 +5,7 @@ const createCounselor = {
   body: Joi.object().keys({
     name: Joi.string().required(),
     score: Joi.string().required(),
-    profile: Joi.string().required().uri(),
+    image: Joi.string().required(),
     description: Joi.string().required(),
   }),
 };
@@ -24,7 +24,7 @@ const updateCounselor = {
     .keys({
       name: Joi.string().required(),
       score: Joi.string().required(),
-      image: Joi.string().required().uri(),
+      image: Joi.string().required(),
       description: Joi.string().required(),
     })
     .min(1),

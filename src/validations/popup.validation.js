@@ -4,7 +4,7 @@ const { objectId } = require('./custom.validation');
 const createPopup = {
   body: Joi.object().keys({
     title: Joi.string().required(),
-    image: Joi.string().required().uri(),
+    image: Joi.string().required(),
     description: Joi.string().required(),
   }),
 };
@@ -22,7 +22,7 @@ const updatePopup = {
   body: Joi.object()
     .keys({
       title: Joi.string().required(),
-      image: Joi.string().required().uri(),
+      image: Joi.string().required(),
       description: Joi.string().required(),
     })
     .min(1),

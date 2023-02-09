@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
-const counselorSchema = mongoose.Schema(
+const reviewSchema = mongoose.Schema(
   {
-    name: {
+    reviewer: {
+      type: String,
+      required: true,
+    },
+    user: {
       type: String,
       required: true,
     },
@@ -11,11 +15,11 @@ const counselorSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    description: {
+    title: {
       type: String,
       required: true,
     },
-    image: {
+    description: {
       type: String,
       required: true,
     },
@@ -26,12 +30,12 @@ const counselorSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-counselorSchema.plugin(toJSON);
-counselorSchema.plugin(paginate);
+reviewSchema.plugin(toJSON);
+reviewSchema.plugin(paginate);
 
 /**
  * @typedef Token
  */
-const Counselor = mongoose.model('Counselor', counselorSchema);
+const Review = mongoose.model('Review', reviewSchema);
 
-module.exports = Counselor;
+module.exports = Review;

@@ -16,7 +16,7 @@ const getNotices = catchAsync(async (req, res) => {
 });
 
 const getNotice = catchAsync(async (req, res) => {
-  const user = await noticeService.getUserById(req.params.userId);
+  const user = await noticeService.getNoticeById(req.params.noticeId);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
@@ -24,12 +24,12 @@ const getNotice = catchAsync(async (req, res) => {
 });
 
 const updateNotice = catchAsync(async (req, res) => {
-  const user = await noticeService.updateNoticeById(req.params.userId, req.body);
+  const user = await noticeService.updateNoticeById(req.params.noticeId, req.body);
   res.send(user);
 });
 
 const deleteNotice = catchAsync(async (req, res) => {
-  await noticeService.deleteNoticeById(req.params.userId);
+  await noticeService.deleteNoticeById(req.params.noticeId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
