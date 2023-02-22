@@ -6,6 +6,7 @@ const createPopup = {
     title: Joi.string().required(),
     image: Joi.string().required(),
     description: Joi.string().required(),
+    link: Joi.string().required(),
   }),
 };
 
@@ -24,6 +25,7 @@ const updatePopup = {
       title: Joi.string().required(),
       image: Joi.string().required(),
       description: Joi.string().required(),
+      link: Joi.string().required(),
     })
     .min(1),
 };
