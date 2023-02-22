@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { popupService } = require('../services');
-const {preSignS3Object} = require("../utils/upload");
+const { preSignS3Object } = require('../utils/upload');
 
 const createPopup = catchAsync(async (req, res) => {
   const user = await popupService.createPopup(req.body);
@@ -11,7 +11,18 @@ const createPopup = catchAsync(async (req, res) => {
 
 const getPopups = catchAsync(async (req, res) => {
   const result = await popupService.queryPopups();
-  res.send(result);
+  res.send(
+    result.map((r) => {
+      return {
+        ...r.toObject(),
+        id: r.id,
+        image: {
+          tempUrl: preSignS3Object(r.image),
+          key: r.image,
+        },
+      };
+    })
+  );
 });
 
 const getPopup = catchAsync(async (req, res) => {
