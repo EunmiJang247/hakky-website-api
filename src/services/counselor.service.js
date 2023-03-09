@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Counselor } = require('../models');
+const { Counselor, Review } = require('../models');
 const ApiError = require('../utils/ApiError');
 const { preSignS3Object } = require('../utils/upload');
 
@@ -32,7 +32,14 @@ const queryCounselors = async (filter, options) => {
  * @returns {Promise<Counselor>}
  */
 const getCounselorById = async (id) => {
-  return Counselor.findById(id);
+  const detailData = await Counselor.findById(id);
+  const prevData = await Counselor.findOne({ createdAt: { $lt: detailData.createdAt } }).sort({ createdAt: -1 });
+  const nextData = await Counselor.findOne({ createdAt: { $gt: detailData.createdAt } }).sort({ createdAt: 1 });
+  return {
+    ...detailData.toObject(),
+    next: nextData && nextData._id,
+    prev: prevData && prevData._id,
+  };
 };
 
 /**

@@ -36,7 +36,7 @@ const getCounselor = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Counselor not found');
   }
   res.send({
-    ...counselor.toObject(),
+    ...counselor,
     id: counselor.id,
     image: {
       tempUrl: preSignS3Object(counselor.image),

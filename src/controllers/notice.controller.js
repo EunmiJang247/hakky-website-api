@@ -11,7 +11,14 @@ const createNotice = catchAsync(async (req, res) => {
 
 const getNotices = catchAsync(async (req, res) => {
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await noticeService.queryNotices({}, options);
+  const result = await noticeService.queryNotices(
+    {
+      title: {
+        $regex: req.query.keyword,
+      },
+    },
+    options
+  );
   res.send(result);
 });
 

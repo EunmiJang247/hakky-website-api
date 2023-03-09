@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Review } = require('../models');
+const { Review, Notice } = require('../models');
 const ApiError = require('../utils/ApiError');
 /**
  * Create a review
@@ -30,7 +30,14 @@ const queryReviews = async (filter, options) => {
  * @returns {Promise<Review>}
  */
 const getReviewById = async (id) => {
-  return Review.findById(id);
+  const detailData = await Review.findById(id);
+  const prevData = await Review.findOne({ createdAt: { $lt: detailData.createdAt } }).sort({ createdAt: -1 });
+  const nextData = await Review.findOne({ createdAt: { $gt: detailData.createdAt } }).sort({ createdAt: 1 });
+  return {
+    ...detailData.toObject(),
+    next: nextData && nextData._id,
+    prev: prevData && prevData._id,
+  };
 };
 
 /**

@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Notice } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { noticeService } = require('./index');
 
 /**
  * Create a notice
@@ -31,7 +32,14 @@ const queryNotices = async (filter, options) => {
  * @returns {Promise<Notice>}
  */
 const getNoticeById = async (id) => {
-  return Notice.findById(id);
+  const detailData = await Notice.findById(id);
+  const prevData = await Notice.findOne({ createdAt: { $lt: detailData.createdAt } }).sort({ createdAt: -1 });
+  const nextData = await Notice.findOne({ createdAt: { $gt: detailData.createdAt } }).sort({ createdAt: 1 });
+  return {
+    ...detailData.toObject(),
+    next: nextData && nextData._id,
+    prev: prevData && prevData._id,
+  };
 };
 
 /**
