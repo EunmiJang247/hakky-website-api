@@ -46,7 +46,7 @@ const updatePopup = catchAsync(async (req, res) => {
 });
 
 const deletePopup = catchAsync(async (req, res) => {
-  await popupService.deletePopupById(req.params.userId);
+  await popupService.deletePopupById(req.params.popupId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
