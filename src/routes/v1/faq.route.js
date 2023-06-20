@@ -6,10 +6,7 @@ const faqController = require('../../controllers/faq.controller');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(validate(faqValidation.createFaq), faqController.createFaq)
-  .get(faqController.getFaqs);
+router.route('/').post(validate(faqValidation.createFaq), faqController.createFaq).get(faqController.getFaqs);
 
 router
   .route('/:faqId')

@@ -3,7 +3,6 @@ const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { reviewService } = require('../services');
 const pick = require('../utils/pick');
-const { preSignS3Object } = require('../utils/upload');
 
 const createReview = catchAsync(async (req, res) => {
   const user = await reviewService.createReview(req.body);

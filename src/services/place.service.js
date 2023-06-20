@@ -1,7 +1,6 @@
 const httpStatus = require('http-status');
 const { Notice } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { noticeService } = require('./index');
 
 /**
  * Create a notice
