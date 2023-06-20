@@ -1,5 +1,6 @@
 const express = require('express');
 const popupRouter = require('./popup.route');
+const placeRouter = require('./place.route');
 const counselorRouter = require('./counselor.route');
 const noticeRouter = require('./notice.route');
 const faqRouter = require('./faq.route');
@@ -13,6 +14,10 @@ const config = require('../../config/config');
 const router = express.Router();
 
 const defaultRoutes = [
+  {
+    path: '/place',
+    route: placeRouter,
+  },
   {
     path: '/popup',
     route: popupRouter,

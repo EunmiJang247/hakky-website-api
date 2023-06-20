@@ -211,7 +211,7 @@ module.exports = router;
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
- *     responses:
+ *     responses:A
  *       "200":
  *         description: OK
  *         content:
