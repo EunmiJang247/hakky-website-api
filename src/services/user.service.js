@@ -8,7 +8,16 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  return User.create(userBody);
+  // todo auth code check
+  const user = await User.create({
+    name: userBody.name,
+    phoneNumber: userBody.phoneNumber,
+    password: userBody.password,
+    role: 'user',
+    termsOfService: true,
+    privacyPolicy: true,
+  });
+  return user;
 };
 
 /**

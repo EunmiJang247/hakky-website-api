@@ -20,7 +20,7 @@ const getNotices = {
     limit: Joi.number().required(),
     skip: Joi.number().required(),
     important: Joi.boolean().required(),
-    keyword: Joi.string().allow(),
+    keyword: Joi.string().allow(''),
   }),
 };
 
