@@ -11,7 +11,7 @@ const register = catchAsync(async (req, res) => {
 
 const registerNaver = catchAsync(async (req, res) => {
   const naverInfo = await naverProfile(req.body.accessToken);
-  const user = await userService.createUser(naverInfo);
+  const user = await userService.createUserNaver(naverInfo);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });

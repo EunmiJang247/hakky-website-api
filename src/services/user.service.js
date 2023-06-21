@@ -23,8 +23,8 @@ const createUser = async (userBody) => {
 const createUserNaver = async (userBody) => {
   // todo auth code check
   const user = await User.create({
-    name: userBody.name,
-    phoneNumber: userBody.mobile,
+    name: userBody.response.name,
+    phoneNumber: userBody.response.mobile,
     role: 'user',
     termsOfService: true,
     privacyPolicy: true,
