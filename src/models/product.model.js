@@ -5,8 +5,8 @@ const optionsSchema = mongoose.Schema({
   name: {
     type: String,
   },
-  size: {
-    type: String,
+  time: {
+    type: Number,
   },
   detail: {
     type: String,

@@ -6,12 +6,12 @@ const faqController = require('../../controllers/faq.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(faqValidation.createFaq), faqController.createFaq).get(faqController.getFaqs);
-
+router.route('/').post(validate(faqValidation.createFaq), faqController.createFaq);
+router.route('/').get(faqController.getFaqs);
 router
   .route('/:faqId')
-  .get(auth('manageUsers'), validate(faqValidation.getFaq), faqController.getFaq)
-  .patch(auth('manageUsers'), validate(faqValidation.updateFaq), faqController.updateFaq)
-  .delete(auth('manageUsers'), validate(faqValidation.deleteFaq), faqController.deleteFaq);
+  .get(auth('ADMIN'), validate(faqValidation.getFaq), faqController.getFaq)
+  .patch(auth('ADMIN'), validate(faqValidation.updateFaq), faqController.updateFaq)
+  .delete(auth('ADMIN'), validate(faqValidation.deleteFaq), faqController.deleteFaq);
 
 module.exports = router;

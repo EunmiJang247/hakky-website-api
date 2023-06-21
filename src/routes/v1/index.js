@@ -1,14 +1,10 @@
 const express = require('express');
-const popupRouter = require('./popup.route');
 const placeRouter = require('./place.route');
-const counselorRouter = require('./counselor.route');
 const noticeRouter = require('./notice.route');
 const faqRouter = require('./faq.route');
-const contactRouter = require('./contact.route');
 const uploadRouter = require('./upload.route');
 const docsRoute = require('./docs.route');
 const authRouter = require('./auth.route');
-const reviewRouter = require('./review.route');
 const config = require('../../config/config');
 
 const router = express.Router();
@@ -19,28 +15,12 @@ const defaultRoutes = [
     route: placeRouter,
   },
   {
-    path: '/popup',
-    route: popupRouter,
-  },
-  {
-    path: '/counselor',
-    route: counselorRouter,
-  },
-  {
     path: '/notice',
     route: noticeRouter,
   },
   {
     path: '/faq',
     route: faqRouter,
-  },
-  {
-    path: '/contact',
-    route: contactRouter,
-  },
-  {
-    path: '/review',
-    route: reviewRouter,
   },
   {
     path: '/file',

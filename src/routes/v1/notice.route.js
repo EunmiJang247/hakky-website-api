@@ -8,13 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(validate(noticeValidation.createNotice), noticeController.createNotice)
+  .post(auth('ADMIN'), validate(noticeValidation.createNotice), noticeController.createNotice)
   .get(noticeController.getNotices);
 
 router
   .route('/:noticeId')
   .get(validate(noticeValidation.getNotice), noticeController.getNotice)
-  .patch(auth('manageUsers'), validate(noticeValidation.updateNotice), noticeController.updateNotice)
-  .delete(auth('manageUsers'), validate(noticeValidation.deleteNotice), noticeController.deleteNotice);
+  .patch(auth('ADMIN'), validate(noticeValidation.updateNotice), noticeController.updateNotice)
+  .delete(auth('ADMIN'), validate(noticeValidation.deleteNotice), noticeController.deleteNotice);
 
 module.exports = router;
