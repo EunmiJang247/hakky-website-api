@@ -11,6 +11,10 @@ const noticeSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    isImportant: {
+      type: Boolean,
+      required: true,
+    },
   },
   {
     timestamps: true,

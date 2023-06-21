@@ -9,7 +9,9 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('ADMIN'), validate(noticeValidation.createNotice), noticeController.createNotice)
-  .get(noticeController.getNotices);
+  .get(validate(noticeValidation.getNotices), noticeController.getNotices);
+
+router.get('/important', noticeController.getImportantNotices);
 
 router
   .route('/:noticeId')

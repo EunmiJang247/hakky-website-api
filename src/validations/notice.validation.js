@@ -5,12 +5,21 @@ const createNotice = {
   body: Joi.object().keys({
     title: Joi.string().required(),
     content: Joi.string().required(),
+    isImportant: Joi.boolean().required(),
   }),
 };
 
 const getNotice = {
   params: Joi.object().keys({
     noticeId: Joi.string().custom(objectId),
+  }),
+};
+
+const getNotices = {
+  query: Joi.object().keys({
+    limit: Joi.number().required(),
+    skip: Joi.number().required(),
+    important: Joi.boolean().required(),
   }),
 };
 
@@ -35,6 +44,7 @@ const deleteNotice = {
 module.exports = {
   createNotice,
   getNotice,
+  getNotices,
   updateNotice,
   deleteNotice,
 };

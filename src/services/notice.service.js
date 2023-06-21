@@ -11,17 +11,24 @@ const createNotice = async (noticeBody) => {
   return Notice.create(noticeBody);
 };
 
-/**
- * Query for notices
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
- * @returns {Promise<QueryResult>}
- */
-const queryNotices = async (filter, options) => {
-  const notices = await Notice.paginate(filter, options);
+const queryNotices = async ({ limit, skip, important }) => {
+  let notices;
+  let count;
+  if (important) {
+    notices = await Notice.find().limit(limit).skip(skip);
+    count = await Notice.countDocuments({ important: false });
+  } else {
+    notices = await Notice.find({ important: false }).limit(limit).skip(skip);
+    count = await Notice.countDocuments({ important: false });
+  }
+  return {
+    result: notices,
+    count,
+  };
+};
+
+const queryImportantNotices = async () => {
+  const notices = await Notice.find({ isImportant: true });
   return notices;
 };
 
@@ -74,6 +81,7 @@ const deleteNoticeById = async (noticeId) => {
 module.exports = {
   createNotice,
   queryNotices,
+  queryImportantNotices,
   getNoticeById,
   updateNoticeById,
   deleteNoticeById,

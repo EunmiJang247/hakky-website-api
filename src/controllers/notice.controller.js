@@ -2,7 +2,6 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { noticeService } = require('../services');
-const pick = require('../utils/pick');
 
 const createNotice = catchAsync(async (req, res) => {
   const user = await noticeService.createNotice(req.body);
@@ -10,16 +9,21 @@ const createNotice = catchAsync(async (req, res) => {
 });
 
 const getNotices = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await noticeService.queryNotices(
-    {
-      title: {
-        $regex: req.query.keyword,
-      },
-    },
-    options
-  );
-  res.send(result);
+  const result = await noticeService.queryNotices({
+    limit: req.query.limit,
+    skip: req.query.skip,
+    important: req.query.important,
+  });
+
+  res.send({
+    result: result.result,
+    totalCount: result.count,
+  });
+});
+
+const getImportantNotices = catchAsync(async (req, res) => {
+  const result = await noticeService.queryImportantNotices();
+  res.send({ result });
 });
 
 const getNotice = catchAsync(async (req, res) => {
@@ -43,6 +47,7 @@ const deleteNotice = catchAsync(async (req, res) => {
 module.exports = {
   createNotice,
   getNotices,
+  getImportantNotices,
   getNotice,
   updateNotice,
   deleteNotice,
