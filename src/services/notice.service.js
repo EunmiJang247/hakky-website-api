@@ -16,20 +16,24 @@ const queryNotices = async ({ limit, skip, important, keyword }) => {
   let count;
   if (keyword) {
     if (important) {
-      notices = await Notice.find().limit(limit).skip(skip);
-      count = await Notice.countDocuments();
+      notices = await Notice.find({ name: { $regex: keyword } })
+        .limit(limit)
+        .skip(skip);
+      count = await Notice.countDocuments({ name: { $regex: keyword } });
     } else {
-      notices = await Notice.find({ important: false, $regex: keyword }).limit(limit).skip(skip);
-      count = await Notice.countDocuments({ important: false, $regex: keyword });
+      notices = await Notice.find({ important: false, name: { $regex: keyword } })
+        .limit(limit)
+        .skip(skip);
+      count = await Notice.countDocuments({ important: false, name: { $regex: keyword } });
     }
   } else {
     // eslint-disable-next-line no-lonely-if
     if (important) {
-      notices = await Notice.find({ $regex: keyword }).limit(limit).skip(skip);
-      count = await Notice.countDocuments({ $regex: keyword });
+      notices = await Notice.find().limit(limit).skip(skip);
+      count = await Notice.countDocuments();
     } else {
-      notices = await Notice.find({ important: false, $regex: keyword }).limit(limit).skip(skip);
-      count = await Notice.countDocuments({ important: false, $regex: keyword });
+      notices = await Notice.find({ important: false }).limit(limit).skip(skip);
+      count = await Notice.countDocuments({ important: false });
     }
   }
 
