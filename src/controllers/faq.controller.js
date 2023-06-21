@@ -2,7 +2,6 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { faqService } = require('../services');
-const pick = require('../utils/pick');
 
 const createFaq = catchAsync(async (req, res) => {
   const user = await faqService.createFaq(req.body);
@@ -10,8 +9,7 @@ const createFaq = catchAsync(async (req, res) => {
 });
 
 const getFaqs = catchAsync(async (req, res) => {
-  const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await faqService.queryFaqs({}, options);
+  const result = await faqService.queryFaqs();
   res.send(result);
 });
 

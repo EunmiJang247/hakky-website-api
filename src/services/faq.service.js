@@ -15,13 +15,10 @@ const createFaq = async (faqBody) => {
  * Query for faqs
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
  * @returns {Promise<QueryResult>}
  */
-const queryFaqs = async (filter, options) => {
-  const faqs = await Faq.paginate(filter, options);
+const queryFaqs = async () => {
+  const faqs = await Faq.find();
   return faqs;
 };
 

@@ -4,8 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const { noticeService } = require('../services');
 
 const createNotice = catchAsync(async (req, res) => {
-  const user = await noticeService.createNotice(req.body);
-  res.status(httpStatus.CREATED).send(user);
+  const notice = await noticeService.createNotice(req.body);
+  res.status(httpStatus.CREATED).send(notice);
 });
 
 const getNotices = catchAsync(async (req, res) => {
@@ -27,16 +27,16 @@ const getImportantNotices = catchAsync(async (req, res) => {
 });
 
 const getNotice = catchAsync(async (req, res) => {
-  const user = await noticeService.getNoticeById(req.params.noticeId);
-  if (!user) {
+  const notice = await noticeService.getNoticeById(req.params.noticeId);
+  if (!notice) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(user);
+  res.send(notice);
 });
 
 const updateNotice = catchAsync(async (req, res) => {
-  const user = await noticeService.updateNoticeById(req.params.noticeId, req.body);
-  res.send(user);
+  const notice = await noticeService.updateNoticeById(req.params.noticeId, req.body);
+  res.send(notice);
 });
 
 const deleteNotice = catchAsync(async (req, res) => {
