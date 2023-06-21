@@ -48,8 +48,8 @@ const getUserById = async (id) => {
  * @param {string} email
  * @returns {Promise<User>}
  */
-const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+const getUserByPhoneNumber = async (phoneNumber) => {
+  return User.findOne({ phoneNumber });
 };
 
 /**
@@ -89,7 +89,7 @@ module.exports = {
   createUser,
   queryUsers,
   getUserById,
-  getUserByEmail,
+  getUserByPhoneNumber,
   updateUserById,
   deleteUserById,
 };
