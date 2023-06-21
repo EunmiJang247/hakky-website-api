@@ -11,6 +11,12 @@ const register = {
   }),
 };
 
+const registerNaver = {
+  body: Joi.object().keys({
+    accessToken: Joi.string().required(),
+  }),
+};
+
 const login = {
   body: Joi.object().keys({
     phoneNumber: Joi.string().required(),
@@ -54,6 +60,7 @@ const verifyEmail = {
 
 module.exports = {
   register,
+  registerNaver,
   login,
   logout,
   refreshTokens,

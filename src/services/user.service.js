@@ -20,6 +20,18 @@ const createUser = async (userBody) => {
   return user;
 };
 
+const createUserNaver = async (userBody) => {
+  // todo auth code check
+  const user = await User.create({
+    name: userBody.name,
+    phoneNumber: userBody.mobile,
+    role: 'user',
+    termsOfService: true,
+    privacyPolicy: true,
+  });
+  return user;
+};
+
 /**
  * Query for users
  * @param {Object} filter - Mongo filter
@@ -87,6 +99,7 @@ const deleteUserById = async (userId) => {
 
 module.exports = {
   createUser,
+  createUserNaver,
   queryUsers,
   getUserById,
   getUserByPhoneNumber,

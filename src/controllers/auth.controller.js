@@ -1,9 +1,17 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
+const naverProfile = require('../utils/naverLogin');
 const { authService, userService, tokenService, emailService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.CREATED).send({ user, tokens });
+});
+
+const registerNaver = catchAsync(async (req, res) => {
+  const naverInfo = await naverProfile(req.body.accessToken);
+  const user = await userService.createUser(naverInfo);
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
@@ -54,6 +62,7 @@ const checkToken = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
+  registerNaver,
   login,
   logout,
   refreshTokens,
