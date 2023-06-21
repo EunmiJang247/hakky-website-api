@@ -9,6 +9,12 @@ const ApiError = require('../utils/ApiError');
  */
 const createUser = async (userBody) => {
   // todo auth code check
+  const check = await User.findOne({ phoneNumber: userBody.phoneNumber });
+
+  if (check) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, '이미 가입이 완료된 핸드폰 번호입니다.');
+  }
+
   const user = await User.create({
     name: userBody.name,
     phoneNumber: userBody.phoneNumber,
@@ -21,7 +27,12 @@ const createUser = async (userBody) => {
 };
 
 const createUserNaver = async (userBody) => {
-  // todo auth code check
+  const check = await User.findOne({ phoneNumber: userBody.response.mobile });
+
+  if (check) {
+    return check;
+  }
+
   const user = await User.create({
     name: userBody.response.name,
     phoneNumber: userBody.response.mobile,
