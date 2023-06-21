@@ -4,8 +4,8 @@ const catchAsync = require('../utils/catchAsync');
 const { faqService } = require('../services');
 
 const createFaq = catchAsync(async (req, res) => {
-  const user = await faqService.createFaq(req.body);
-  res.status(httpStatus.CREATED).send(user);
+  const faq = await faqService.createFaq(req.body);
+  res.status(httpStatus.CREATED).send(faq);
 });
 
 const getFaqs = catchAsync(async (req, res) => {
@@ -14,16 +14,16 @@ const getFaqs = catchAsync(async (req, res) => {
 });
 
 const getFaq = catchAsync(async (req, res) => {
-  const user = await faqService.getFaqById(req.params.faqId);
-  if (!user) {
+  const faq = await faqService.getFaqById(req.params.faqId);
+  if (!faq) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Faq not found');
   }
-  res.send(user);
+  res.send(faq);
 });
 
 const updateFaq = catchAsync(async (req, res) => {
-  const user = await faqService.updateFaqById(req.params.faqId, req.body);
-  res.send(user);
+  const faq = await faqService.updateFaqById(req.params.faqId, req.body);
+  res.send(faq);
 });
 
 const deleteFaq = catchAsync(async (req, res) => {
