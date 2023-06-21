@@ -27,6 +27,14 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
+    termsOfService: {
+      type: Boolean,
+      required: false,
+    },
+    privacyPolicy: {
+      type: Boolean,
+      required: false,
+    },
   },
   {
     timestamps: true,

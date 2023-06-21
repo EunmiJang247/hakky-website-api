@@ -11,16 +11,27 @@ const createNotice = async (noticeBody) => {
   return Notice.create(noticeBody);
 };
 
-const queryNotices = async ({ limit, skip, important }) => {
+const queryNotices = async ({ limit, skip, important, keyword }) => {
   let notices;
   let count;
-  if (important) {
-    notices = await Notice.find().limit(limit).skip(skip);
-    count = await Notice.countDocuments({ important: false });
-  } else {
-    notices = await Notice.find({ important: false }).limit(limit).skip(skip);
-    count = await Notice.countDocuments({ important: false });
+  if (keyword) {
+    if (important) {
+      notices = await Notice.find({ $regex: keyword }).limit(limit).skip(skip);
+      count = await Notice.countDocuments({ $regex: keyword });
+    } else {
+      notices = await Notice.find({ important: false, $regex: keyword }).limit(limit).skip(skip);
+      count = await Notice.countDocuments({ important: false, $regex: keyword });
+    }
+  } else if (!keyword) {
+    if (important) {
+      notices = await Notice.find().limit(limit).skip(skip);
+      count = await Notice.countDocuments();
+    } else {
+      notices = await Notice.find({ important: false }).limit(limit).skip(skip);
+      count = await Notice.countDocuments({ important: false });
+    }
   }
+
   return {
     result: notices,
     count,

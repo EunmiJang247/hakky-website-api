@@ -13,6 +13,7 @@ const getNotices = catchAsync(async (req, res) => {
     limit: req.query.limit,
     skip: req.query.skip,
     important: req.query.important,
+    keyword: req.query.keyword,
   });
 
   res.send({
