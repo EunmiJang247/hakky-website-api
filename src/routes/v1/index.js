@@ -1,4 +1,8 @@
 const express = require('express');
+const scheduleRouter = require('./schedule.route');
+const includeScheduleRouter = require('./include-schedule.route');
+const excludeScheduleRouter = require('./exclude-schedule.route');
+const productRouter = require('./product.route');
 const placeRouter = require('./place.route');
 const noticeRouter = require('./notice.route');
 const faqRouter = require('./faq.route');
@@ -13,6 +17,22 @@ const defaultRoutes = [
   {
     path: '/place',
     route: placeRouter,
+  },
+  {
+    path: '/schedule',
+    route: scheduleRouter,
+  },
+  {
+    path: '/include-schedule',
+    route: includeScheduleRouter,
+  },
+  {
+    path: '/exclude-schedule',
+    route: excludeScheduleRouter,
+  },
+  {
+    path: '/product',
+    route: productRouter,
   },
   {
     path: '/notice',
