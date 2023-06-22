@@ -71,7 +71,7 @@ const getNoticeById = async (id) => {
  * @returns {Promise<Notice>}
  */
 const updateNoticeById = async (noticeId, updateBody) => {
-  const notice = await Notice.findOne(noticeId);
+  const notice = await Notice.findById(noticeId);
   if (!notice) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
