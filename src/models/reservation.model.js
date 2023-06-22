@@ -22,7 +22,11 @@ const reservationSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    reservationAt: {
+    reservationFrom: {
+      type: Date,
+      required: true,
+    },
+    reservationTo: {
       type: Date,
       required: true,
     },
