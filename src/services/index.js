@@ -5,3 +5,7 @@ module.exports.userService = require('./user.service');
 module.exports.noticeService = require('./notice.service');
 module.exports.faqService = require('./faq.service');
 module.exports.placeService = require('./place.service');
+module.exports.productService = require('./product.service');
+module.exports.scheduleService = require('./schedule.service');
+module.exports.includeScheduleService = require('./include-schedule.service');
+module.exports.excludeScheduleService = require('./exclude-schedule.service');

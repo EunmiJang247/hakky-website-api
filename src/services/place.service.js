@@ -2,11 +2,11 @@ const httpStatus = require('http-status');
 const { Place } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createNotice = async (noticeBody) => {
-  return Place.create(noticeBody);
+const createPlace = async (placeBody) => {
+  return Place.create(placeBody);
 };
 
-const queryPlaces = async () => {
+const getPlaces = async () => {
   const places = await Place.find();
   return places;
 };
@@ -16,10 +16,10 @@ const getPlaceById = async (id) => {
   return detailData;
 };
 
-const updatePlace = async (noticeId, updateBody) => {
-  const place = await getPlaceById(noticeId);
+const updatePlace = async (placeId, updateBody) => {
+  const place = await getPlaceById(placeId);
   if (!place) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
   }
   Object.assign(place, updateBody);
   await place.save();
@@ -29,15 +29,15 @@ const updatePlace = async (noticeId, updateBody) => {
 const deletePlaceById = async (noticeId) => {
   const place = await getPlaceById(noticeId);
   if (!place) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
   }
   await place.remove();
   return place;
 };
 
 module.exports = {
-  createNotice,
-  queryPlaces,
+  createPlace,
+  getPlaces,
   getPlaceById,
   deletePlaceById,
   updatePlace,

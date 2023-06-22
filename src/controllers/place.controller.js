@@ -14,20 +14,20 @@ const getPlaces = catchAsync(async (req, res) => {
 });
 
 const getPlace = catchAsync(async (req, res) => {
-  const user = await placeService.getPlaceById(req.params.noticeId);
-  if (!user) {
+  const place = await placeService.getPlaceById(req.params.productId);
+  if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(user);
+  res.send(place);
 });
 
 const updatePlace = catchAsync(async (req, res) => {
-  const user = await placeService.updatePlace(req.params.placeId, req.body);
-  res.send(user);
+  const place = await placeService.updatePlace(req.params.placeId, req.body);
+  res.send(place);
 });
 
 const deletePlace = catchAsync(async (req, res) => {
-  await placeService.deletePlace(req.params.noticeId);
+  await placeService.deletePlace(req.params.productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

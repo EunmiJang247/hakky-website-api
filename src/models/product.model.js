@@ -18,6 +18,10 @@ const optionsSchema = mongoose.Schema({
 
 const productSchema = mongoose.Schema(
   {
+    place: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

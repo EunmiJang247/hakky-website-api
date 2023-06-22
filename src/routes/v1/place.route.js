@@ -6,9 +6,7 @@ const placeController = require('../../controllers/place.controller');
 
 const router = express.Router();
 
-router.get('/authors', placeController.getAuthors);
 router.route('/').post(validate(placeValidation.createPlace), placeController.createPlace).get(placeController.getPlaces);
-
 router
   .route('/:placeId/:month')
   .get(validate(placeValidation.getPlace), placeController.getPlace)

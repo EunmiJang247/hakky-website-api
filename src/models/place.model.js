@@ -34,6 +34,10 @@ const businessHoursSchema = mongoose.Schema({
 
 const scheduleSchema = mongoose.Schema(
   {
+    place: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -55,15 +59,19 @@ const scheduleSchema = mongoose.Schema(
 
 const excludeScheduleSchema = mongoose.Schema(
   {
+    place: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
     },
-    date: {
+    startAt: {
       type: Date,
       required: true,
     },
-    businessHours: {
+    endAt: {
       type: Date,
       required: true,
     },
@@ -75,6 +83,10 @@ const excludeScheduleSchema = mongoose.Schema(
 
 const includeScheduleSchema = mongoose.Schema(
   {
+    place: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     name: {
       type: String,
       required: true,
@@ -159,9 +171,14 @@ const placeSchema = mongoose.Schema(
 placeSchema.plugin(toJSON);
 placeSchema.plugin(paginate);
 
-/**
- * @typedef Place
- */
 const Place = mongoose.model('Place', placeSchema);
+const Schedule = mongoose.model('Schedule', scheduleSchema);
+const IncludeSchedule = mongoose.model('IncludeSchedule', includeScheduleSchema);
+const ExcludeSchedule = mongoose.model('ExcludeSchedule', excludeScheduleSchema);
 
-module.exports = Place;
+module.exports = {
+  Place,
+  Schedule,
+  IncludeSchedule,
+  ExcludeSchedule,
+};
