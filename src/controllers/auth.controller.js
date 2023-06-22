@@ -1,7 +1,9 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const naverProfile = require('../utils/naverLogin');
+// const kakaoProfile = require('../utils/kakaoLogin');
 const { authService, userService, tokenService, emailService } = require('../services');
+// const ApiError = require('../utils/ApiError');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -15,6 +17,14 @@ const registerNaver = catchAsync(async (req, res) => {
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });
+
+// const registerKakao = catchAsync(async (req, res) => {
+//   if (req.query.error || req.query.errorMessage) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, req.query.errorMessage);
+//   }
+//   const kakaoInfo = await kakaoProfile(req.body.code);
+
+// });
 
 const login = catchAsync(async (req, res) => {
   const { phoneNumber, password } = req.body;

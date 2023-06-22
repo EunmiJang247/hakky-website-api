@@ -30,8 +30,9 @@ const updateNotice = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string().required(),
-      content: Joi.string().required(),
+      title: Joi.string(),
+      content: Joi.string(),
+      isImportant: Joi.boolean(),
     })
     .min(1),
 };
