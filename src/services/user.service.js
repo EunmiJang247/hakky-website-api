@@ -39,34 +39,24 @@ const createUserNaver = async (userBody) => {
     role: 'user',
     termsOfService: true,
     privacyPolicy: true,
+    isNaver: true,
   });
   return user;
 };
 
-/**
- * Query for users
- * @param {Object} filter - Mongo filter
- * @param {Object} options - Query options
- * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
- * @param {number} [options.limit] - Maximum number of results per page (default = 10)
- * @param {number} [options.page] - Current page (default = 1)
- * @returns {Promise<QueryResult>}
- */
-const queryUsers = async (filter, options) => {
-  const users = await User.paginate(filter, options);
+const queryUsers = async () => {
+  const users = await User.find();
   return users;
 };
 
-/**
- * Get user by id
- * @param {ObjectId} id
- * @returns {Promise<User>}
- */
-const getUserById = async (id) => User.findById(id);
+const getUserById = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
 
 /**
  * Get user by email
- * @param {string} email
+ * @param {string} phoneNumber
  * @returns {Promise<User>}
  */
 const getUserByPhoneNumber = async (phoneNumber) => User.findOne({ phoneNumber });
@@ -82,8 +72,8 @@ const updateUserById = async (userId, updateBody) => {
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  if (updateBody.phoneNumber && (await User.isPhoneNumberTaken(updateBody.phoneNumber, userId))) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'phoneNumber already taken');
   }
   Object.assign(user, updateBody);
   await user.save();
