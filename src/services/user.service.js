@@ -44,9 +44,51 @@ const createUserNaver = async (userBody) => {
   return user;
 };
 
-const queryUsers = async () => {
-  const users = await User.find();
-  return users;
+const queryUsers = async (keyword, limit, skip) => {
+  let users;
+  let count;
+  if (keyword) {
+    users = await User.find(
+      {
+        $or: [
+          {
+            name: { $regex: keyword },
+          },
+          {
+            phoneNumber: { $regex: keyword },
+          },
+          {
+            _id: { $regex: keyword },
+          },
+        ],
+      },
+    )
+      .limit(limit)
+      .skip(skip);
+    count = await User.countDocuments(
+      {
+        $or: [
+          {
+            name: { $regex: keyword },
+          },
+          {
+            phoneNumber: { $regex: keyword },
+          },
+          {
+            _id: { $regex: keyword },
+          },
+        ],
+      },
+    );
+  } else {
+    users = await User.find().limit(limit).skip(skip);
+    count = await User.countDocuments();
+  }
+
+  return {
+    result: users,
+    count,
+  };
 };
 
 const getUserById = async (id) => {
