@@ -22,7 +22,7 @@ const getUsers = {
 const getUser = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
-  }),
+  }).required(),
 };
 
 const updateUser = {
@@ -35,7 +35,7 @@ const updateUser = {
       password: Joi.string().custom(password),
       name: Joi.string(),
     })
-    .min(1),
+    .required(),
 };
 
 const deleteUser = {

@@ -6,10 +6,10 @@ const createProduct = {
     .keys({
       place: Joi.string().required(),
       name: Joi.string().required(),
-      images: Joi.array(Joi.string()).required(),
+      images: Joi.array().items(Joi.string()).required(),
       description: Joi.string().required(),
-      options: Joi.array(
-        Joi.object().keys({
+      options: Joi.array().items(
+        Joi.object({
           name: Joi.string().required(),
           time: Joi.string().required(),
           detail: Joi.string().required(),
@@ -39,10 +39,10 @@ const updateProduct = {
   body: Joi.object()
     .keys({
       name: Joi.string(),
-      images: Joi.array(Joi.string()),
+      images: Joi.array().items(Joi.string()),
       description: Joi.string(),
-      options: Joi.array(
-        Joi.object().keys({
+      options: Joi.array().items(
+        Joi.object({
           name: Joi.string(),
           time: Joi.string(),
           detail: Joi.string(),
