@@ -2,9 +2,7 @@ const httpStatus = require('http-status');
 const { Schedule } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createSchedule = async (scheduleBody) => {
-  return Schedule.create(scheduleBody);
-};
+const createSchedule = async (scheduleBody) => Schedule.create(scheduleBody);
 
 const getSchedules = async (placeId) => {
   const places = await Schedule.find({ place: placeId });

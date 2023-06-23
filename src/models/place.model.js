@@ -54,7 +54,7 @@ const scheduleSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const excludeScheduleSchema = mongoose.Schema(
@@ -78,7 +78,7 @@ const excludeScheduleSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const includeScheduleSchema = mongoose.Schema(
@@ -102,7 +102,7 @@ const includeScheduleSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 const placeSchema = mongoose.Schema(
@@ -122,7 +122,17 @@ const placeSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    address: {
+    address1: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    address2: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    postalCode: {
       type: String,
       required: true,
       trim: true,
@@ -164,7 +174,7 @@ const placeSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // add plugin that converts mongoose to json

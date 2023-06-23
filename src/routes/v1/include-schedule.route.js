@@ -16,12 +16,12 @@ router
   .patch(
     auth('ADMIN'),
     validate(includeScheduleValidation.updateIncludeSchedule),
-    includeScheduleController.updateIncludeSchedule
+    includeScheduleController.updateIncludeSchedule,
   )
   .delete(
     auth('ADMIN'),
     validate(includeScheduleValidation.deleteIncludeSchedule),
-    includeScheduleController.deleteIncludeSchedule
+    includeScheduleController.deleteIncludeSchedule,
   );
 
 module.exports = router;

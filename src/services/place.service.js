@@ -2,9 +2,7 @@ const httpStatus = require('http-status');
 const { Place } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createPlace = async (placeBody) => {
-  return Place.create(placeBody);
-};
+const createPlace = async (placeBody) => Place.create(placeBody);
 
 const getPlaces = async () => {
   const places = await Place.find();

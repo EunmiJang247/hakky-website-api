@@ -14,7 +14,7 @@ const faqSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // add plugin that converts mongoose to json

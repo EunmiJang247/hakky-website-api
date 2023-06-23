@@ -2,7 +2,9 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const naverProfile = require('../utils/naverLogin');
 // const kakaoProfile = require('../utils/kakaoLogin');
-const { authService, userService, tokenService, emailService } = require('../services');
+const {
+  authService, userService, tokenService, emailService,
+} = require('../services');
 // const ApiError = require('../utils/ApiError');
 
 const register = catchAsync(async (req, res) => {

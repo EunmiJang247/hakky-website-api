@@ -7,11 +7,11 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} noticeBody
  * @returns {Promise<Notice>}
  */
-const createNotice = async (noticeBody) => {
-  return Notice.create(noticeBody);
-};
+const createNotice = async (noticeBody) => Notice.create(noticeBody);
 
-const queryNotices = async ({ limit, skip, important, keyword }) => {
+const queryNotices = async ({
+  limit, skip, important, keyword,
+}) => {
   let notices;
   let count;
   if (keyword) {

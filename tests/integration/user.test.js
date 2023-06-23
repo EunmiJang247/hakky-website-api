@@ -4,7 +4,9 @@ const httpStatus = require('http-status');
 const app = require('../../src/app');
 const setupTestDB = require('../utils/setupTestDB');
 const { User } = require('../../src/models');
-const { userOne, userTwo, admin, insertUsers } = require('../fixtures/user.fixture');
+const {
+  userOne, userTwo, admin, insertUsers,
+} = require('../fixtures/user.fixture');
 const { userOneAccessToken, adminAccessToken } = require('../fixtures/token.fixture');
 
 setupTestDB();
@@ -43,7 +45,9 @@ describe('User routes', () => {
       const dbUser = await User.findById(res.body.id);
       expect(dbUser).toBeDefined();
       expect(dbUser.password).not.toBe(newUser.password);
-      expect(dbUser).toMatchObject({ name: newUser.name, email: newUser.email, role: newUser.role, isEmailVerified: false });
+      expect(dbUser).toMatchObject({
+        name: newUser.name, email: newUser.email, role: newUser.role, isEmailVerified: false,
+      });
     });
 
     test('should be able to create an admin as well', async () => {
@@ -553,7 +557,7 @@ describe('User routes', () => {
       const updateBody = { name: faker.name.findName() };
 
       await request(app)
-        .patch(`/v1/users/invalidId`)
+        .patch('/v1/users/invalidId')
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);

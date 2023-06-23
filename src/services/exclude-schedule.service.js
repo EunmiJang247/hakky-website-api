@@ -2,9 +2,7 @@ const httpStatus = require('http-status');
 const { ExcludeSchedule } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createExcludeSchedule = async (scheduleBody) => {
-  return ExcludeSchedule.create(scheduleBody);
-};
+const createExcludeSchedule = async (scheduleBody) => ExcludeSchedule.create(scheduleBody);
 
 const getExcludeSchedule = async (placeId) => {
   const places = await ExcludeSchedule.find({ place: placeId });

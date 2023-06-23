@@ -7,9 +7,7 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} faqBody
  * @returns {Promise<Faq>}
  */
-const createFaq = async (faqBody) => {
-  return Faq.create(faqBody);
-};
+const createFaq = async (faqBody) => Faq.create(faqBody);
 
 /**
  * Query for faqs
@@ -27,9 +25,7 @@ const queryFaqs = async () => {
  * @param {ObjectId} id
  * @returns {Promise<Faq>}
  */
-const getFaqById = async (id) => {
-  return Faq.findById(id);
-};
+const getFaqById = async (id) => Faq.findById(id);
 
 /**
  * Update faq by id

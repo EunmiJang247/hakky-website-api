@@ -51,7 +51,7 @@ const reservationSchema = mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 /**

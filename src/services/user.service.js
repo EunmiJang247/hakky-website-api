@@ -62,18 +62,14 @@ const queryUsers = async (filter, options) => {
  * @param {ObjectId} id
  * @returns {Promise<User>}
  */
-const getUserById = async (id) => {
-  return User.findById(id);
-};
+const getUserById = async (id) => User.findById(id);
 
 /**
  * Get user by email
  * @param {string} email
  * @returns {Promise<User>}
  */
-const getUserByPhoneNumber = async (phoneNumber) => {
-  return User.findOne({ phoneNumber });
-};
+const getUserByPhoneNumber = async (phoneNumber) => User.findOne({ phoneNumber });
 
 /**
  * Update user by id

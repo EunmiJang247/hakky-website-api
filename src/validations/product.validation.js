@@ -14,7 +14,7 @@ const createProduct = {
           time: Joi.string().required(),
           detail: Joi.string().required(),
           price: Joi.string().required(),
-        })
+        }),
       ),
     })
     .required(),
@@ -47,7 +47,7 @@ const updateProduct = {
           time: Joi.string(),
           detail: Joi.string(),
           price: Joi.string(),
-        })
+        }),
       ),
     })
     .required(),

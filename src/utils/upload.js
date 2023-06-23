@@ -8,7 +8,9 @@ const ApiError = require('./ApiError');
 const { errorData } = require('./errorData');
 const config = require('../config/config');
 
-const { accessKeyId, secretAccessKey, region, bucket } = config.s3;
+const {
+  accessKeyId, secretAccessKey, region, bucket,
+} = config.s3;
 
 const autoContentType = (req, file, cb) => {
   if (file.mimetype !== 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
@@ -60,13 +62,11 @@ const upload = multer({
 
 const preSignedS3ObjectDuration = 24 * 60 * 60;
 
-const preSignS3Object = (key) => {
-  return s3.getSignedUrl('getObject', {
-    Bucket: bucket,
-    Key: key,
-    Expires: preSignedS3ObjectDuration,
-  });
-};
+const preSignS3Object = (key) => s3.getSignedUrl('getObject', {
+  Bucket: bucket,
+  Key: key,
+  Expires: preSignedS3ObjectDuration,
+});
 
 module.exports = {
   upload,
