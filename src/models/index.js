@@ -8,3 +8,4 @@ module.exports.IncludeSchedule = require('./place.model');
 module.exports.ExcludeSchedule = require('./place.model');
 module.exports.Schedule = require('./place.model');
 module.exports.Product = require('./product.model');
+module.exports.MainPageBanner = require('./banner.model');

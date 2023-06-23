@@ -1,4 +1,6 @@
 const express = require('express');
+const userRouter = require('./user.route');
+const bannerRouter = require('./banner.route');
 const scheduleRouter = require('./schedule.route');
 const includeScheduleRouter = require('./include-schedule.route');
 const excludeScheduleRouter = require('./exclude-schedule.route');
@@ -14,6 +16,14 @@ const config = require('../../config/config');
 const router = express.Router();
 
 const defaultRoutes = [
+  {
+    path: '/banner',
+    route: bannerRouter,
+  },
+  {
+    path: '/user',
+    route: userRouter,
+  },
   {
     path: '/place',
     route: placeRouter,
