@@ -22,7 +22,8 @@ const getPlace = catchAsync(async (req, res) => {
 });
 
 const getPlaceDetail = catchAsync(async (req, res) => {
-  const place = await placeService.getPlaceById(req.params.placeId);
+  const date = new Date(`${req.params.year}-${req.params.month}-${req.params.day}`);
+  const place = await placeService.getPlaceDetail(req.params.placeId, date, req.params.dayOfWeek);
   if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
@@ -35,7 +36,7 @@ const updatePlace = catchAsync(async (req, res) => {
 });
 
 const deletePlace = catchAsync(async (req, res) => {
-  await placeService.deletePlace(req.params.productId);
+  await placeService.deletePlaceById(req.params.productId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

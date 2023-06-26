@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Place } = require('../models');
+const { Place, Schedule } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createPlace = async (placeBody) => Place.create(placeBody);
@@ -12,6 +12,15 @@ const getPlaces = async () => {
 const getPlaceById = async (id) => {
   const detailData = await Place.findById(id);
   return detailData;
+};
+
+const getPlaceDetail = async(id, date, dayOfWeek) => {
+  const detailData = await Place.findById(id);
+  const schedule = await Schedule.findOne({
+    place: id,
+    startAt: { $gt: date },
+    endAt: { $lt: date },
+  });
 };
 
 const updatePlace = async (placeId, updateBody) => {
@@ -37,6 +46,7 @@ module.exports = {
   createPlace,
   getPlaces,
   getPlaceById,
+  getPlaceDetail,
   deletePlaceById,
   updatePlace,
 };
