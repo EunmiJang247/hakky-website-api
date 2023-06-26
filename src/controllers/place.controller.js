@@ -14,7 +14,15 @@ const getPlaces = catchAsync(async (req, res) => {
 });
 
 const getPlace = catchAsync(async (req, res) => {
-  const place = await placeService.getPlaceById(req.params.productId);
+  const place = await placeService.getPlaceById(req.params.placeId);
+  if (!place) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
+  }
+  res.send(place);
+});
+
+const getPlaceDetail = catchAsync(async (req, res) => {
+  const place = await placeService.getPlaceById(req.params.placeId);
   if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
@@ -37,4 +45,5 @@ module.exports = {
   getPlace,
   updatePlace,
   deletePlace,
+  getPlaceDetail,
 };

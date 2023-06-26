@@ -11,7 +11,7 @@ const createUser = {
 
 const getUsers = {
   query: Joi.object().keys({
-    keyword: Joi.string(),
+    keyword: Joi.string().allow(''),
     limit: Joi.number().integer(),
     skip: Joi.number().integer(),
   }),

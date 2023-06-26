@@ -22,13 +22,22 @@ const createPlace = {
 
 const getPlace = {
   params: Joi.object().keys({
-    popupId: Joi.string().custom(objectId),
+    placeId: Joi.string().custom(objectId),
+  }),
+};
+
+const getPlaceDetial = {
+  params: Joi.object().keys({
+    placeId: Joi.string().custom(objectId).required(),
+    year: Joi.string().required(),
+    month: Joi.string().required(),
+    day: Joi.string().required(),
   }),
 };
 
 const updatePlace = {
   params: Joi.object().keys({
-    popupId: Joi.required().custom(objectId),
+    placeId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
@@ -42,7 +51,7 @@ const updatePlace = {
 
 const deletePlace = {
   params: Joi.object().keys({
-    popupId: Joi.string().custom(objectId),
+    placeId: Joi.string().custom(objectId),
   }),
 };
 
@@ -51,4 +60,5 @@ module.exports = {
   getPlace,
   updatePlace,
   deletePlace,
+  getPlaceDetial,
 };

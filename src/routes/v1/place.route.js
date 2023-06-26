@@ -8,9 +8,13 @@ const router = express.Router();
 
 router.route('/').post(validate(placeValidation.createPlace), placeController.createPlace).get(placeController.getPlaces);
 router
-  .route('/:placeId/:month')
+  .route('/:placeId/')
   .get(validate(placeValidation.getPlace), placeController.getPlace)
   .patch(auth('manageUsers'), validate(placeValidation.updatePlace), placeController.updatePlace)
   .delete(auth('manageUsers'), validate(placeValidation.deletePlace), placeController.deletePlace);
+
+router
+  .route('/detail/:placeId/:year/:month/:day')
+  .get(validate(placeValidation.getPlaceDetail), placeController.getPlaceDetail);
 
 module.exports = router;
