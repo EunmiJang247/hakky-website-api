@@ -15,12 +15,16 @@ const getPlaceById = async (id) => {
 };
 
 const getPlaceDetail = async(id, date, dayOfWeek) => {
+  let timeSchedule;
   const detailData = await Place.findById(id);
   const schedule = await Schedule.findOne({
     place: id,
     startAt: { $gt: date },
     endAt: { $lt: date },
   });
+
+  // if
+  
 };
 
 const updatePlace = async (placeId, updateBody) => {
