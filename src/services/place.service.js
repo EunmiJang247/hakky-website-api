@@ -23,7 +23,7 @@ const getPlaceDetail = async(id, date, dayOfWeek) => {
     endAt: { $lt: date },
   });
 
-  // if
+  // switch
   
 };
 
