@@ -3,6 +3,8 @@ const { objectId } = require('./custom.validation');
 
 const createPlace = {
   body: Joi.object().keys({
+    loginId: Joi.string().required(),
+    password: Joi.string().required(),
     name: Joi.string().required(),
     images: Joi.array().items(Joi.string()).required(),
     description: Joi.string().required(),
@@ -42,10 +44,22 @@ const updatePlace = {
   }),
   body: Joi.object()
     .keys({
-      title: Joi.string().required(),
-      image: Joi.string().required(),
-      description: Joi.string().required(),
-      link: Joi.string().required(),
+      loginId: Joi.string(),
+      password: Joi.string(),
+      name: Joi.string(),
+      images: Joi.array().items(Joi.string()),
+      description: Joi.string(),
+      phone: Joi.string(),
+      address1: Joi.string(),
+      address2: Joi.string(),
+      postalCode: Joi.string(),
+      author: Joi.object().keys({
+        name: Joi.string(),
+        description: Joi.string(),
+        tag: Joi.string(),
+        instagram: Joi.string(),
+        images: Joi.array().items(Joi.string()),
+      }),
     })
     .min(1),
 };

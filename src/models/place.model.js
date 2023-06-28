@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const { toJSON, paginate } = require('./plugins');
 
 const businessHoursSchema = mongoose.Schema({
@@ -107,6 +108,16 @@ const includeScheduleSchema = mongoose.Schema(
 
 const placeSchema = mongoose.Schema(
   {
+    loginId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     images: {
       type: [String],
       required: true,
@@ -176,6 +187,14 @@ const placeSchema = mongoose.Schema(
     timestamps: true,
   },
 );
+
+placeSchema.pre('save', async function (next) {
+  const place = this;
+  if (place.isModified('password')) {
+    place.password = await bcrypt.hash(place.password, 8);
+  }
+  next();
+});
 
 // add plugin that converts mongoose to json
 placeSchema.plugin(toJSON);
