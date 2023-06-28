@@ -14,7 +14,7 @@ router
   .delete(auth('manageUsers'), validate(placeValidation.deletePlace), placeController.deletePlace);
 
 router
-  .route('/detail/:placeId/:year/:month/:day')
+  .route('/detail/:placeId/:year/:month/:day/:dayOfWeek')
   .get(validate(placeValidation.getPlaceDetail), placeController.getPlaceDetail);
 
 module.exports = router;

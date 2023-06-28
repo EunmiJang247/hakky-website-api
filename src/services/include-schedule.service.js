@@ -1,16 +1,16 @@
 const httpStatus = require('http-status');
-const { IncludeSchedule } = require('../models');
+const { PlaceIdle } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createIncludeSchedule = async (scheduleBody) => IncludeSchedule.create(scheduleBody);
+const createIncludeSchedule = async (scheduleBody) => PlaceIdle.IncludeSchedule.create(scheduleBody);
 
 const getIncludeSchedule = async (placeId) => {
-  const places = await IncludeSchedule.find({ place: placeId });
+  const places = await PlaceIdle.IncludeSchedule.find({ place: placeId });
   return places;
 };
 
 const getIncludeScheduleById = async (id) => {
-  const detailData = await IncludeSchedule.findById(id);
+  const detailData = await PlaceIdle.IncludeSchedule.findById(id);
   return detailData;
 };
 

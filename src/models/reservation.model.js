@@ -6,6 +6,10 @@ const reservationSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
+    place: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     price: {
       type: String,
       required: true,

@@ -9,9 +9,9 @@ const createBanner = catchAsync(async (req, res) => {
 });
 
 const getBanner = catchAsync(async (req, res) => {
-  const excludeSchedule = await bannerService.getBanner(req.params.productId);
+  const excludeSchedule = await bannerService.getBanner();
   if (!excludeSchedule) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Banner not found');
   }
   res.send(excludeSchedule);
 });

@@ -1,30 +1,177 @@
 const httpStatus = require('http-status');
-const { Place, Schedule } = require('../models');
+const { PlaceIdle, Reservation } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createPlace = async (placeBody) => Place.create(placeBody);
+const createPlace = async (placeBody) => PlaceIdle.Place.create(placeBody);
 
 const getPlaces = async () => {
-  const places = await Place.find();
+  const places = await PlaceIdle.Place.find();
   return places;
 };
 
 const getPlaceById = async (id) => {
-  const detailData = await Place.findById(id);
+  const detailData = await PlaceIdle.Place.findById(id);
   return detailData;
 };
 
-const getPlaceDetail = async(id, date, dayOfWeek) => {
-  let timeSchedule;
-  const detailData = await Place.findById(id);
-  const schedule = await Schedule.findOne({
+const getPlaceDetail = async (id, date, dayOfWeek) => {
+  const schedule = await PlaceIdle.Schedule.findOne({
+    place: id,
+    startAt: { $lte: date },
+    endAt: { $gte: date },
+  });
+
+  if (!schedule) {
+    return 'CAN_NOT_RESERVATION';
+  }
+
+  const scheduleMap = {
+    0: schedule.term.mon,
+    1: schedule.term.tue,
+    2: schedule.term.wed,
+    3: schedule.term.thu,
+    4: schedule.term.fri,
+    5: schedule.term.sat,
+    6: schedule.term.sun,
+  };
+  const timeSchedule = scheduleMap[dayOfWeek];
+
+  const reservations = await Reservation.find({
     place: id,
     startAt: { $gt: date },
     endAt: { $lt: date },
-  });
+  }).sort('startAt').exec();
 
-  // switch
-  
+  const businessHours = timeSchedule.split(',');
+  const reservList = [];
+
+  for (let i = 0; i < businessHours.length; i += 1) {
+    const [start, end] = businessHours[i].split('-');
+    const [startHour, startMinute] = start.split(':').map(Number);
+    const [endHour, endMinute] = end.split(':').map(Number);
+
+    const differenceHour = endHour - startHour;
+    let h = startHour;
+
+    for (let j = 0; j < differenceHour; j += 1) {
+      if (startMinute === 0 && h === startHour) {
+        reservList.push({ time: `${h}:00`, available: true });
+        reservList.push({ time: `${h}:30`, available: true });
+      } else if (startMinute === 30 && h === startHour) {
+        reservList.push({ time: `${h}:30`, available: true });
+      } else if (endMinute === 0 && h === endHour) {
+        reservList.push({ time: `${h}:00`, available: false });
+      } else if (endMinute === 30 && h + 1 === endHour) {
+        reservList.push({ time: `${h}:00`, available: true });
+        reservList.push({ time: `${h}:30`, available: true });
+        reservList.push({ time: `${h + 1}:00`, available: true });
+      } else {
+        // eslint-disable-next-line no-lonely-if
+        if (h !== endHour) {
+          reservList.push({ time: `${h}:00`, available: true });
+          reservList.push({ time: `${h}:30`, available: true });
+        } else {
+          reservList.push({ time: `${h}:00`, available: true });
+          reservList.push({ time: `${h}:30`, available: false });
+        }
+      }
+      h += 1;
+    }
+
+    const endOfDayHour = parseInt(businessHours[businessHours.length - 1].split('-')[1].split(':')[0], 10);
+
+    if (h !== endOfDayHour) {
+      const nextHour = parseInt(businessHours[i + 1].split('-')[0].split(':')[0], 10);
+      const nextMinute = parseInt(businessHours[i + 1].split('-')[0].split(':')[1], 10);
+
+      if (nextHour - endHour > 1) {
+        if (nextMinute === 0 && endMinute === 30) {
+          for (let k = endHour; k + 1 <= nextHour; k += 1) {
+            if (endHour === k) {
+              reservList.push({ time: `${k}:30`, available: false });
+            } else {
+              reservList.push({ time: `${k}:00`, available: false });
+              reservList.push({ time: `${k}:30`, available: false });
+            }
+          }
+        } else if (nextMinute === 30 && endMinute === 0) {
+          for (let k = endHour; k + 1 <= nextHour; k += 1) {
+            if (nextHour === endHour && nextMinute === 30) {
+              reservList.push({ time: `${k}:00`, available: false });
+            } else if (k + 1 === nextHour) {
+              reservList.push({ time: `${k}:00`, available: false });
+              reservList.push({ time: `${k}:30`, available: false });
+              reservList.push({ time: `${k + 1}:00`, available: false });
+            } else {
+              reservList.push({ time: `${k}:00`, available: false });
+              reservList.push({ time: `${k}:30`, available: false });
+            }
+          }
+        } else if (nextMinute === 30 && endMinute === 30) {
+          for (let k = endHour; k + 1 <= nextHour; k += 1) {
+            if (nextHour === endHour && nextMinute === 30) {
+              reservList.push({ time: `${k}:00`, available: false });
+            } else if (k + 1 === nextHour) {
+              reservList.push({ time: `${k}:00`, available: false });
+              reservList.push({ time: `${k}:30`, available: false });
+              reservList.push({ time: `${k + 1}:00`, available: false });
+            } else {
+              reservList.push({ time: `${k}:30`, available: false });
+            }
+          }
+        } else {
+          for (let k = endHour; k + 1 <= nextHour; k += 1) {
+            reservList.push({ time: `${k}:00`, available: false });
+            reservList.push({ time: `${k}:30`, available: false });
+          }
+        }
+        h += 1;
+      }
+    }
+  }
+
+  for (let i = 0; i < reservations.length; i += 1) {
+    for (let j = 0; j < reservList.length; j += 1) {
+      const reservationStart = new Date(reservations[i].startAt);
+      const reservationEnd = new Date(reservations[i].endAt);
+      const reservationStartHours = reservationStart.getHours();
+      const reservationStartMinutes = reservationStart.getMinutes();
+      const reservationEndHours = reservationEnd.getHours();
+
+      const reservTime = reservList[j].time.split(':');
+      const reservHours = parseInt(reservTime[0], 10);
+      const reservMinutes = parseInt(reservTime[1], 10);
+
+      if (
+        (reservHours === reservationStartHours && reservMinutes === reservationStartMinutes)
+        || (reservHours > reservationStartHours && reservHours < reservationEndHours)
+        || (reservHours === reservationEndHours && reservMinutes === 30)
+      ) {
+        reservList[j].available = false;
+      }
+    }
+  }
+
+  let maxReservationTime = 0;
+  let picker = 0;
+
+  for (let i = 0; i < reservList.length; i += 1) {
+    if (reservList[i].available) {
+      picker += 30;
+    } else if (maxReservationTime < picker) {
+      maxReservationTime = picker;
+      picker = 0;
+    }
+  }
+  if (picker > maxReservationTime) {
+    maxReservationTime = picker;
+  }
+
+  return {
+    max: maxReservationTime,
+    schedule: reservList,
+    date,
+  };
 };
 
 const updatePlace = async (placeId, updateBody) => {

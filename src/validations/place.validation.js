@@ -26,12 +26,13 @@ const getPlace = {
   }),
 };
 
-const getPlaceDetial = {
+const getPlaceDetail = {
   params: Joi.object().keys({
     placeId: Joi.string().custom(objectId).required(),
     year: Joi.string().required(),
     month: Joi.string().required(),
     day: Joi.string().required(),
+    dayOfWeek: Joi.number().required(),
   }),
 };
 
@@ -60,5 +61,5 @@ module.exports = {
   getPlace,
   updatePlace,
   deletePlace,
-  getPlaceDetial,
+  getPlaceDetail,
 };

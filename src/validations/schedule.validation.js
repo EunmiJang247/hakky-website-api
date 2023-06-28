@@ -4,7 +4,7 @@ const { objectId } = require('./custom.validation');
 const createSchedule = {
   body: Joi.object()
     .keys({
-      place: Joi.string().required(),
+      place: Joi.string().required().custom(objectId),
       name: Joi.string().required(),
       startAt: Joi.date().required(),
       endAt: Joi.date().required(),

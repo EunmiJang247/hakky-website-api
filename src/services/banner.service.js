@@ -12,7 +12,7 @@ const getBanner = async () => {
 const updateBanner = async (updateBody) => {
   const banner = await getBanner();
   if (!banner) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'banner not found');
   }
   Object.assign(banner, updateBody);
   await banner.save();

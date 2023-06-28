@@ -3,7 +3,7 @@ const Joi = require('joi');
 
 const register = {
   body: Joi.object().keys({
-    // authCode: Joi.string().required(),
+    authenticationNumber: Joi.string().required(),
     phoneNumber: Joi.string().required(),
     // password: Joi.string().required().custom(password),
     password: Joi.string().required(),
