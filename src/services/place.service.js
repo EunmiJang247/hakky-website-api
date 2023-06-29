@@ -14,34 +14,7 @@ const getPlaceById = async (id) => {
   return detailData;
 };
 
-const getPlaceDetail = async (id, date, dayOfWeek) => {
-  const schedule = await PlaceIdle.Schedule.findOne({
-    place: id,
-    startAt: { $lte: date },
-    endAt: { $gte: date },
-  });
-
-  if (!schedule) {
-    return 'CAN_NOT_RESERVATION';
-  }
-
-  const scheduleMap = {
-    0: schedule.term.mon,
-    1: schedule.term.tue,
-    2: schedule.term.wed,
-    3: schedule.term.thu,
-    4: schedule.term.fri,
-    5: schedule.term.sat,
-    6: schedule.term.sun,
-  };
-  const timeSchedule = scheduleMap[dayOfWeek];
-
-  const reservations = await Reservation.find({
-    place: id,
-    startAt: { $gt: date },
-    endAt: { $lt: date },
-  }).sort('startAt').exec();
-
+const reservationCheck = (reservations, timeSchedule) => {
   const businessHours = timeSchedule.split(',');
   const reservList = [];
 
@@ -152,6 +125,10 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     }
   }
 
+  return reservList;
+};
+
+const availableTimeCheck = (reservList) => {
   let maxReservationTime = 0;
   let picker = 0;
 
@@ -166,6 +143,40 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
   if (picker > maxReservationTime) {
     maxReservationTime = picker;
   }
+
+  return maxReservationTime;
+};
+
+const getPlaceDetail = async (id, date, dayOfWeek) => {
+  const schedule = await PlaceIdle.Schedule.findOne({
+    place: id,
+    startAt: { $lte: date },
+    endAt: { $gte: date },
+  });
+
+  if (!schedule) {
+    return 'CAN_NOT_RESERVATION';
+  }
+
+  const scheduleMap = {
+    0: schedule.term.mon,
+    1: schedule.term.tue,
+    2: schedule.term.wed,
+    3: schedule.term.thu,
+    4: schedule.term.fri,
+    5: schedule.term.sat,
+    6: schedule.term.sun,
+  };
+  const timeSchedule = scheduleMap[dayOfWeek];
+
+  const reservations = await Reservation.find({
+    place: id,
+    startAt: { $gt: date },
+    endAt: { $lt: date },
+  }).sort('startAt').exec();
+
+  const reservList = reservationCheck(reservations, timeSchedule);
+  const maxReservationTime = availableTimeCheck(reservList);
 
   return {
     max: maxReservationTime,
