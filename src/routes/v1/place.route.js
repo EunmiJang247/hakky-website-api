@@ -10,8 +10,8 @@ router.route('/').post(validate(placeValidation.createPlace), placeController.cr
 router
   .route('/:placeId/')
   .get(validate(placeValidation.getPlace), placeController.getPlace)
-  .patch(auth('manageUsers'), validate(placeValidation.updatePlace), placeController.updatePlace)
-  .delete(auth('manageUsers'), validate(placeValidation.deletePlace), placeController.deletePlace);
+  .patch(auth('ADMIN' || 'SUB_ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
+  .delete(auth('ADMIN' || 'SUB_ADMIN'), validate(placeValidation.deletePlace), placeController.deletePlace);
 
 router
   .route('/detail/:placeId/:year/:month/:day/:dayOfWeek')
