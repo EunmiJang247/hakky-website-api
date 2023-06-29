@@ -3,7 +3,7 @@ const { objectId } = require('./custom.validation');
 
 const createPortfolio = {
   body: Joi.object().keys({
-    image: Joi.string().required(),
+    image: Joi.object().required(),
     title: Joi.string().required(),
   }).required(),
 };
@@ -19,7 +19,7 @@ const updatePortfolio = {
     portfolioId: Joi.string().custom(objectId).required(),
   }),
   body: Joi.object().keys({
-    image: Joi.string(),
+    image: Joi.object(),
     title: Joi.string(),
   }),
 };

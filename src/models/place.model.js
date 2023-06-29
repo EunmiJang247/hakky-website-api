@@ -119,7 +119,7 @@ const placeSchema = mongoose.Schema(
       trim: true,
     },
     images: {
-      type: [String],
+      type: [Object],
       required: true,
       trim: true,
     },
@@ -170,7 +170,7 @@ const placeSchema = mongoose.Schema(
         trim: true,
       },
       images: {
-        type: [String],
+        type: [Object],
         required: true,
         trim: true,
       },
