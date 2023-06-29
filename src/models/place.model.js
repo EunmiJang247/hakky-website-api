@@ -108,15 +108,9 @@ const includeScheduleSchema = mongoose.Schema(
 
 const placeSchema = mongoose.Schema(
   {
-    loginId: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
+    subAdmin: {
+      type: mongoose.Types.ObjectId,
+      required: false,
     },
     images: {
       type: [Object],
