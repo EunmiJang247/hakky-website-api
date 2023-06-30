@@ -52,12 +52,10 @@ const reservationCheck = (reservations, timeSchedule) => {
     }
 
     const endOfDayHour = parseInt(businessHours[businessHours.length - 1].split('-')[1].split(':')[0], 10);
-
     if (h !== endOfDayHour) {
       const nextHour = parseInt(businessHours[i + 1].split('-')[0].split(':')[0], 10);
       const nextMinute = parseInt(businessHours[i + 1].split('-')[0].split(':')[1], 10);
-
-      if (nextHour - endHour > 1) {
+      if (nextHour - endHour >= 1) {
         if (nextMinute === 0 && endMinute === 30) {
           for (let k = endHour; k + 1 <= nextHour; k += 1) {
             if (endHour === k) {
@@ -154,8 +152,23 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     endAt: { $gte: date },
   });
 
+  const ExcludeSchedules = await PlaceIdle.ExcludeSchedule.findOne({
+    place: id,
+    startAt: { $lte: date },
+    endAt: { $gte: date },
+  });
+
   if (!schedule) {
     return 'CAN_NOT_RESERVATION';
+  }
+
+  if (ExcludeSchedules) {
+    return {
+      max: 0,
+      schedule: [],
+      date,
+      available: false,
+    };
   }
 
   const scheduleMap = {
@@ -175,14 +188,69 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     endAt: { $lt: date },
   }).sort('startAt').exec();
 
-  const reservList = reservationCheck(reservations, timeSchedule);
+  const includeSchedules = await PlaceIdle.IncludeSchedule.findOne({
+    place: id,
+    date,
+  });
+
+  let reservList;
+  if (includeSchedules) {
+    const includeScheduleMap = {
+      0: includeSchedules.term.mon,
+      1: includeSchedules.term.tue,
+      2: includeSchedules.term.wed,
+      3: includeSchedules.term.thu,
+      4: includeSchedules.term.fri,
+      5: includeSchedules.term.sat,
+      6: includeSchedules.term.sun,
+    };
+    const includeTimeSchedule = includeScheduleMap[dayOfWeek];
+    reservList = reservationCheck(reservations, includeTimeSchedule);
+  } else {
+    reservList = reservationCheck(reservations, timeSchedule);
+  }
+
   const maxReservationTime = availableTimeCheck(reservList);
 
   return {
     max: maxReservationTime,
     schedule: reservList,
     date,
+    available: true,
   };
+};
+
+const getDateStartToLast = (start, last) => {
+  const result = [];
+  const curDate = new Date(start);
+
+  while (curDate <= new Date(last)) {
+    result.push(curDate.toISOString().split('T')[0]);
+    curDate.setDate(curDate.getDate() + 1);
+  }
+
+  return result;
+};
+
+const getPlaceReservationList = async (id, date) => {
+  const schedule = await PlaceIdle.Schedule.findOne({
+    place: id,
+    startAt: { $lte: date },
+    endAt: { $gte: date },
+  });
+
+  if (!schedule) {
+    return 'CAN_NOT_RESERVATION';
+  }
+  const dateList = getDateStartToLast(date, schedule.endAt);
+
+  const result = await Promise.all(dateList.map(async (dateElem) => {
+    const dayOfWeek = new Date(dateElem).getDay();
+    const data = await getPlaceDetail(id, dateElem, dayOfWeek);
+    return data;
+  }));
+
+  return result;
 };
 
 const updatePlace = async (placeId, updateBody) => {
@@ -209,6 +277,7 @@ module.exports = {
   getPlaces,
   getPlaceById,
   getPlaceDetail,
+  getPlaceReservationList,
   deletePlaceById,
   updatePlace,
 };

@@ -7,7 +7,7 @@ const reservationSchema = mongoose.Schema(
       required: true,
     },
     place: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
     },
     price: {
@@ -32,6 +32,10 @@ const reservationSchema = mongoose.Schema(
     },
     reservationTo: {
       type: Date,
+      required: true,
+    },
+    reservationTime: {
+      type: Number,
       required: true,
     },
     note: {

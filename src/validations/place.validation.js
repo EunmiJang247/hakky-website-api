@@ -36,6 +36,15 @@ const getPlaceDetail = {
   }),
 };
 
+const getPlaceReservationList = {
+  params: Joi.object().keys({
+    placeId: Joi.string().custom(objectId).required(),
+    year: Joi.string().required(),
+    month: Joi.string().required(),
+    day: Joi.string().required(),
+  }),
+};
+
 const updatePlace = {
   params: Joi.object().keys({
     placeId: Joi.required().custom(objectId),
@@ -72,4 +81,5 @@ module.exports = {
   updatePlace,
   deletePlace,
   getPlaceDetail,
+  getPlaceReservationList,
 };

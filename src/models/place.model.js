@@ -92,14 +92,11 @@ const includeScheduleSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    startAt: {
+    date: {
       type: Date,
       required: true,
     },
-    endAt: {
-      type: Date,
-      required: true,
-    },
+    term: businessHoursSchema,
   },
   {
     timestamps: true,
@@ -169,9 +166,6 @@ const placeSchema = mongoose.Schema(
         trim: true,
       },
     },
-    schedule: [scheduleSchema],
-    excludeSchedule: [excludeScheduleSchema],
-    includeSchedule: [includeScheduleSchema],
     product: {
       type: [mongoose.SchemaTypes.ObjectId],
       ref: 'Product',

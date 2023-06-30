@@ -17,4 +17,8 @@ router
   .route('/detail/:placeId/:year/:month/:day/:dayOfWeek')
   .get(validate(placeValidation.getPlaceDetail), placeController.getPlaceDetail);
 
+router
+  .route('/list/:placeId/:year/:month/:day')
+  .get(validate(placeValidation.getPlaceReservationList), placeController.getPlaceReservationList);
+
 module.exports = router;
