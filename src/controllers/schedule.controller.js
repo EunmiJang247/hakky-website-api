@@ -9,7 +9,7 @@ const createSchedule = catchAsync(async (req, res) => {
 });
 
 const getSchedules = catchAsync(async (req, res) => {
-  const schedules = await scheduleService.getSchedules(req.query.scheduleId);
+  const schedules = await scheduleService.getSchedules(req.query.placeId);
   res.send(schedules);
 });
 
