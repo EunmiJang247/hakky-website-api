@@ -288,6 +288,7 @@ const serializer = async (place) => {
     postalCode: place.postalCode,
     author: place.author,
     product: productList,
+    createAt: place.createdAt,
   };
 };
 

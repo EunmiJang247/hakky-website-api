@@ -86,5 +86,5 @@ module.exports = {
   updateReservation,
   cancelReservation,
   adminReadReservation,
-  adminReadReservations
+  adminReadReservations,
 };
