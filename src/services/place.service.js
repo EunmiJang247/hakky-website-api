@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { PlaceIdle, Reservation, Product } = require('../models');
+const { PlaceIdle, Reservation, Product, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createPlace = async (placeBody) => PlaceIdle.Place.create(placeBody);
@@ -274,12 +274,14 @@ const deletePlaceById = async (noticeId) => {
 
 const serializer = async (place) => {
   const productList = [];
+  const subAdmin = await User.findById(place.subAdmin);
   await Promise.all(place.product.map(async (prod) => {
     const product = await Product.findById(prod);
     productList.push(product);
   }));
   return {
     id: place._id,
+    subAdmin: subAdmin.name,
     images: place.images,
     name: place.name,
     phone: place.phone,
