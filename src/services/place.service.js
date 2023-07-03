@@ -1,5 +1,10 @@
 const httpStatus = require('http-status');
-const { PlaceIdle, Reservation, Product, User } = require('../models');
+const {
+  PlaceIdle,
+  Reservation,
+  Product,
+  User,
+} = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createPlace = async (placeBody) => PlaceIdle.Place.create(placeBody);
@@ -281,7 +286,7 @@ const serializer = async (place) => {
   }));
   return {
     id: place._id,
-    subAdmin: subAdmin.name,
+    subAdmin: subAdmin._id,
     images: place.images,
     name: place.name,
     phone: place.phone,
