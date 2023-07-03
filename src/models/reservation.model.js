@@ -56,6 +56,16 @@ const reservationSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    isDone: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    isChanged: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   {
     timestamps: true,

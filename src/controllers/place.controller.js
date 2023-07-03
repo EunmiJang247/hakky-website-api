@@ -18,7 +18,8 @@ const getPlace = catchAsync(async (req, res) => {
   if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(place);
+  const result = await placeService.serializer(place);
+  res.send(result);
 });
 
 const getPlaceDetail = catchAsync(async (req, res) => {

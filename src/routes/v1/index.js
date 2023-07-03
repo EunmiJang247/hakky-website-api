@@ -1,5 +1,6 @@
 const express = require('express');
 const userRouter = require('./user.route');
+const portfolioRouter = require('./portfolio.route');
 const bannerRouter = require('./banner.route');
 const scheduleRouter = require('./schedule.route');
 const includeScheduleRouter = require('./include-schedule.route');
@@ -27,6 +28,10 @@ const defaultRoutes = [
   {
     path: '/place',
     route: placeRouter,
+  },
+  {
+    path: '/portfolio',
+    route: portfolioRouter,
   },
   {
     path: '/schedule',

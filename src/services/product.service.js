@@ -1,8 +1,14 @@
 const httpStatus = require('http-status');
-const { Product } = require('../models');
+const { Product, PlaceIdle } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createProduct = async (productBody) => Product.create(productBody);
+const createProduct = async (productBody) => {
+  const product = await Product.create(productBody);
+  const place = await PlaceIdle.Place.findById(productBody.place);
+  place.product.push(product.id);
+  place.save();
+  return product;
+};
 
 const getProducts = async (placeId) => {
   const places = await Product.find({ place: placeId });
@@ -29,6 +35,11 @@ const deleteProductById = async (productId) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
+  const place = await PlaceIdle.Place.findById(product.place);
+  const newArr = place.product.filter((prod) => String(prod) !== String(productId));
+  place.product = newArr;
+  place.markModified('product');
+  place.save();
   await product.remove();
   return product;
 };

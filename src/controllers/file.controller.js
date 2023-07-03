@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const ApiError = require('../utils/ApiError');
 const { errorData } = require('../utils/errorData');
-const { preSignS3Object } = require('../utils/upload');
+const { preSignS3Object, getObject } = require('../utils/upload');
 
 const file = catchAsync(async (req, res) => {
   if (req.file === undefined) {
@@ -18,6 +18,19 @@ const file = catchAsync(async (req, res) => {
   });
 });
 
+const fileAsPublic = catchAsync(async (req, res) => {
+  if (req.file === undefined) {
+    throw new ApiError(httpStatus.BAD_REQUEST, errorData.FILE_REQUIRED);
+  }
+  const tempUrl = getObject(req.file);
+  res.status(httpStatus.CREATED).send({
+    originalName: req.file.originalname,
+    key: req.file.key,
+    tempUrl,
+  });
+});
+
 module.exports = {
   file,
+  fileAsPublic,
 };

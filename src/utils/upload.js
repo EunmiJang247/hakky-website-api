@@ -33,6 +33,34 @@ const requestFileToBody = (req, _, next) => {
   next();
 };
 
+const uploadAsPublic = multer({
+  storage: multerS3({
+    s3,
+    acl: 'public-read',
+    bucket,
+    contentType: autoContentType,
+    key: (req, file, cb) => {
+      try {
+        // file original name converter
+        // eslint-disable-next-line no-param-reassign
+        file.originalname = Buffer.from(file.originalname, 'latin1').toString('utf8');
+        const mime = file.mimetype;
+
+        // Check whether it's allowed.
+        if (!isAllowedMime(mime)) {
+          throw new ApiError(httpStatus.BAD_REQUEST, errorData.INVALID_MIMETYPE.message);
+        }
+        // Get appropriate extension.
+        const ext = mimeToExt(mime);
+        // Send final s3 object name.
+        cb(null, `${uuid()}.${ext}`);
+      } catch (e) {
+        cb(e);
+      }
+    },
+  }),
+});
+
 const upload = multer({
   storage: multerS3({
     s3,
@@ -60,6 +88,8 @@ const upload = multer({
   }),
 });
 
+const getObject = (file) => file.location;
+
 const preSignedS3ObjectDuration = 24 * 60 * 60;
 
 const preSignS3Object = (key) => s3.getSignedUrl('getObject', {
@@ -70,6 +100,8 @@ const preSignS3Object = (key) => s3.getSignedUrl('getObject', {
 
 module.exports = {
   upload,
+  uploadAsPublic,
   requestFileToBody,
   preSignS3Object,
+  getObject,
 };

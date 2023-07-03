@@ -1,11 +1,11 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
-const PortFolio = require('../models/index');
+const { PortFolio } = require('../models');
 
 const createPortFolio = async (portfolioBody) => PortFolio.create(portfolioBody);
 
 const readPortFolio = async (id) => {
-  const portfolio = PortFolio.findById({ id });
+  const portfolio = await PortFolio.findById({ id });
   if (!portfolio) {
     throw new ApiError(httpStatus.BAD_REQUEST, '해당 id를 가진 포트폴리오가 없습니다.');
   }

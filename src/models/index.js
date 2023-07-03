@@ -7,3 +7,4 @@ module.exports.PlaceIdle = require('./place.model');
 module.exports.Product = require('./product.model');
 module.exports.MainPageBanner = require('./banner.model');
 module.exports.PortFolio = require('./portfolio.model');
+module.exports.Payment = require('./payment.model');

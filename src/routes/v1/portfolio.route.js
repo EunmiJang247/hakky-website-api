@@ -6,11 +6,11 @@ const portfolioController = require('../../controllers/portfolio.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(portFolioValidation.createPortfolio), portfolioController.createPlace).get(portfolioController.getPlaces);
+router.route('/').post(validate(portFolioValidation.createPortfolio), portfolioController.createPortfolio).get(portfolioController.getPortfolios);
 router
   .route('/:portfolioId/')
-  .get(validate(portFolioValidation.readPortfolio), portfolioController.getPlace)
-  .patch(auth('manageUsers'), validate(portFolioValidation.updatePortfolio), portfolioController.updatePlace)
-  .delete(auth('manageUsers'), validate(portFolioValidation.deletePortFolio), portfolioController.deletePlace);
+  .get(validate(portFolioValidation.readPortfolio), portfolioController.getPortfolio)
+  .patch(auth('manageUsers'), validate(portFolioValidation.updatePortfolio), portfolioController.updatePortfolio)
+  .delete(auth('manageUsers'), validate(portFolioValidation.deletePortFolio), portfolioController.deletePortfolio);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { PlaceIdle, Reservation } = require('../models');
+const { PlaceIdle, Reservation, Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createPlace = async (placeBody) => PlaceIdle.Place.create(placeBody);
@@ -272,6 +272,25 @@ const deletePlaceById = async (noticeId) => {
   return place;
 };
 
+const serializer = async (place) => {
+  const productList = [];
+  await Promise.all(place.product.map(async (prod) => {
+    const product = await Product.findById(prod);
+    productList.push(product);
+  }));
+  return {
+    id: place._id,
+    images: place.images,
+    name: place.name,
+    phone: place.phone,
+    address1: place.address1,
+    address2: place.address2,
+    postalCode: place.postalCode,
+    author: place.author,
+    product: productList,
+  };
+};
+
 module.exports = {
   createPlace,
   getPlaces,
@@ -280,4 +299,5 @@ module.exports = {
   getPlaceReservationList,
   deletePlaceById,
   updatePlace,
+  serializer,
 };

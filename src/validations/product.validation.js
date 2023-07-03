@@ -11,11 +11,11 @@ const createProduct = {
       options: Joi.array().items(
         Joi.object({
           name: Joi.string().required(),
-          time: Joi.string().required(),
+          time: Joi.number().required(),
           detail: Joi.string().required(),
-          price: Joi.string().required(),
+          price: Joi.number().required(),
         }),
-      ),
+      ).required(),
     })
     .required(),
 };
@@ -44,9 +44,9 @@ const updateProduct = {
       options: Joi.array().items(
         Joi.object({
           name: Joi.string(),
-          time: Joi.string(),
+          time: Joi.number(),
           detail: Joi.string(),
-          price: Joi.string(),
+          price: Joi.number(),
         }),
       ),
     })
