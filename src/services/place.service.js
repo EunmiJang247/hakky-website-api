@@ -177,16 +177,24 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
   }
 
   const scheduleMap = {
-    0: schedule.term.mon,
-    1: schedule.term.tue,
-    2: schedule.term.wed,
-    3: schedule.term.thu,
-    4: schedule.term.fri,
-    5: schedule.term.sat,
-    6: schedule.term.sun,
+    0: schedule.term.sun,
+    1: schedule.term.mon,
+    2: schedule.term.tue,
+    3: schedule.term.wed,
+    4: schedule.term.thu,
+    5: schedule.term.fri,
+    6: schedule.term.sat,
   };
   const timeSchedule = scheduleMap[dayOfWeek];
 
+  if (timeSchedule === '') {
+    return {
+      max: 0,
+      schedule: [],
+      date,
+      available: false,
+    };
+  }
   const reservations = await Reservation.find({
     place: id,
     startAt: { $gt: date },
@@ -201,13 +209,13 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
   let reservList;
   if (includeSchedules) {
     const includeScheduleMap = {
-      0: includeSchedules.term.mon,
-      1: includeSchedules.term.tue,
-      2: includeSchedules.term.wed,
-      3: includeSchedules.term.thu,
-      4: includeSchedules.term.fri,
-      5: includeSchedules.term.sat,
-      6: includeSchedules.term.sun,
+      0: includeSchedules.term.sun,
+      1: includeSchedules.term.mon,
+      2: includeSchedules.term.tue,
+      3: includeSchedules.term.wed,
+      4: includeSchedules.term.thu,
+      5: includeSchedules.term.fri,
+      6: includeSchedules.term.sat,
     };
     const includeTimeSchedule = includeScheduleMap[dayOfWeek];
     reservList = reservationCheck(reservations, includeTimeSchedule);

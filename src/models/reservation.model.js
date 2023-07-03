@@ -7,18 +7,14 @@ const reservationSchema = mongoose.Schema(
       required: true,
     },
     place: {
-      type: String,
+      type: mongoose.Types.ObjectId,
       required: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     productName: {
-      type: String,
-      required: true,
-    },
-    product: {
       type: String,
       required: true,
     },
@@ -44,7 +40,7 @@ const reservationSchema = mongoose.Schema(
     },
     adminNote: {
       type: String,
-      required: true,
+      required: false,
     },
     isCanceld: {
       type: Boolean,
