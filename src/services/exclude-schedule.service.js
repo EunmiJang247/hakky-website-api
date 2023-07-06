@@ -4,9 +4,9 @@ const ApiError = require('../utils/ApiError');
 
 const createExcludeSchedule = async (scheduleBody) => PlaceIdle.ExcludeSchedule.create(scheduleBody);
 
-const getExcludeSchedule = async (placeId) => {
-  const places = await PlaceIdle.ExcludeSchedule.find({ place: placeId });
-  return places;
+const getExcludeSchedules = async (placeId) => {
+  const excludeSchedules = await PlaceIdle.ExcludeSchedule.find({ place: placeId });
+  return excludeSchedules;
 };
 
 const getExcludeScheduleById = async (id) => {
@@ -15,27 +15,27 @@ const getExcludeScheduleById = async (id) => {
 };
 
 const updateExcludeSchedule = async (ExcludeScheduleId, updateBody) => {
-  const product = await getExcludeScheduleById(ExcludeScheduleId);
-  if (!product) {
+  const excludeSchedule = await getExcludeScheduleById(ExcludeScheduleId);
+  if (!excludeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'ExcludeSchedule not found');
   }
-  Object.assign(product, updateBody);
-  await product.save();
-  return product;
+  Object.assign(excludeSchedule, updateBody);
+  await excludeSchedule.save();
+  return excludeSchedule;
 };
 
 const deleteExcludeScheduleById = async (ExcludeScheduleId) => {
-  const product = await getExcludeScheduleById(ExcludeScheduleId);
-  if (!product) {
+  const excludeSchedule = await getExcludeScheduleById(ExcludeScheduleId);
+  if (!excludeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'ExcludeSchedule not found');
   }
-  await product.remove();
-  return product;
+  await excludeSchedule.remove();
+  return excludeSchedule;
 };
 
 module.exports = {
   createExcludeSchedule,
-  getExcludeSchedule,
+  getExcludeSchedules,
   getExcludeScheduleById,
   deleteExcludeScheduleById,
   updateExcludeSchedule,
