@@ -1,4 +1,5 @@
 const express = require('express');
+const optionRouter = require('./option.route');
 const userRouter = require('./user.route');
 const portfolioRouter = require('./portfolio.route');
 const bannerRouter = require('./banner.route');
@@ -17,6 +18,10 @@ const config = require('../../config/config');
 const router = express.Router();
 
 const defaultRoutes = [
+  {
+    path: '/option',
+    route: optionRouter,
+  },
   {
     path: '/banner',
     route: bannerRouter,

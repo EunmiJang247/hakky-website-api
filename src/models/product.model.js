@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
 const optionsSchema = mongoose.Schema({
+  productId: {
+    type: mongoose.Types.ObjectId,
+  },
+  id: {
+    type: String,
+  },
   name: {
     type: String,
   },
