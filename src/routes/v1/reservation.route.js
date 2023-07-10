@@ -1,19 +1,21 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const productValidation = require('../../validations/product.validation');
-const productController = require('../../controllers/reservation.controller');
+const reservationValidation = require('../../validations/reservation.validation');
+const reservationController = require('../../controllers/reservation.controller');
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(validate(productValidation.createProduct), productController.createProduct)
-  .get(validate(productValidation.getProducts), productController.getProducts);
+  .post(validate(reservationValidation.createReservation), reservationController.createReservation)
+  .get(validate(reservationValidation.getReservations), reservationController.readReservations);
 router
-  .route('/:productId')
-  .get(validate(productValidation.getProduct), productController.getProduct)
-  .patch(auth('ADMIN'), validate(productValidation.updateProduct), productController.updateProduct)
-  .delete(auth('ADMIN'), validate(productValidation.deleteProduct), productController.deleteProduct);
+  .route('/:reservationId')
+  .get(validate(reservationValidation.getProduct), reservationController.readReservation)
+  .patch(auth('ADMIN'), validate(reservationValidation.updateProduct), reservationController.updateReservation);
+router
+  .route('/:reservationId/cancel')
+  .patch(validate(reservationValidation.cancelReservation), reservationController.cancelReservation);
 
 module.exports = router;

@@ -48,7 +48,7 @@ const updateReservation = {
     .required(),
 };
 
-const deleteReservation = {
+const cancelReservation = {
   params: Joi.object().keys({
     reservationId: Joi.string().custom(objectId),
   }),
@@ -59,5 +59,5 @@ module.exports = {
   getReservations,
   getReservation,
   updateReservation,
-  deleteReservation,
+  cancelReservation,
 };

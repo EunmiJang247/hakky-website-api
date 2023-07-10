@@ -17,6 +17,7 @@ const paymentSchema = mongoose.Schema(
     isDeposit: {
       type: Boolean,
       required: true,
+      defalut: false,
     },
     productName: {
       type: String,

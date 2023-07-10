@@ -8,14 +8,14 @@ const createProduct = {
       name: Joi.string().required(),
       images: Joi.array().items(Joi.object()).required(),
       description: Joi.string().required(),
-      options: Joi.array().items(
-        Joi.object({
-          name: Joi.string().required(),
-          time: Joi.number().required(),
-          detail: Joi.string().required(),
-          price: Joi.number().required(),
-        }),
-      ).required(),
+      // options: Joi.array().items(
+      //   Joi.object({
+      //     name: Joi.string().required(),
+      //     time: Joi.number().required(),
+      //     detail: Joi.string().required(),
+      //     price: Joi.number().required(),
+      //   }),
+      // ).required(),
     })
     .required(),
 };
@@ -41,14 +41,14 @@ const updateProduct = {
       name: Joi.string(),
       images: Joi.array().items(Joi.object()),
       description: Joi.string(),
-      options: Joi.array().items(
-        Joi.object({
-          name: Joi.string(),
-          time: Joi.number(),
-          detail: Joi.string(),
-          price: Joi.number(),
-        }),
-      ),
+      // options: Joi.array().items(
+      //   Joi.object({
+      //     name: Joi.string(),
+      //     time: Joi.number(),
+      //     detail: Joi.string(),
+      //     price: Joi.number(),
+      //   }),
+      // ),
     })
     .required(),
 };
