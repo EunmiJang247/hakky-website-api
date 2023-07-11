@@ -3,7 +3,6 @@ const Joi = require('joi');
 const createOption = {
   body: Joi.object().keys({
     productId: Joi.string().required(),
-    id: Joi.string().required(),
     name: Joi.string().required(),
     time: Joi.number().required(),
     detail: Joi.string().required(),

@@ -1,9 +1,13 @@
+const { v4 } = require('uuid');
+
 const httpStatus = require('http-status');
 const { Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createOption = async (optionBody) => {
   const product = await Product.findById(optionBody.productId);
+  // eslint-disable-next-line no-param-reassign
+  optionBody.id = v4();
   product.options.push(optionBody);
   product.save();
   return product;

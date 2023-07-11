@@ -13,3 +13,4 @@ module.exports.bannerService = require('./banner.service');
 module.exports.portfolioService = require('./portfolio.service');
 module.exports.reservationService = require('./reservation.service');
 module.exports.optionService = require('./option.service');
+module.exports.paymentService = require('./payment.service');
