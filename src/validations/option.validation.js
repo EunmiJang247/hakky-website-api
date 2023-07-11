@@ -10,6 +10,13 @@ const createOption = {
   }).required(),
 };
 
+const readOption = {
+  params: Joi.object().keys({
+    productId: Joi.string().required(),
+    id: Joi.string().required(),
+  }),
+};
+
 const updateOption = {
   params: Joi.object().keys({
     productId: Joi.string().required(),
@@ -48,6 +55,7 @@ const deleteOption = {
 
 module.exports = {
   createOption,
+  readOption,
   deleteOption,
   updateOption,
   updateOptionsOrder,

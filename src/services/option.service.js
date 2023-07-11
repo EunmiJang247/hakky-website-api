@@ -1,16 +1,21 @@
-const { v4 } = require('uuid');
-
 const httpStatus = require('http-status');
 const { Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createOption = async (optionBody) => {
   const product = await Product.findById(optionBody.productId);
-  // eslint-disable-next-line no-param-reassign
-  optionBody.id = v4();
   product.options.push(optionBody);
   product.save();
   return product;
+};
+
+const readOption = async (productId, id) => {
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+  const index = product.options.findIndex((item) => item.id === id);
+  return product.options[index];
 };
 
 const updateOption = async (productId, id, updateBody) => {
@@ -50,6 +55,7 @@ const deleteOptionById = async (productId, id) => {
 
 module.exports = {
   createOption,
+  readOption,
   updateOption,
   updateOptionsOrder,
   deleteOptionById,

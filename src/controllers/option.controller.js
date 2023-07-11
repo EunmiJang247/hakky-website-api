@@ -7,14 +7,19 @@ const createOption = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(option);
 });
 
+const readOption = catchAsync(async (req, res) => {
+  const option = await optionService.readOption(req.params.productId, req.params.id);
+  res.send(option);
+});
+
 const updateOption = catchAsync(async (req, res) => {
-  const notice = await optionService.updateOption(req.params.productId, req.params.id, req.body);
-  res.send(notice);
+  const option = await optionService.updateOption(req.params.productId, req.params.id, req.body);
+  res.send(option);
 });
 
 const updateOptionsOrder = catchAsync(async (req, res) => {
-  const notice = await optionService.updateOptionsOrder(req.params.productId, req.body);
-  res.send(notice);
+  const option = await optionService.updateOptionsOrder(req.params.productId, req.body);
+  res.send(option);
 });
 
 const deleteOptionById = catchAsync(async (req, res) => {
@@ -24,6 +29,7 @@ const deleteOptionById = catchAsync(async (req, res) => {
 
 module.exports = {
   createOption,
+  readOption,
   updateOption,
   updateOptionsOrder,
   deleteOptionById,
