@@ -4,6 +4,8 @@ const ApiError = require('../utils/ApiError');
 
 const createProduct = async (productBody) => {
   const product = await Product.create(productBody);
+  product.options = [];
+  product.save();
   const place = await PlaceIdle.Place.findById(productBody.place);
   place.product.push(product.id);
   place.save();
