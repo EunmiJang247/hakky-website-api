@@ -14,7 +14,7 @@ const readOption = async (productId, id) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  const index = product.options.findIndex((item) => item.id === id);
+  const index = product.options.findIndex((item) => String(item._id) === String(id));
   return product.options[index];
 };
 
@@ -23,7 +23,7 @@ const updateOption = async (productId, id, updateBody) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  const index = product.options.findIndex((item) => item.id === id);
+  const index = product.options.findIndex((item) => String(item._id) === String(id));
   product.options[index] = updateBody;
   product.markModified('options');
   await product.save();
@@ -46,7 +46,7 @@ const deleteOptionById = async (productId, id) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  const result = product.options.filter((item) => item.id !== id);
+  const result = product.options.filter((item) => String(item._id) !== String(id));
   product.options = result;
   product.markModified('options');
   product.save();
