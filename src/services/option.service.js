@@ -24,6 +24,8 @@ const updateOption = async (productId, id, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
   const index = product.options.findIndex((item) => String(item._id) === String(id));
+  // eslint-disable-next-line no-param-reassign
+  updateBody._id = id;
   product.options[index] = updateBody;
   product.markModified('options');
   await product.save();

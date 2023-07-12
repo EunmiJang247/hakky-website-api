@@ -1,6 +1,18 @@
-const Payment = require('../models');
+const { Payment, Reservation } = require('../models');
 
-const createPayment = async (paymentBody) => Payment.create(paymentBody);
+const createPayment = async (paymentBody) => {
+  // const reservation = await Reservation.create({
+
+  // });
+
+  const payment = await Payment.create({
+    applicant: paymentBody.applicant,
+    refund: false,
+    isDeposit: false,
+    amount: paymentBody.price,
+  });
+  return payment;
+};
 
 const readPayment = async (id) => {
   const payment = await Payment.findById(id);
