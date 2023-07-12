@@ -13,7 +13,7 @@ router
   .route('/:productId/')
   .patch(auth('ADMIN'), validate(optionValidation.updateOptionsOrder), optionController.updateOptionsOrder);
 router
-  .route('/:productId/:optionId')
+  .route('/:productId/:id')
   .get(validate(optionValidation.readOption), optionController.readOption)
   .patch(auth('ADMIN'), validate(optionValidation.updateOption), optionController.updateOption)
   .delete(auth('ADMIN'), validate(optionValidation.deleteOption), optionController.deleteOptionById);

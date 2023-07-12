@@ -1,5 +1,30 @@
 const mongoose = require('mongoose');
 
+const reservationProductSchema = mongoose.Schema(
+  {
+    id: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    detail: {
+      type: String,
+      required: true,
+    },
+    images: {
+      type: Array,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    options: {
+      type: Array,
+      required: true,
+    },
+  },
+);
+
 const reservationSchema = mongoose.Schema(
   {
     applicant: {
@@ -14,12 +39,12 @@ const reservationSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    productName: {
-      type: String,
+    products: {
+      type: [reservationProductSchema],
       required: true,
     },
     deposit: {
-      type: String,
+      type: Number,
       required: true,
     },
     reservationFrom: {

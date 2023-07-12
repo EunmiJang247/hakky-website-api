@@ -19,8 +19,8 @@ const paymentSchema = mongoose.Schema(
       required: true,
       defalut: false,
     },
-    productName: {
-      type: String,
+    reservationId: {
+      type: mongoose.Types.ObjectId,
       required: true,
     },
   },
