@@ -8,10 +8,10 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(validate(paymentValidation.readOption), paymentController.readPayments)
-  .post(validate(paymentValidation.createOption), paymentController.createPayment);
+  .get(validate(paymentValidation.readPayments), paymentController.readPayments)
+  .post(validate(paymentValidation.createPayment), paymentController.createPayment);
 router
   .route('/:paymentId/')
-  .get(validate(paymentValidation.updateOptionsOrder), paymentController.readPayment);
+  .get(validate(paymentValidation.readPayment), paymentController.readPayment);
 
 module.exports = router;
