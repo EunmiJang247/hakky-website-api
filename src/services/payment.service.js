@@ -1,9 +1,31 @@
-const { Payment, Reservation } = require('../models');
+const { Payment, Reservation, Product } = require('../models');
+const ApiError = require('../utils/ApiError');
 
 const createPayment = async (paymentBody) => {
-  // const reservation = await Reservation.create({
+  let timecheck = 0;
+  await Promise.all(paymentBody.products.map(async (product) => {
+    const productDoc = await Product.findById(product.id);
+    const index = productDoc.option.findIndex((item) => String(item._id) === String(product.option[0].id));
+    const option = product.option[index];
+    timecheck += option.time;
+  }));
 
-  // });
+  if (timecheck !== paymentBody.reservationTime) {
+    throw new ApiError(400, 'reservationTime is not valid');
+  }
+
+  const reservation = await Reservation.create({
+    applicant: paymentBody.applicant,
+    place: paymentBody.place,
+    price: paymentBody.price,
+    deposit: Math.floor(paymentBody.price / 2),
+    products: paymentBody.products,
+    reservationFrom: paymentBody.reservationFrom,
+    reservationTo: paymentBody.reservationTo,
+    reservationTime: paymentBody.reservationTime,
+    note: paymentBody.note,
+  });
+  reservation.save();
 
   const payment = await Payment.create({
     applicant: paymentBody.applicant,
@@ -19,7 +41,7 @@ const readPayment = async (id) => {
   return payment;
 };
 
-const readPayments = async (keyword, startDate, endDate, applicant) => {
+const readPayments = async (keywords, startDate, endDate, applicant, limit, skip) => {
   const query = {
     startAt: { $gt: startDate },
     endAt: { $lt: endDate },
@@ -28,12 +50,13 @@ const readPayments = async (keyword, startDate, endDate, applicant) => {
   if (applicant) {
     query.applicant = applicant;
   }
-  const payments = await Payment.find(query);
+  if (keywords !== '') {
+    query._id = { $regex: keywords };
+  }
+
+  const payments = await Payment.find(query).limit(limit).skip(skip);
 
   return payments;
-  // if (keyword !== '') {
-  //   payments = await Payment.find();
-  // }
 };
 
 module.exports = {

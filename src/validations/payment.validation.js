@@ -8,7 +8,7 @@ const createPayment = {
     reservationFrom: Joi.date().required(),
     reservationTo: Joi.date().required(),
     reservationTime: Joi.number().required(),
-    note: Joi.string().required(),
+    note: Joi.string().required().allow(''),
   }).required(),
 };
 
@@ -24,6 +24,8 @@ const readPayments = {
     from: Joi.date(),
     to: Joi.date(),
     applicant: Joi.string(),
+    limit: Joi.number().required(),
+    skip: Joi.date().required(),
   }).required(),
 };
 
