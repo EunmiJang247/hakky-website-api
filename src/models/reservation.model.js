@@ -6,7 +6,7 @@ const reservationProductSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
-    detail: {
+    description: {
       type: String,
       required: true,
     },
