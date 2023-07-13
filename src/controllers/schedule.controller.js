@@ -10,7 +10,8 @@ const createSchedule = catchAsync(async (req, res) => {
 
 const getSchedules = catchAsync(async (req, res) => {
   const schedules = await scheduleService.getSchedules(req.query.placeId);
-  res.send(schedules);
+  const result = schedules.map(scheduleService.serializer);
+  res.send(result);
 });
 
 const getSchedule = catchAsync(async (req, res) => {
@@ -18,12 +19,14 @@ const getSchedule = catchAsync(async (req, res) => {
   if (!schedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(schedule);
+  const result = scheduleService.serializer(schedule);
+  res.send(result);
 });
 
 const updateSchedule = catchAsync(async (req, res) => {
   const schedule = await scheduleService.updateSchedule(req.params.scheduleId, req.body);
-  res.send(schedule);
+  const result = scheduleService.serializer(schedule);
+  res.send(result);
 });
 
 const deleteSchedule = catchAsync(async (req, res) => {

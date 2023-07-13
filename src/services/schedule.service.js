@@ -33,10 +33,21 @@ const deleteScheduleById = async (scheduleId) => {
   return product;
 };
 
+const serializer = (schedule) => ({
+  id: schedule._id,
+  place: schedule.place,
+  name: schedule.name,
+  startAt: schedule.startAt,
+  endAt: schedule.endAt,
+  term: schedule.term,
+  createdAt: schedule.createdAt,
+});
+
 module.exports = {
   createSchedule,
   getSchedules,
   getScheduleById,
   deleteScheduleById,
   updateSchedule,
+  serializer,
 };
