@@ -41,20 +41,28 @@ const readReservations = async (status, userId) => {
   };
 };
 
-const adminReadReservations = async (status) => {
-  const statusQuery = {
-    all: {},
-    beforeDeposit: { isApproval: false, isCanceld: false },
-    complete: { isApproval: true, isCanceld: false },
-    canceld: { isCanceld: true },
-    done: { reservationTo: { $lte: new Date() }, isCanceld: false },
-  };
+const adminReadReservations = async (applicant, placeId, from, to, limit, skip) => {
+  const query = {};
+  if (applicant) {
+    query.applicant = applicant;
+  }
+  if (placeId) {
+    query.place = placeId;
+  }
+  if (from) {
+    query.from = { $gte: from };
+  }
+  if (to) {
+    query.to = { $lte: to };
+  }
+  if (applicant) {
+    query.applicant = applicant;
+  }
 
-  const reservations = await Reservation.find(statusQuery[status]).sort('-createdAt');
-  const count = await Reservation.countDocuments(statusQuery[status]);
-
+  const result = await Reservation.find(query).limit(limit).skip(skip);
+  const count = await Reservation.countDocuments(query);
   return {
-    result: reservations,
+    result,
     count,
   };
 };

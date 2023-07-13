@@ -20,7 +20,12 @@ const createReservation = {
 const getReservations = {
   query: Joi.object().keys({
     placeId: Joi.string().custom(objectId),
-  }),
+    applicant: Joi.string().custom(objectId),
+    from: Joi.date(),
+    to: Joi.date(),
+    limit: Joi.number(),
+    skip: Joi.number(),
+  }).required(),
 };
 
 const getReservation = {

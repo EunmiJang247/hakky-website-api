@@ -19,6 +19,11 @@ const readReservations = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(reservation);
 });
 
+const adminReadReservations = catchAsync(async (req, res) => {
+  const reservation = await reservationService.adminReadReservations(req.query.applicant, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
+  res.send({ result: reservation.result, count: reservation.count });
+});
+
 const updateReservation = catchAsync(async (req, res) => {
   const { userId } = req.user;
   const reservation = await reservationService.updateReservation(req.params.id, userId);
@@ -35,6 +40,7 @@ module.exports = {
   createReservation,
   readReservation,
   readReservations,
+  adminReadReservations,
   updateReservation,
   cancelReservation,
 };
