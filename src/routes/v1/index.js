@@ -1,4 +1,6 @@
 const express = require('express');
+const reservationRouter = require('./reservation.route');
+const paymentRouter = require('./payment.route');
 const optionRouter = require('./option.route');
 const userRouter = require('./user.route');
 const portfolioRouter = require('./portfolio.route');
@@ -18,6 +20,14 @@ const config = require('../../config/config');
 const router = express.Router();
 
 const defaultRoutes = [
+  {
+    path: '/reservation',
+    route: reservationRouter,
+  },
+  {
+    path: '/payment',
+    route: paymentRouter,
+  },
   {
     path: '/option',
     route: optionRouter,
