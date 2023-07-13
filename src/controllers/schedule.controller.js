@@ -15,9 +15,9 @@ const getSchedules = catchAsync(async (req, res) => {
 });
 
 const getSchedule = catchAsync(async (req, res) => {
-  const schedule = await scheduleService.getScheduleById(req.params.productId);
+  const schedule = await scheduleService.getScheduleById(req.params.scheduleId);
   if (!schedule) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Schedule not found');
   }
   const result = scheduleService.serializer(schedule);
   res.send(result);
