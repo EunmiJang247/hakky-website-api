@@ -3,12 +3,14 @@ const ApiError = require('../utils/ApiError');
 
 const createPayment = async (paymentBody, userId) => {
   let timecheck = 0;
-  await Promise.all(paymentBody.products.map(async (product) => {
-    const productDoc = await Product.findById(product.id);
-    const index = productDoc.option.findIndex((item) => String(item._id) === String(product.option[0].id));
-    const option = product.option[index];
-    timecheck += option.time;
-  }));
+  await Promise.all(
+    paymentBody.products.map(async (product) => {
+      const productDoc = await Product.findById(product.id);
+      const index = productDoc.options.findIndex((item) => String(item._id) === String(product.options[0].id));
+      const option = productDoc.options[index];
+      timecheck += option.time;
+    }),
+  );
 
   if (timecheck !== paymentBody.reservationTime) {
     throw new ApiError(400, 'reservationTime is not valid');
