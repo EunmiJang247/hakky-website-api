@@ -2,7 +2,8 @@ const { paymentService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 
 const createPayment = catchAsync(async (req, res) => {
-  const payment = await paymentService.createPayment(req.body);
+  const { id: userId } = req.user;
+  const payment = await paymentService.createPayment(req.body, userId);
   // todo create reservation
   res.send(payment);
 });

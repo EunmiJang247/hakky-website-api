@@ -1,7 +1,7 @@
 const { Payment, Reservation, Product } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createPayment = async (paymentBody) => {
+const createPayment = async (paymentBody, userId) => {
   let timecheck = 0;
   await Promise.all(paymentBody.products.map(async (product) => {
     const productDoc = await Product.findById(product.id);
@@ -15,8 +15,8 @@ const createPayment = async (paymentBody) => {
   }
 
   const reservation = await Reservation.create({
-    applicant: paymentBody.applicant,
-    place: paymentBody.place,
+    applicant: userId,
+    place: paymentBody.placeId,
     price: paymentBody.price,
     deposit: Math.floor(paymentBody.price / 2),
     products: paymentBody.products,
@@ -28,7 +28,7 @@ const createPayment = async (paymentBody) => {
   reservation.save();
 
   const payment = await Payment.create({
-    applicant: paymentBody.applicant,
+    applicant: userId,
     refund: false,
     isDeposit: false,
     amount: paymentBody.price,
