@@ -4,7 +4,7 @@ const createPayment = {
   body: Joi.object().keys({
     price: Joi.number().required(),
     placeId: Joi.string().required(),
-    product: Joi.array().items(Joi.object()),
+    products: Joi.array().items(Joi.object()),
     reservationFrom: Joi.date().required(),
     reservationTo: Joi.date().required(),
     reservationTime: Joi.number().required(),
