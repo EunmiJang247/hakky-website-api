@@ -30,6 +30,7 @@ const createPayment = async (paymentBody, userId) => {
   reservation.save();
 
   const payment = await Payment.create({
+    reservationId: reservation,
     applicant: userId,
     refund: false,
     isDeposit: false,
