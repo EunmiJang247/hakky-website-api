@@ -37,7 +37,7 @@ const updateReservation = catchAsync(async (req, res) => {
 
 const adminUdateReservation = catchAsync(async (req, res) => {
   const { userId } = req.user;
-  const reservation = await reservationService.updateReservation(req.params.id, userId);
+  const reservation = await reservationService.adminUpdateReservation(req.params.id, userId);
   res.status(httpStatus.NO_CONTENT).send(reservation);
 });
 
