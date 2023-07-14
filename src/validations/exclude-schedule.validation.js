@@ -26,7 +26,7 @@ const getExcludeSchedule = {
 
 const updateExcludeSchedule = {
   params: Joi.object().keys({
-    excludeScheduletId: Joi.required().custom(objectId),
+    excludeScheduleId: Joi.required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
