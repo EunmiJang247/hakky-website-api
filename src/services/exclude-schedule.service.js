@@ -38,7 +38,7 @@ const serializer = async (excludeSchedule) => ({
   place: excludeSchedule.place,
   name: excludeSchedule.name,
   startAt: excludeSchedule.startAt,
-  endAt: excludeSchedule.entAtt,
+  endAt: excludeSchedule.endAt,
   createdAt: excludeSchedule.createdAt,
 });
 
