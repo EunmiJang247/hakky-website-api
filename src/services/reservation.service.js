@@ -77,8 +77,8 @@ const updateReservation = async (id, updateBody, userId) => {
   return reservation;
 };
 
-const adminUpdateReservation = async (id, updateBody, userId) => {
-  const reservation = await Reservation.findOne({ _id: id, applicant: userId });
+const adminUpdateReservation = async (id, updateBody) => {
+  const reservation = await Reservation.findOne({ _id: id });
   if (!reservation) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
