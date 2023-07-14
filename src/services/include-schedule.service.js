@@ -33,7 +33,7 @@ const deleteIncludeScheduleById = async (includeScheduleId) => {
   return product;
 };
 
-const serializer = async (includeSchedule) => ({
+const serializer = (includeSchedule) => ({
   id: includeSchedule._id,
   place: includeSchedule.place,
   name: includeSchedule.name,
