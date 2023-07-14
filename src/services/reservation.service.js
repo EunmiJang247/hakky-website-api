@@ -77,6 +77,16 @@ const updateReservation = async (id, updateBody, userId) => {
   return reservation;
 };
 
+const adminUpdateReservation = async (id, updateBody, userId) => {
+  const reservation = await Reservation.findOne({ _id: id, applicant: userId });
+  if (!reservation) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
+  }
+  Object.assign(reservation, updateBody);
+  reservation.save();
+  return reservation;
+};
+
 const cancelReservation = async (id, userId) => {
   const reservation = await Reservation.findOne({ _id: id, applicant: userId });
   if (!reservation) {
@@ -95,4 +105,5 @@ module.exports = {
   cancelReservation,
   adminReadReservation,
   adminReadReservations,
+  adminUpdateReservation,
 };

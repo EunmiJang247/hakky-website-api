@@ -9,13 +9,20 @@ const router = express.Router();
 router
   .route('/')
   .post(validate(reservationValidation.createReservation), reservationController.createReservation)
-  .get(validate(reservationValidation.getReservations), reservationController.readReservations);
+  .get(auth(), validate(reservationValidation.getReservations), reservationController.readReservations);
 router
   .route('/:reservationId')
-  .get(validate(reservationValidation.getProduct), reservationController.readReservation)
-  .patch(auth('ADMIN'), validate(reservationValidation.updateProduct), reservationController.updateReservation);
+  .get(validate(reservationValidation.getReservation), reservationController.readReservation)
+  .patch(auth(), validate(reservationValidation.updateReservation), reservationController.updateReservation);
+router
+  .route('/admin/:reservaionId')
+  .get(auth('ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
+  .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminReadReservations);
+router
+  .route('/admin/')
+  .patch(auth('ADMIN', validate(reservationValidation.adminGetReservations), reservationController.adminReadReservations));
 router
   .route('/:reservationId/cancel')
-  .patch(validate(reservationValidation.cancelReservation), reservationController.cancelReservation);
+  .patch(auth(), validate(reservationValidation.cancelReservation), reservationController.cancelReservation);
 
 module.exports = router;

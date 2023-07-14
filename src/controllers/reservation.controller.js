@@ -13,6 +13,11 @@ const readReservation = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(reservation);
 });
 
+const adminReadReservation = catchAsync(async (req, res) => {
+  const reservation = await reservationService.adminReadReservation(req.params.id);
+  res.status(httpStatus.OK).send(reservation);
+});
+
 const readReservations = catchAsync(async (req, res) => {
   const { userId } = req.user;
   const reservation = await reservationService.readReservations(req.query.status, userId);
@@ -30,6 +35,12 @@ const updateReservation = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send(reservation);
 });
 
+const adminUdateReservation = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  const reservation = await reservationService.updateReservation(req.params.id, userId);
+  res.status(httpStatus.NO_CONTENT).send(reservation);
+});
+
 const cancelReservation = catchAsync(async (req, res) => {
   const { userId } = req.user;
   const reservation = await reservationService.cancelReservation(req.params.id, userId);
@@ -40,7 +51,9 @@ module.exports = {
   createReservation,
   readReservation,
   readReservations,
+  adminReadReservation,
   adminReadReservations,
+  adminUdateReservation,
   updateReservation,
   cancelReservation,
 };

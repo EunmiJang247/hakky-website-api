@@ -13,7 +13,7 @@ router
 router
   .route('/:scheduleId')
   .get(validate(scheduleValidation.getSchedule), scheduleController.getSchedule)
-  .patch(auth('manageUsers'), validate(scheduleValidation.updateSchedule), scheduleController.updateSchedule)
-  .delete(auth('manageUsers'), validate(scheduleValidation.deleteSchedule), scheduleController.deleteSchedule);
+  .patch(auth('ADMIN'), validate(scheduleValidation.updateSchedule), scheduleController.updateSchedule)
+  .delete(auth('ADMIN'), validate(scheduleValidation.deleteSchedule), scheduleController.deleteSchedule);
 
 module.exports = router;

@@ -17,7 +17,7 @@ const createReservation = {
     .required(),
 };
 
-const getReservations = {
+const adminGetReservations = {
   query: Joi.object().keys({
     placeId: Joi.string().custom(objectId),
     applicant: Joi.string().custom(objectId),
@@ -25,6 +25,12 @@ const getReservations = {
     to: Joi.date(),
     limit: Joi.number(),
     skip: Joi.number(),
+  }).required(),
+};
+
+const getReservations = {
+  query: Joi.object().keys({
+    status: Joi.string().required(),
   }).required(),
 };
 
@@ -63,6 +69,7 @@ module.exports = {
   createReservation,
   getReservations,
   getReservation,
+  adminGetReservations,
   updateReservation,
   cancelReservation,
 };
