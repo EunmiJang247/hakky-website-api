@@ -33,10 +33,20 @@ const deleteExcludeScheduleById = async (ExcludeScheduleId) => {
   return excludeSchedule;
 };
 
+const serializer = async (excludeSchedule) => ({
+  id: excludeSchedule._id,
+  place: excludeSchedule.place,
+  name: excludeSchedule.name,
+  startAt: excludeSchedule.startAt,
+  endAt: excludeSchedule.entAtt,
+  createdAt: excludeSchedule.createdAt,
+});
+
 module.exports = {
   createExcludeSchedule,
   getExcludeSchedules,
   getExcludeScheduleById,
   deleteExcludeScheduleById,
   updateExcludeSchedule,
+  serializer,
 };

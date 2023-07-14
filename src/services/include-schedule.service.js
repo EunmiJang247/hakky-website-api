@@ -4,7 +4,7 @@ const ApiError = require('../utils/ApiError');
 
 const createIncludeSchedule = async (scheduleBody) => PlaceIdle.IncludeSchedule.create(scheduleBody);
 
-const getIncludeSchedule = async (placeId) => {
+const getIncludeSchedules = async (placeId) => {
   const places = await PlaceIdle.IncludeSchedule.find({ place: placeId });
   return places;
 };
@@ -33,10 +33,20 @@ const deleteIncludeScheduleById = async (includeScheduleId) => {
   return product;
 };
 
+const serializer = async (includeSchedule) => ({
+  id: includeSchedule._id,
+  place: includeSchedule.place,
+  name: includeSchedule.name,
+  date: includeSchedule.date,
+  term: includeSchedule.term,
+  createdAt: includeSchedule.createdAt,
+});
+
 module.exports = {
   createIncludeSchedule,
-  getIncludeSchedule,
+  getIncludeSchedules,
   getIncludeScheduleById,
   deleteIncludeScheduleById,
   updateIncludeSchedule,
+  serializer,
 };

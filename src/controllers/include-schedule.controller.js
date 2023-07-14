@@ -5,12 +5,14 @@ const { includeScheduleService } = require('../services');
 
 const createIncludeSchedule = catchAsync(async (req, res) => {
   const includeSchedule = await includeScheduleService.createIncludeSchedule(req.body);
-  res.status(httpStatus.CREATED).send(includeSchedule);
+  const result = includeScheduleService.serializer(includeSchedule);
+  res.status(httpStatus.CREATED).send(result);
 });
 
 const getIncludeSchedules = catchAsync(async (req, res) => {
   const includeSchedules = await includeScheduleService.getIncludeSchedules(req.query.includeScheduleId);
-  res.send(includeSchedules);
+  const result = includeSchedules.map(includeScheduleService.serializer);
+  res.send(result);
 });
 
 const getIncludeSchedule = catchAsync(async (req, res) => {
@@ -18,12 +20,14 @@ const getIncludeSchedule = catchAsync(async (req, res) => {
   if (!includeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(includeSchedule);
+  const result = includeScheduleService.serializer(includeSchedule);
+  res.send(result);
 });
 
 const updateIncludeSchedule = catchAsync(async (req, res) => {
   const includeSchedule = await includeScheduleService.updateIncludeSchedule(req.params.includeScheduleId, req.body);
-  res.send(includeSchedule);
+  const result = includeScheduleService.serializer(includeSchedule);
+  res.send(result);
 });
 
 const deleteIncludeSchedule = catchAsync(async (req, res) => {

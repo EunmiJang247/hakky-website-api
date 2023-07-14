@@ -5,12 +5,14 @@ const { excludeScheduleService } = require('../services');
 
 const createExcludeSchedule = catchAsync(async (req, res) => {
   const excludeSchedule = await excludeScheduleService.createExcludeSchedule(req.body);
-  res.status(httpStatus.CREATED).send(excludeSchedule);
+  const result = excludeScheduleService(excludeSchedule);
+  res.status(httpStatus.CREATED).send(result);
 });
 
 const getExcludeSchedules = catchAsync(async (req, res) => {
   const excludeSchedules = await excludeScheduleService.getExcludeSchedules(req.query.placeId);
-  res.send(excludeSchedules);
+  const result = excludeSchedules.map(excludeScheduleService.serializer);
+  res.send(result);
 });
 
 const getExcludeSchedule = catchAsync(async (req, res) => {
@@ -18,12 +20,14 @@ const getExcludeSchedule = catchAsync(async (req, res) => {
   if (!excludeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
-  res.send(excludeSchedule);
+  const result = excludeScheduleService.serializer(excludeSchedule);
+  res.send(result);
 });
 
 const updateExcludeSchedule = catchAsync(async (req, res) => {
   const excludeSchedule = await excludeScheduleService.updateExcludeSchedule(req.params.excludeScheduleId, req.body);
-  res.send(excludeSchedule);
+  const result = excludeScheduleService.serializer(excludeSchedule);
+  res.send(result);
 });
 
 const deleteExcludeSchedule = catchAsync(async (req, res) => {
