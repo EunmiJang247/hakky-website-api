@@ -14,7 +14,7 @@ const createExcludeSchedule = {
 
 const getExcludeSchedules = {
   query: Joi.object().keys({
-    placeId: Joi.string().custom(objectId),
+    excludeScheduleId: Joi.string().custom(objectId),
   }),
 };
 
