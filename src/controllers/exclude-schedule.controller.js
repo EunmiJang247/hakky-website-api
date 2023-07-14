@@ -9,12 +9,12 @@ const createExcludeSchedule = catchAsync(async (req, res) => {
 });
 
 const getExcludeSchedules = catchAsync(async (req, res) => {
-  const excludeSchedules = await excludeScheduleService.getExcludeSchedules(req.query.excludeScheduleId);
+  const excludeSchedules = await excludeScheduleService.getExcludeSchedules(req.query.placeId);
   res.send(excludeSchedules);
 });
 
 const getExcludeSchedule = catchAsync(async (req, res) => {
-  const excludeSchedule = await excludeScheduleService.getExcludeScheduleById(req.params.productId);
+  const excludeSchedule = await excludeScheduleService.getExcludeScheduleById(req.params.excludeScheduleId);
   if (!excludeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
