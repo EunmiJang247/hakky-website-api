@@ -7,5 +7,5 @@ module.exports.placeController = require('./place.controller');
 module.exports.productController = require('./product.controller');
 module.exports.scheduleController = require('./schedule.controller');
 module.exports.includeScheduleController = require('./include-schedule.controller');
-module.exports.excludeSheduleController = require('./exclude-schedule.controller');
+module.exports.excludeScheduleController = require('./exclude-schedule.controller');
 module.exports.portfolioController = require('./portfolio.controller');

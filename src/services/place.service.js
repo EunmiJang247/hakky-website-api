@@ -209,17 +209,7 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
 
   let reservList;
   if (includeSchedules) {
-    const includeScheduleMap = {
-      0: includeSchedules.term.sun,
-      1: includeSchedules.term.mon,
-      2: includeSchedules.term.tue,
-      3: includeSchedules.term.wed,
-      4: includeSchedules.term.thu,
-      5: includeSchedules.term.fri,
-      6: includeSchedules.term.sat,
-    };
-    const includeTimeSchedule = includeScheduleMap[dayOfWeek];
-    reservList = reservationCheck(reservations, includeTimeSchedule);
+    reservList = reservationCheck(reservations, includeSchedules.term);
   } else {
     reservList = reservationCheck(reservations, timeSchedule);
   }

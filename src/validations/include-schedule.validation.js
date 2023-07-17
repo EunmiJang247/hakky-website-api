@@ -6,8 +6,8 @@ const createIncludeSchedule = {
     .keys({
       place: Joi.string().required(),
       name: Joi.string().required(),
-      startAt: Joi.date().required(),
-      endAt: Joi.date().required(),
+      date: Joi.date().required(),
+      term: Joi.string().required(),
     })
     .required(),
 };
@@ -30,9 +30,9 @@ const updateIncludeSchedule = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string().required(),
-      startAt: Joi.date().required(),
-      endAt: Joi.date().required(),
+      name: Joi.string(),
+      date: Joi.date(),
+      term: Joi.string(),
     })
     .required(),
 };

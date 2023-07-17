@@ -96,7 +96,10 @@ const includeScheduleSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
-    term: businessHoursSchema,
+    term: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

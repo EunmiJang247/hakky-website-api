@@ -30,9 +30,9 @@ const updateExcludeSchedule = {
   }),
   body: Joi.object()
     .keys({
-      name: Joi.string().required(),
-      startAt: Joi.date().required(),
-      endAt: Joi.date().required(),
+      name: Joi.string(),
+      startAt: Joi.date(),
+      endAt: Joi.date(),
     })
     .required(),
 };
