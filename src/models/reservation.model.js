@@ -31,20 +31,16 @@ const reservationSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
-    place: {
+    placeId: {
       type: mongoose.Types.ObjectId,
       required: true,
     },
-    price: {
-      type: Number,
+    paymentId: {
+      type: mongoose.Types.ObjectId,
       required: true,
     },
     products: {
       type: [reservationProductSchema],
-      required: true,
-    },
-    deposit: {
-      type: Number,
       required: true,
     },
     reservationFrom: {

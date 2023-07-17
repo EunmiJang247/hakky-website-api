@@ -9,6 +9,9 @@ const createPayment = {
     reservationTo: Joi.date().required(),
     reservationTime: Joi.number().required(),
     note: Joi.string().required().allow(''),
+    paymentKey: Joi.string().required(),
+    orderId: Joi.string().required(),
+    amount: Joi.number().required(),
   }).required(),
 };
 

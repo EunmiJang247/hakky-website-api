@@ -1,10 +1,11 @@
-const { Payment, Reservation, Product } = require('../models');
-const ApiError = require('../utils/ApiError');
+const axios = require('axios');
+const { Payment, Product } = require('../models');
+const config = require('../config/config');
 
-const createPayment = async (paymentBody, userId) => {
+const chedckValidTime = async (products, reservTime) => {
   let timecheck = 0;
   await Promise.all(
-    paymentBody.products.map(async (product) => {
+    products.map(async (product) => {
       const productDoc = await Product.findById(product.id);
       const index = productDoc.options.findIndex((item) => String(item._id) === String(product.options[0].id));
       const option = productDoc.options[index];
@@ -12,30 +13,43 @@ const createPayment = async (paymentBody, userId) => {
     }),
   );
 
-  if (timecheck !== paymentBody.reservationTime) {
-    throw new ApiError(400, 'reservationTime is not valid');
+  if (timecheck !== reservTime) {
+    return false;
   }
 
-  const reservation = await Reservation.create({
-    applicant: userId,
-    place: paymentBody.placeId,
-    price: paymentBody.price,
-    deposit: Math.floor(paymentBody.price / 2),
-    products: paymentBody.products,
-    reservationFrom: paymentBody.reservationFrom,
-    reservationTo: paymentBody.reservationTo,
-    reservationTime: paymentBody.reservationTime,
-    note: paymentBody.note,
-  });
-  reservation.save();
+  return true;
+};
 
+const checkValidAmount = async (products, amount) => {
+  let amountcheck = 0;
+  await Promise.all(
+    products.map(async (product) => {
+      const productDoc = await Product.findById(product.id);
+      const index = productDoc.options.findIndex((item) => String(item._id) === String(product.options[0].id));
+      const option = productDoc.options[index];
+      amountcheck += option.price;
+    }),
+  );
+
+  if (Math.floor(amountcheck / 2) !== amount) {
+    return false;
+  }
+
+  return true;
+};
+
+const createPayment = async (paymentBody, userId, now) => {
   const payment = await Payment.create({
-    reservationId: reservation,
     applicant: userId,
     refund: false,
     isDeposit: false,
     amount: paymentBody.price,
+    deposit: paymentBody.amount,
+    paymentKey: paymentBody.paymentKey,
+    orderId: paymentBody.orderId,
+    depositDeadline: now.setDate(now.getDate() + 1),
   });
+
   return payment;
 };
 
@@ -62,8 +76,41 @@ const readPayments = async (keywords, startDate, endDate, applicant, limit, skip
   return payments;
 };
 
+const tossVirtualAccountCreate = async (paymentDoc) => {
+  try {
+    const result = await axios({
+      url: 'https://api.tosspayments.com/v1/payments/confirm',
+      method: 'POST',
+      data: {
+        paymentKey: paymentDoc.paymentKey,
+        orderId: paymentDoc.orderId,
+        amount: parseInt(paymentDoc.deposit, 10),
+      },
+      headers: {
+        Authorization: `Basic ${config.toss}`,
+        'Content-type': 'application/json',
+      },
+    });
+    const payment = await Payment.findById(paymentDoc._id);
+    payment.method = result.data.method;
+    payment.bankName = result.data.method;
+    payment.virtualAccount = result.data.virtualAccount.accountNumber;
+    payment.virtualAccountOwner = result.data.virtualAccount.customerName;
+    payment.cashReceipt = !!result.data.cashReceipt;
+
+    payment.save();
+
+    return payment;
+  } catch (err) {
+    return err;
+  }
+};
+
 module.exports = {
+  checkValidAmount,
+  chedckValidTime,
   createPayment,
   readPayment,
   readPayments,
+  tossVirtualAccountCreate,
 };

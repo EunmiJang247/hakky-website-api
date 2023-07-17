@@ -12,7 +12,7 @@ router
   .get(auth(), validate(reservationValidation.getReservations), reservationController.readReservations);
 router
   .route('/:reservationId')
-  .get(validate(reservationValidation.getReservation), reservationController.readReservation)
+  .get(auth(), validate(reservationValidation.getReservation), reservationController.readReservation)
   .patch(auth(), validate(reservationValidation.updateReservation), reservationController.updateReservation);
 router
   .route('/admin/:reservaionId')

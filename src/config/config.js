@@ -28,6 +28,8 @@ const envVarsSchema = Joi.object()
     S3_SECRET_ACCESS_KEY: Joi.string().required().description('S3 secret access key'),
     S3_REGION: Joi.string().required().description('S3 region'),
     S3_BUCKET: Joi.string().required().description('S3 bucket'),
+
+    TOSS_PAYMENT_SECRET: Joi.string().required().description('Toss secret'),
   })
   .unknown();
 
@@ -72,4 +74,5 @@ module.exports = {
     region: envVars.S3_REGION,
     bucket: envVars.S3_BUCKET,
   },
+  toss: envVars.TOSS_PAYMENT_SECRET,
 };

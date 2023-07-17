@@ -36,7 +36,7 @@ const getReservations = {
 
 const getReservation = {
   params: Joi.object().keys({
-    productId: Joi.string().custom(objectId),
+    reservationId: Joi.string().custom(objectId),
   }),
 };
 

@@ -1,9 +1,20 @@
 const httpStatus = require('http-status');
-const { Reservation } = require('../models');
+const {
+  Reservation, Payment, Product, PlaceIdle,
+} = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createReservation = async (reservationBody) => {
-  const reservation = await Reservation.create(reservationBody);
+const createReservation = async (reservationBody, paymentId, userId) => {
+  const reservation = await Reservation.create({
+    applicant: userId,
+    placeId: reservationBody.placeId,
+    paymentId,
+    products: reservationBody.products,
+    reservationFrom: reservationBody.reservationFrom,
+    reservationTo: reservationBody.reservationTo,
+    reservationTime: reservationBody.reservationTime,
+    note: reservationBody.note,
+  });
   return reservation;
 };
 
@@ -97,6 +108,52 @@ const cancelReservation = async (id, userId) => {
   return reservation;
 };
 
+const serializer = async (reserv) => {
+  const payment = await Payment.findById(reserv.paymentId);
+  const place = await PlaceIdle.Place.findById(reserv.placeId);
+  const productNameList = [];
+  await Promise.all(
+    reserv.products.map(async (product) => {
+      const productDoc = await Product.findById(product.id);
+      productNameList.push(productDoc.name);
+    }),
+  );
+
+  const now = new Date();
+  let status;
+
+  if (reserv.isApproval === false && reserv.isCanceled === false) {
+    status = '입금전';
+  } else if (reserv.isApproval === true && reserv.isCanceled === false) {
+    status = '예약완료';
+  } else if (reserv.isCanceled === true) {
+    status = '예약취소';
+  } else if (reserv.reservationTo < now && reserv.isCanceled === false) {
+    status = '작업완료';
+  }
+
+  return {
+    id: reserv._id,
+    products: productNameList,
+    placeName: place.name,
+    authorName: place.author.name,
+    price: payment.amount,
+    deposit: payment.deposit,
+    appointmentStartDate: reserv.reservationFrom,
+    appointmentEndDate: reserv.reservationTo,
+    depositDeadline: payment.depositDeadline,
+    status,
+    payment: {
+      method: payment.method,
+      bankName: payment.bankName,
+      virtualAccount: payment.virtualAccount,
+      virtualAccountOwner: payment.virtualAccountOwner,
+      cashReceipt: payment.cashReceipt,
+    },
+    createAt: reserv.createdAt,
+  };
+};
+
 module.exports = {
   createReservation,
   readReservation,
@@ -106,4 +163,5 @@ module.exports = {
   adminReadReservation,
   adminReadReservations,
   adminUpdateReservation,
+  serializer,
 };
