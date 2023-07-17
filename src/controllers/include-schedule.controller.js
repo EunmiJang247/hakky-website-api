@@ -10,7 +10,7 @@ const createIncludeSchedule = catchAsync(async (req, res) => {
 });
 
 const getIncludeSchedules = catchAsync(async (req, res) => {
-  const includeSchedules = await includeScheduleService.getIncludeSchedules(req.query.includeScheduleId);
+  const includeSchedules = await includeScheduleService.getIncludeSchedules(req.query.placeId);
   const result = includeSchedules.map(includeScheduleService.serializer);
   res.send(result);
 });
