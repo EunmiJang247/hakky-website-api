@@ -67,7 +67,7 @@ const reservationSchema = mongoose.Schema(
       type: String,
       required: false,
     },
-    isCanceld: {
+    isCanceled: {
       type: Boolean,
       required: true,
       default: false,

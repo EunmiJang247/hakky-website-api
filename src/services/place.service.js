@@ -199,7 +199,7 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     place: id,
     startAt: { $gt: date },
     endAt: { $lt: date },
-    isCanceld: false,
+    isCanceled: false,
   }).sort('startAt').exec();
 
   const includeSchedules = await PlaceIdle.IncludeSchedule.findOne({

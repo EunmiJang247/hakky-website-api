@@ -26,10 +26,10 @@ const adminReadReservation = async (id) => {
 const readReservations = async (status, userId) => {
   const statusQuery = {
     all: {},
-    beforeDeposit: { isApproval: false, isCanceld: false, applicant: userId },
-    complete: { isApproval: true, isCanceld: false, applicant: userId },
-    canceld: { isCanceld: true, applicant: userId },
-    done: { reservationTo: { $lte: new Date() }, isCanceld: false, applicant: userId },
+    beforeDeposit: { isApproval: false, isCanceled: false, applicant: userId },
+    complete: { isApproval: true, isCanceled: false, applicant: userId },
+    canceled: { isCanceled: true, applicant: userId },
+    done: { reservationTo: { $lte: new Date() }, isCanceled: false, applicant: userId },
   };
 
   const reservations = await Reservation.find(statusQuery[status]).sort('-createdAt');
@@ -92,7 +92,7 @@ const cancelReservation = async (id, userId) => {
   if (!reservation) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
-  reservation.isCanceld = true;
+  reservation.iseCanceled = true;
   reservation.save();
   return reservation;
 };
