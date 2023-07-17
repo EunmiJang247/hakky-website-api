@@ -197,6 +197,7 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
   }
   const reservations = await Reservation.find({
     placeId: id,
+    reservationDate: date,
     isCanceled: false,
   }).sort('reservationFrom').exec();
 

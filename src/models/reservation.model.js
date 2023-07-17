@@ -43,6 +43,10 @@ const reservationSchema = mongoose.Schema(
       type: [reservationProductSchema],
       required: true,
     },
+    reservationDate: {
+      type: Date,
+      required: true,
+    },
     reservationFrom: {
       type: Date,
       required: true,

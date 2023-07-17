@@ -5,6 +5,14 @@ const {
 const ApiError = require('../utils/ApiError');
 
 const createReservation = async (reservationBody, paymentId, userId) => {
+  const today = new Date();
+
+  const month = today.getUTCMonth();
+  const day = today.getUTCDate();
+  const year = today.getUTCFullYear();
+
+  const date = new Date(year, month, day);
+
   const reservation = await Reservation.create({
     applicant: userId,
     placeId: reservationBody.placeId,
@@ -13,6 +21,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     reservationFrom: reservationBody.reservationFrom,
     reservationTo: reservationBody.reservationTo,
     reservationTime: reservationBody.reservationTime,
+    reservationDate: date,
     note: reservationBody.note,
   });
   return reservation;
