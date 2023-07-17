@@ -108,11 +108,11 @@ const reservationCheck = (reservations, timeSchedule) => {
 
   for (let i = 0; i < reservations.length; i += 1) {
     for (let j = 0; j < reservList.length; j += 1) {
-      const reservationStart = new Date(reservations[i].startAt);
-      const reservationEnd = new Date(reservations[i].endAt);
-      const reservationStartHours = reservationStart.getHours();
+      const reservationStart = new Date(reservations[i].reservationFrom);
+      const reservationEnd = new Date(reservations[i].reservationTo);
+      const reservationStartHours = reservationStart.getHours() + 9;
       const reservationStartMinutes = reservationStart.getMinutes();
-      const reservationEndHours = reservationEnd.getHours();
+      const reservationEndHours = reservationEnd.getHours() + 9;
 
       const reservTime = reservList[j].time.split(':');
       const reservHours = parseInt(reservTime[0], 10);
@@ -196,11 +196,9 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     };
   }
   const reservations = await Reservation.find({
-    place: id,
-    startAt: { $gt: date },
-    endAt: { $lt: date },
+    placeId: id,
     isCanceled: false,
-  }).sort('startAt').exec();
+  }).sort('reservationFrom').exec();
 
   const includeSchedules = await PlaceIdle.IncludeSchedule.findOne({
     place: id,
