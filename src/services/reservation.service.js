@@ -158,7 +158,7 @@ const serializer = async (reserv) => {
       virtualAccountOwner: payment.virtualAccountOwner,
       cashReceipt: payment.cashReceipt,
     },
-    createAt: reserv.createdAt,
+    createdAt: reserv.createdAt,
   };
 };
 
