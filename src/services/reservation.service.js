@@ -165,6 +165,7 @@ const serializer = async (reserv) => {
       cashReceipt: payment.cashReceipt,
     },
     note: reserv.note,
+    isChanged: reserv.isChanged,
     createdAt: reserv.createdAt,
   };
 };

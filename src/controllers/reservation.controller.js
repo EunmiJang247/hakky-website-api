@@ -38,20 +38,20 @@ const adminReadReservations = catchAsync(async (req, res) => {
 
 const updateReservation = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
-  const reservation = await reservationService.updateReservation(req.params.id, userId);
+  const reservation = await reservationService.updateReservation(req.params.reservationId, req.body, userId);
   const result = await reservationService.serializer(reservation);
-  res.status(httpStatus.NO_CONTENT).send(result);
+  res.status(httpStatus.OK).send(result);
 });
 
 const adminUdateReservation = catchAsync(async (req, res) => {
-  const reservation = await reservationService.adminUpdateReservation(req.params.id);
+  const reservation = await reservationService.adminUpdateReservation(req.params.reservationId, req.body);
   const result = await reservationService.serializer(reservation);
   res.status(httpStatus.NO_CONTENT).send(result);
 });
 
 const cancelReservation = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
-  await reservationService.cancelReservation(req.params.id, userId);
+  await reservationService.cancelReservation(req.params.reservationId, userId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

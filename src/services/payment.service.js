@@ -67,8 +67,10 @@ const readPayments = async (keywords, startDate, endDate, applicant, limit, skip
   if (applicant) {
     query.applicant = applicant;
   }
-  if (keywords !== '') {
-    query._id = { $regex: keywords };
+  if (keywords) {
+    if (keywords !== '') {
+      query._id = { $regex: keywords };
+    }
   }
 
   const payments = await Payment.find(query).limit(limit).skip(skip);
