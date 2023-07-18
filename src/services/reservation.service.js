@@ -116,7 +116,7 @@ const cancelReservation = async (id, userId) => {
   if (!reservation) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
-  reservation.iseCanceled = true;
+  reservation.isCanceled = true;
   reservation.save();
   return reservation;
 };
