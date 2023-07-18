@@ -26,7 +26,7 @@ const readPayments = {
     keywords: Joi.string().allow(''),
     from: Joi.date(),
     to: Joi.date(),
-    applicant: Joi.string(),
+    applicant: Joi.string().allow(''),
     limit: Joi.number().required(),
     skip: Joi.date().required(),
   }).required(),

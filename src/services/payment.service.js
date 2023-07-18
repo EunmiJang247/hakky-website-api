@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { Payment, Product } = require('../models');
+const { Payment, Product, User } = require('../models');
 const config = require('../config/config');
 
 const chedckValidTime = async (products, reservTime) => {
@@ -65,7 +65,11 @@ const readPayments = async (keywords, startDate, endDate, applicant, limit, skip
   };
 
   if (applicant) {
-    query.applicant = applicant;
+    if (applicant !== '') {
+      const users = await User.find({ name: { $regex: applicant } });
+      const nameList = users.map((user) => user._id);
+      query.applicant = { $in: nameList };
+    }
   }
   if (keywords) {
     if (keywords !== '') {
