@@ -23,6 +23,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     reservationTime: reservationBody.reservationTime,
     reservationDate: date,
     note: reservationBody.note,
+    isAdminCreate: false,
   });
   return reservation;
 };
@@ -114,6 +115,7 @@ const adminReadReservations = async (applicant, placeId, keywords, from, to, lim
       query.applicant = { $in: nameList };
     }
   }
+
   const result = await Reservation.find(query).limit(limit).skip(skip);
   const count = await Reservation.countDocuments(query);
   return {
@@ -160,6 +162,13 @@ const serializer = async (reserv) => {
   const payment = await Payment.findById(reserv.paymentId);
   const place = await PlaceIdle.Place.findById(reserv.placeId);
   const productNameList = [];
+  const applicant = await User.findById(reserv.applicant);
+  let customerName;
+  if (!applicant) {
+    customerName = reserv.customerName;
+  } else {
+    customerName = applicant.name;
+  }
   await Promise.all(
     reserv.products.map(async (product) => {
       productNameList.push(`${product.name}::${product.options[0].name}`);
@@ -199,7 +208,7 @@ const serializer = async (reserv) => {
       virtualAccountOwner: payment.virtualAccountOwner,
       cashReceipt: payment.cashReceipt,
     },
-    customerName: reserv.customerName,
+    customerName,
     phoneNumber: reserv.phoneNumber,
     isAdminCreate: reserv.isAdminCreate,
     note: reserv.note,
