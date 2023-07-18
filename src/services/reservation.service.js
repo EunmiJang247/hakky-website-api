@@ -85,7 +85,7 @@ const readReservations = async (status, userId) => {
   };
 };
 
-const adminReadReservations = async (applicant, placeId, from, to, limit, skip, isAdminCreate) => {
+const adminReadReservations = async (applicant, placeId, keywords, from, to, limit, skip, isAdminCreate) => {
   const query = { isAdminCreate };
   if (applicant) {
     query.applicant = applicant;
@@ -101,6 +101,11 @@ const adminReadReservations = async (applicant, placeId, from, to, limit, skip, 
   }
   if (from && to) {
     query.createdAt = { $gte: from, $lte: to };
+  }
+  if (keywords) {
+    if (keywords !== '') {
+      query._id = { $regex: keywords };
+    }
   }
   if (applicant) {
     if (applicant !== '') {

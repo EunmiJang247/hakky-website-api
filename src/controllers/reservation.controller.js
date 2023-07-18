@@ -37,7 +37,9 @@ const readReservations = catchAsync(async (req, res) => {
 });
 
 const adminReadReservations = catchAsync(async (req, res) => {
-  const reservation = await reservationService.adminReadReservations(req.query.applicant, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip, req.query.isAdminCreate);
+  const reservation = await reservationService.adminReadReservations(
+    req.query.applicant, req.query.placeId, req.query.keywords, req.query.from, req.query.to, req.query.limit, req.query.skip, req.query.isAdminCreate,
+  );
   const result = await Promise.all(reservation.result.map(reservationService.serializer));
   res.send({ result, count: reservation.count });
 });
