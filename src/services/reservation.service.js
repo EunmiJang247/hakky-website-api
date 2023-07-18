@@ -143,6 +143,7 @@ const serializer = async (reserv) => {
   return {
     id: reserv._id,
     products: productNameList,
+    placeId: reserv.placeId,
     placeName: place.name,
     authorName: place.author.name,
     price: payment.amount,

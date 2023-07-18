@@ -241,7 +241,6 @@ const getPlaceReservationList = async (id, date) => {
     startAt: { $lte: date },
     endAt: { $gte: date },
   });
-
   if (!schedule) {
     return 'CAN_NOT_RESERVATION';
   }

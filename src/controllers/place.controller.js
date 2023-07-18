@@ -24,13 +24,12 @@ const getPlace = catchAsync(async (req, res) => {
 
 const getPlaceDetail = catchAsync(async (req, res) => {
   const date = new Date(`${req.params.year}-${req.params.month}-${req.params.day}`);
-
   const place = await placeService.getPlaceDetail(req.params.placeId, date, req.params.dayOfWeek);
   if (place === 'CAN_NOT_RESERVATION') {
     throw new ApiError(httpStatus.BAD_REQUEST, '현재 예약을 받고있지 않은 기간입니다.');
   }
   if (!place) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'placd not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
   }
   res.send(place);
 });
