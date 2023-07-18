@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const {
-  Reservation, Payment, Product, PlaceIdle,
+  Reservation, Payment, PlaceIdle,
 } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -123,8 +123,7 @@ const serializer = async (reserv) => {
   const productNameList = [];
   await Promise.all(
     reserv.products.map(async (product) => {
-      const productDoc = await Product.findById(product.id);
-      productNameList.push(productDoc.name);
+      productNameList.push(`${product.name}::${product.options[0].name}`);
     }),
   );
 
