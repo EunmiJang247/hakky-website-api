@@ -16,7 +16,7 @@ const paymentSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    refund: {
+    isRefund: {
       type: Boolean,
       required: true,
     },

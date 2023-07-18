@@ -23,14 +23,15 @@ const createPayment = catchAsync(async (req, res) => {
 
 const readPayment = catchAsync(async (req, res) => {
   const payment = await paymentService.readPayment(req.params.paymentId);
-  res.send(payment);
+  const result = await paymentService.serializer(payment);
+  res.send(result);
 });
 
 const readPayments = catchAsync(async (req, res) => {
   const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.applicant);
-
+  const result = await Promise.all(payments.result.map(paymentService.serializer));
   res.send({
-    result: payments.result,
+    result,
     count: payments.count,
   });
 });

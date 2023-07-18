@@ -1,5 +1,7 @@
 const axios = require('axios');
-const { Payment, Product, User } = require('../models');
+const {
+  Payment, Product, User, Reservation,
+} = require('../models');
 const config = require('../config/config');
 
 const chedckValidTime = async (products, reservTime) => {
@@ -41,7 +43,7 @@ const checkValidAmount = async (products, amount) => {
 const createPayment = async (paymentBody, userId, now) => {
   const payment = await Payment.create({
     applicant: userId,
-    refund: false,
+    isRefund: false,
     isDeposit: false,
     amount: paymentBody.price,
     deposit: paymentBody.amount,
@@ -114,11 +116,35 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
   }
 };
 
+const serializer = async (payment) => {
+  const reservation = await Reservation.findById(payment.reservationId);
+  const applicant = await User.findById(payment.applicant);
+
+  const productNameList = [];
+  await Promise.all(
+    reservation.products.map(async (product) => {
+      productNameList.push(`${product.name}::${product.options[0].name}`);
+    }),
+  );
+  return {
+    id: payment._id,
+    createdAt: payment.createdAt,
+    deposit: payment.deposit,
+    isDeposit: payment.isDeposit,
+    isRefund: payment.isRefund,
+    reservationId: payment.reservationId,
+    reservationName: productNameList,
+    applicantId: payment.applicant,
+    applicantName: applicant.name,
+  };
+};
+
 module.exports = {
   checkValidAmount,
   chedckValidTime,
   createPayment,
   readPayment,
   readPayments,
+  serializer,
   tossVirtualAccountCreate,
 };
