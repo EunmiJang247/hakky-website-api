@@ -14,8 +14,10 @@ const createPayment = catchAsync(async (req, res) => {
   const now = new Date();
   const payment = await paymentService.createPayment(req.body, userId, now);
   const reservation = await reservationService.createReservation(req.body, payment._id, userId);
-  await paymentService.tossVirtualAccountCreate(payment);
 
+  payment.reservationId = reservation._id;
+  await paymentService.tossVirtualAccountCreate(payment);
+  payment.save();
   const result = await reservationService.serializer(reservation);
 
   res.send(result);

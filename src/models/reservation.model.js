@@ -36,7 +36,7 @@ const reservationSchema = mongoose.Schema(
       required: true,
     },
     paymentId: {
-      type: mongoose.Types.ObjectId,
+      type: String,
       required: true,
     },
     products: {

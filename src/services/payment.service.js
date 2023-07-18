@@ -101,9 +101,59 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
         'Content-type': 'application/json',
       },
     });
+
+    const bankCode = {
+      39: '경남은행',
+      34: '광주은행',
+      S8: '교보증권',
+      12: '단위농협(지역농축협)',
+      SE: '대신증권',
+      SK: '메리츠증권',
+      S5: '미래에셋증권',
+      SM: '부국증권',
+      32: '부산은행',
+      S3: '삼성증권',
+      45: '새마을금고',
+      64: '산림조합',
+      SN: '신영증권',
+      S2: '신한금융투자',
+      88: '신한은행',
+      48: '신협',
+      27: '씨티은행',
+      20: '우리은행',
+      71: '우체국예금보험',
+      S0: '유안타증권',
+      SJ: '유진투자증권',
+      50: '저축은행중앙회',
+      37: '전북은행',
+      35: '제주은행',
+      90: '카카오뱅크',
+      SQ: '카카오페이증권',
+      89: '키움증권',
+      92: '토스뱅크',
+      ST: '토스증권',
+      SR: '펀드온라인코리아(한국포스증권)',
+      SH: '하나금융투자',
+      81: '하나은행',
+      S9: '하이투자증권',
+      S6: '한국투자증권',
+      SG: '한화투자증권',
+      SI: 'DB금융투자',
+      31: 'DGB대구은행',
+      '03': 'IBK기업은행',
+      '06': 'KB국민은행',
+      '02': 'KDB산업은행',
+      SP: 'KTB투자증권(다올투자증권)',
+      SO: 'LIG투자증권',
+      11: 'NH농협은행',
+      SL: 'NH투자증권',
+      23: 'SC제일은행',
+      '07': 'Sh수협은행',
+      SD: 'SK증권',
+    };
     const payment = await Payment.findById(paymentDoc._id);
     payment.method = result.data.method;
-    payment.bankName = result.data.method;
+    payment.bankName = bankCode[result.data.virtualAccount.bankCode];
     payment.virtualAccount = result.data.virtualAccount.accountNumber;
     payment.virtualAccountOwner = result.data.virtualAccount.customerName;
     payment.cashReceipt = !!result.data.cashReceipt;
@@ -136,6 +186,7 @@ const serializer = async (payment) => {
     reservationName: productNameList,
     applicantId: payment.applicant,
     applicantName: applicant.name,
+    amount: payment.amount,
   };
 };
 
