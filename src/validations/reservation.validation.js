@@ -17,8 +17,26 @@ const createReservation = {
     .required(),
 };
 
+const adminCreateReservation = {
+  body: Joi.object()
+    .keys({
+      customerName: Joi.string().required(),
+      phoneNumber: Joi.string().required(),
+      place: Joi.string().required().custom(objectId),
+      price: Joi.number().required(),
+      productName: Joi.string().required(),
+      deposit: Joi.string().required(),
+      reservationFrom: Joi.date().required(),
+      reservationTo: Joi.date().required(),
+      reservationTime: Joi.date().required(),
+      note: Joi.string().allow(''),
+    })
+    .required(),
+};
+
 const adminGetReservations = {
   query: Joi.object().keys({
+    isAdminCreate: Joi.boolean().required(),
     placeId: Joi.string().custom(objectId),
     applicant: Joi.string().custom(objectId),
     from: Joi.date(),
@@ -66,6 +84,7 @@ const cancelReservation = {
 };
 
 module.exports = {
+  adminCreateReservation,
   createReservation,
   getReservations,
   getReservation,

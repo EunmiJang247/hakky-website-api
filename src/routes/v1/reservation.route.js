@@ -20,7 +20,8 @@ router
   .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminReadReservations);
 router
   .route('/admin/')
-  .patch(auth('ADMIN', validate(reservationValidation.adminGetReservations), reservationController.adminReadReservations));
+  .post(auth('ADMIN'), validate(reservationValidation.adminCreateReservation), reservationController.adminCreateReservation)
+  .get(auth('ADMIN', validate(reservationValidation.adminGetReservations), reservationController.adminReadReservations));
 router
   .route('/:reservationId/cancel')
   .patch(auth(), validate(reservationValidation.cancelReservation), reservationController.cancelReservation);

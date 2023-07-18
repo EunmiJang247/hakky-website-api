@@ -8,6 +8,12 @@ const createReservation = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(result);
 });
 
+const adminCreateReservation = catchAsync(async (req, res) => {
+  const reservation = await reservationService.adminCreateReservation(req.body);
+  const result = await Promise.all(reservation.result.map(reservationService.serializer));
+  res.send({ result, count: reservation.count });
+});
+
 const readReservation = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   const reservation = await reservationService.readReservation(req.params.reservationId, userId);
@@ -31,7 +37,7 @@ const readReservations = catchAsync(async (req, res) => {
 });
 
 const adminReadReservations = catchAsync(async (req, res) => {
-  const reservation = await reservationService.adminReadReservations(req.query.applicant, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
+  const reservation = await reservationService.adminReadReservations(req.query.applicant, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip, req.query.isAdminCreate);
   const result = await Promise.all(reservation.result.map(reservationService.serializer));
   res.send({ result, count: reservation.count });
 });
@@ -59,6 +65,7 @@ module.exports = {
   createReservation,
   readReservation,
   readReservations,
+  adminCreateReservation,
   adminReadReservation,
   adminReadReservations,
   adminUdateReservation,

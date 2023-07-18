@@ -29,11 +29,24 @@ const reservationSchema = mongoose.Schema(
   {
     applicant: {
       type: mongoose.Types.ObjectId,
+      required: false,
+    },
+    customerName: {
+      type: String,
+      required: false,
+    },
+    phoneNumber: {
+      type: String,
+      required: false,
+    },
+    isAdminCreate: {
+      type: Boolean,
       required: true,
+      default: false,
     },
     placeId: {
       type: mongoose.Types.ObjectId,
-      required: true,
+      required: false,
     },
     paymentId: {
       type: String,

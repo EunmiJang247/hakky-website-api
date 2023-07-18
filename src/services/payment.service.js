@@ -61,10 +61,16 @@ const readPayment = async (id) => {
 };
 
 const readPayments = async (keywords, startDate, endDate, applicant, limit, skip) => {
-  const query = {
-    createdAt: { $gte: startDate, $lte: endDate },
-  };
-
+  const query = {};
+  if (startDate) {
+    query.createdAt = { $gte: startDate };
+  }
+  if (endDate) {
+    query.createdAt = { $lte: endDate };
+  }
+  if (startDate && endDate) {
+    query.createdAt = { $gte: startDate, $lte: endDate };
+  }
   if (applicant) {
     if (applicant !== '') {
       const users = await User.find({ name: { $regex: applicant } });

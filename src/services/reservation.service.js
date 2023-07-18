@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const {
-  Reservation, Payment, PlaceIdle,
+  Reservation, Payment, PlaceIdle, User,
 } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -17,6 +17,30 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     applicant: userId,
     placeId: reservationBody.placeId,
     paymentId,
+    products: reservationBody.products,
+    reservationFrom: reservationBody.reservationFrom,
+    reservationTo: reservationBody.reservationTo,
+    reservationTime: reservationBody.reservationTime,
+    reservationDate: date,
+    note: reservationBody.note,
+  });
+  return reservation;
+};
+
+const adminCreateReservation = async (reservationBody) => {
+  const today = new Date();
+
+  const month = today.getUTCMonth();
+  const day = today.getUTCDate();
+  const year = today.getUTCFullYear();
+
+  const date = new Date(year, month, day);
+
+  const reservation = await Reservation.create({
+    isAdminCreate: true,
+    customerName: reservationBody.cusutomerName,
+    phoneNumber: reservationBody.phoneNumber,
+    placeId: reservationBody.placeId,
     products: reservationBody.products,
     reservationFrom: reservationBody.reservationFrom,
     reservationTo: reservationBody.reservationTo,
@@ -61,8 +85,8 @@ const readReservations = async (status, userId) => {
   };
 };
 
-const adminReadReservations = async (applicant, placeId, from, to, limit, skip) => {
-  const query = {};
+const adminReadReservations = async (applicant, placeId, from, to, limit, skip, isAdminCreate) => {
+  const query = { isAdminCreate };
   if (applicant) {
     query.applicant = applicant;
   }
@@ -70,15 +94,21 @@ const adminReadReservations = async (applicant, placeId, from, to, limit, skip) 
     query.place = placeId;
   }
   if (from) {
-    query.from = { $gte: from };
+    query.createdAt = { $gte: from };
   }
   if (to) {
-    query.to = { $lte: to };
+    query.createdAt = { $lte: to };
+  }
+  if (from && to) {
+    query.createdAt = { $gte: from, $lte: to };
   }
   if (applicant) {
-    query.applicant = applicant;
+    if (applicant !== '') {
+      const users = await User.find({ name: { $regex: applicant } });
+      const nameList = users.map((user) => user._id);
+      query.applicant = { $in: nameList };
+    }
   }
-
   const result = await Reservation.find(query).limit(limit).skip(skip);
   const count = await Reservation.countDocuments(query);
   return {
@@ -164,6 +194,9 @@ const serializer = async (reserv) => {
       virtualAccountOwner: payment.virtualAccountOwner,
       cashReceipt: payment.cashReceipt,
     },
+    customerName: reserv.customerName,
+    phoneNumber: reserv.phoneNumber,
+    isAdminCreate: reserv.isAdminCreate,
     note: reserv.note,
     isChanged: reserv.isChanged,
     createdAt: reserv.createdAt,
@@ -171,6 +204,7 @@ const serializer = async (reserv) => {
 };
 
 module.exports = {
+  adminCreateReservation,
   createReservation,
   readReservation,
   readReservations,
