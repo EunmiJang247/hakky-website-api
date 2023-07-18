@@ -60,8 +60,7 @@ const readPayment = async (id) => {
 
 const readPayments = async (keywords, startDate, endDate, applicant, limit, skip) => {
   const query = {
-    startAt: { $gt: startDate },
-    endAt: { $lt: endDate },
+    createdAt: { $gte: startDate, $lte: endDate },
   };
 
   if (applicant) {

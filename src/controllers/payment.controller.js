@@ -27,7 +27,7 @@ const readPayment = catchAsync(async (req, res) => {
 });
 
 const readPayments = catchAsync(async (req, res) => {
-  const payments = await paymentService.readPayments(req.query.keyword, req.query.startDate, req.query.startDate, req.query.applicant);
+  const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.applicant);
   // maybe pagination
   res.send(payments);
 });

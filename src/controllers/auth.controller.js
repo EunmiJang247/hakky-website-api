@@ -24,6 +24,8 @@ const registerKakao = catchAsync(async (req, res) => {
   if (req.query.error || req.query.errorMessage) {
     throw new ApiError(httpStatus.BAD_REQUEST, req.query.errorMessage);
   }
+
+  // todo crteate user
   const kakaoInfo = await kakaoProfile(req.body.code);
   res.status(httpStatus.CREATED).send(kakaoInfo);
 });
