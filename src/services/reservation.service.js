@@ -92,7 +92,11 @@ const updateReservation = async (id, updateBody, userId) => {
   if (!reservation) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
+  if (reservation.isChanged === true) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Reservation is already changed');
+  }
   Object.assign(reservation, updateBody);
+  reservation.isChanged = true;
   reservation.save();
   return reservation;
 };
