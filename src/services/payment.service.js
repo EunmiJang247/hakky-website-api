@@ -77,8 +77,11 @@ const readPayments = async (keywords, startDate, endDate, applicant, limit, skip
   }
 
   const payments = await Payment.find(query).limit(limit).skip(skip);
-
-  return payments;
+  const count = await Payment.countDocuments(query);
+  return {
+    result: payments,
+    count,
+  };
 };
 
 const tossVirtualAccountCreate = async (paymentDoc) => {

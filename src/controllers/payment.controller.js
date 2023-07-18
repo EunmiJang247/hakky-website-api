@@ -28,8 +28,11 @@ const readPayment = catchAsync(async (req, res) => {
 
 const readPayments = catchAsync(async (req, res) => {
   const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.applicant);
-  // maybe pagination
-  res.send(payments);
+
+  res.send({
+    result: payments.result,
+    count: payments.count,
+  });
 });
 
 module.exports = {
