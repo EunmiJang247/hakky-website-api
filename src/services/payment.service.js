@@ -186,7 +186,6 @@ const serializer = async (payment) => {
     reservationName: productNameList,
     applicantId: payment.applicant,
     applicantName: applicant.name,
-    amount: payment.amount,
   };
 };
 
