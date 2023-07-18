@@ -25,7 +25,9 @@ const readReservations = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   const reservation = await reservationService.readReservations(req.query.status, userId);
   const result = await Promise.all(reservation.result.map(reservationService.serializer));
-  res.status(httpStatus.OK).send(result);
+  res.status(httpStatus.OK).send({
+    result, count: reservation.count,
+  });
 });
 
 const adminReadReservations = catchAsync(async (req, res) => {
