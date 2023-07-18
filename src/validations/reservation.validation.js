@@ -12,7 +12,7 @@ const createReservation = {
       reservationFrom: Joi.date().required(),
       reservationTo: Joi.date().required(),
       reservationTime: Joi.date().required(),
-      note: Joi.string(),
+      note: Joi.string().allow(''),
     })
     .required(),
 };
@@ -54,7 +54,7 @@ const updateReservation = {
       reservationFrom: Joi.date(),
       reservationTo: Joi.date(),
       reservationTime: Joi.date(),
-      note: Joi.string(),
+      note: Joi.string().allow(''),
     })
     .required(),
 };
