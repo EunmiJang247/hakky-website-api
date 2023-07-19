@@ -35,9 +35,11 @@ const getPlaceDetail = catchAsync(async (req, res) => {
   res.send(place);
 });
 
-// const getPlaceBySubAdmin = catchAsync(async (req, res) => {
-//   const place = await placeService.getPlaceBySubAdmin
-// })
+const getPlaceBySubAdmin = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  const place = await placeService.getPlaceBySubAdmin(userId);
+  res.send(place);
+});
 
 const getPlaceReservationList = catchAsync(async (req, res) => {
   const date = new Date(`${req.params.year}-${req.params.month}-${req.params.day}`);
@@ -66,6 +68,7 @@ module.exports = {
   createPlace,
   getPlaces,
   getPlace,
+  getPlaceBySubAdmin,
   updatePlace,
   deletePlace,
   getPlaceDetail,

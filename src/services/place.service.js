@@ -19,6 +19,14 @@ const getPlaceById = async (id) => {
   return detailData;
 };
 
+const getPlaceBySubAdmin = async (id) => {
+  const detailData = await PlaceIdle.Place.findOne({ subAdmin: id });
+  if (!detailData) {
+    throw new ApiError(400, '아직 관리자가 할당되지 않은 지점입니다.');
+  }
+  return detailData;
+};
+
 const reservationCheck = (reservations, timeSchedule) => {
   const businessHours = timeSchedule.split(',');
   const reservList = [];
@@ -302,6 +310,7 @@ module.exports = {
   getPlaceById,
   getPlaceDetail,
   getPlaceReservationList,
+  getPlaceBySubAdmin,
   deletePlaceById,
   updatePlace,
   serializer,

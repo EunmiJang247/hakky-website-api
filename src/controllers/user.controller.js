@@ -31,6 +31,11 @@ const updateUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).end();
 });
 
+const adminUpdateUser = catchAsync(async (req, res) => {
+  await userService.updateUserById(req.params.userId, req.body);
+  res.status(httpStatus.NO_CONTENT).end();
+});
+
 const deleteUser = catchAsync(async (req, res) => {
   await userService.deleteUserById(req.params.userId);
   res.status(httpStatus.NO_CONTENT).end();
@@ -43,4 +48,5 @@ module.exports = {
   getSubAdmins,
   updateUser,
   deleteUser,
+  adminUpdateUser,
 };

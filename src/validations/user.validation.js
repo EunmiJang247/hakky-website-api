@@ -36,6 +36,20 @@ const updateUser = {
     .required(),
 };
 
+const adminUpdateUser = {
+  params: Joi.object().keys({
+    userId: Joi.required().custom(objectId),
+  }),
+  body: Joi.object()
+    .keys({
+      role: Joi.string(),
+      phoneNumber: Joi.string(),
+      password: Joi.string().custom(password),
+      name: Joi.string(),
+    })
+    .required(),
+};
+
 const deleteUser = {
   params: Joi.object().keys({
     userId: Joi.string().custom(objectId),
@@ -48,4 +62,5 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  adminUpdateUser,
 };

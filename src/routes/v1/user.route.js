@@ -14,6 +14,9 @@ router
   .route('/subAdmin/')
   .get(auth('ADMIN'), validate(userValidation.getUsers), userController.getSubAdmins);
 router
+  .route('/admin/:userId')
+  .patch(auth('ADMIN'), validate(userValidation.adminUpdateUser), userController.adminUpdateUser);
+router
   .route('/:userId')
   .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
   .patch(auth('' || 'ADMIN'), validate(userValidation.updateUser), userController.updateUser)
