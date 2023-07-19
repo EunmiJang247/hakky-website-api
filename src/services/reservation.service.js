@@ -14,6 +14,8 @@ const createReservation = async (reservationBody, paymentId, userId) => {
   const date = new Date(year, month, day);
 
   const payment = await Payment.findById(paymentId);
+  const place = await PlaceIdle.Place.findById(reservationBody.placeId);
+
   const reservation = await Reservation.create({
     applicant: userId,
     placeId: reservationBody.placeId,
@@ -28,6 +30,8 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     isApproval: true,
     deposit: payment.deposit,
     price: payment.amount,
+    placeName: place.name,
+    authorName: place.author.name,
   });
   return reservation;
 };
@@ -41,18 +45,23 @@ const adminCreateReservation = async (reservationBody) => {
 
   const date = new Date(year, month, day);
 
+  const place = await PlaceIdle.Place.findById(reservationBody.placeId);
+
   const reservation = await Reservation.create({
     isAdminCreate: true,
     customerName: reservationBody.cusutomerName,
     phoneNumber: reservationBody.phoneNumber,
     placeId: reservationBody.placeId,
     products: reservationBody.products,
+    price: reservationBody.price,
     deposit: reservationBody.deposit,
     reservationFrom: reservationBody.reservationFrom,
     reservationTo: reservationBody.reservationTo,
     reservationTime: reservationBody.reservationTime,
     reservationDate: date,
     note: reservationBody.note,
+    placeName: place.name,
+    authorName: place.author.name,
   });
   return reservation;
 };
@@ -210,13 +219,13 @@ const serializer = async (reserv) => {
     products: reserv.products,
     productNames: productNameList,
     placeId: reserv.placeId,
-    placeName: place.name,
-    authorName: place.author.name,
+    placeName: reserv.placeName,
+    authorName: reserv.authorName,
     price: reserv.price,
     deposit: reserv.deposit,
     appointmentStartDate: reserv.reservationFrom,
     appointmentEndDate: reserv.reservationTo,
-    depositDeadline: payment.depositDeadline,
+    depositDeadline: payment.depositDeadline ? payment : undefined,
     status,
     payment: paymentDoc,
     customerName,

@@ -48,6 +48,14 @@ const reservationSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: false,
     },
+    placeName: {
+      type: String,
+      required: true,
+    },
+    authorName: {
+      type: String,
+      required: true,
+    },
     paymentId: {
       type: String,
       required: false,
