@@ -224,7 +224,7 @@ const serializer = async (reserv) => {
     deposit: reserv.deposit,
     appointmentStartDate: reserv.reservationFrom,
     appointmentEndDate: reserv.reservationTo,
-    depositDeadline: payment.depositDeadline ? payment : undefined,
+    depositDeadline: payment ? payment.depositDeadline : undefined,
     status,
     payment: paymentDoc,
     customerName,
