@@ -10,7 +10,7 @@ const createReservation = catchAsync(async (req, res) => {
 
 const adminCreateReservation = catchAsync(async (req, res) => {
   const reservation = await reservationService.adminCreateReservation(req.body);
-  const result = await Promise.all(reservation.result.map(reservationService.serializer));
+  const result = await reservationService.serializer(reservation);
   res.send({ result, count: reservation.count });
 });
 
