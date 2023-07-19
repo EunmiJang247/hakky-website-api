@@ -5,7 +5,7 @@ const { excludeScheduleService } = require('../services');
 
 const createExcludeSchedule = catchAsync(async (req, res) => {
   const excludeSchedule = await excludeScheduleService.createExcludeSchedule(req.body);
-  const result = excludeScheduleService(excludeSchedule);
+  const result = excludeScheduleService.serializer(excludeSchedule);
   res.status(httpStatus.CREATED).send(result);
 });
 
