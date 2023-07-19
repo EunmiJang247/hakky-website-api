@@ -174,7 +174,6 @@ const cancelReservation = async (id, userId) => {
 
 const serializer = async (reserv) => {
   const payment = await Payment.findById(reserv.paymentId);
-  const place = await PlaceIdle.Place.findById(reserv.placeId);
   const productNameList = [];
   const applicant = await User.findById(reserv.applicant);
   let customerName;
