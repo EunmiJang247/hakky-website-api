@@ -13,7 +13,7 @@ router
 
 router
   .route('/:userId')
-  .get(auth(''), validate(userValidation.getUser), userController.getUser)
+  .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
   .patch(auth('' || 'ADMIN'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth('' || 'ADMIN'), validate(userValidation.deleteUser), userController.deleteUser);
 
