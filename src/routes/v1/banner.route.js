@@ -10,6 +10,6 @@ router
   .route('/')
   .post(auth('ADMIN'), bannerController.createBanner)
   .get(bannerController.getBanner)
-  .patch(auth('' || 'ADMIN'), validate(bannerValidation.updateBanner), bannerController.updateBanner);
+  .patch(auth('ADMIN'), validate(bannerValidation.updateBanner), bannerController.updateBanner);
 
 module.exports = router;
