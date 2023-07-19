@@ -17,7 +17,7 @@ const getBanner = catchAsync(async (req, res) => {
 });
 
 const updateBanner = catchAsync(async (req, res) => {
-  const banner = await bannerService.updateBanner(req.params.excludeScheduleId, req.body);
+  const banner = await bannerService.updateBanner(req.body);
   res.send(banner);
 });
 
