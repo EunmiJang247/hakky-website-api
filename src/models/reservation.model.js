@@ -80,6 +80,10 @@ const reservationSchema = mongoose.Schema(
       type: String,
       required: false,
     },
+    deposit: {
+      type: Number,
+      required: false,
+    },
     isCanceled: {
       type: Boolean,
       required: true,

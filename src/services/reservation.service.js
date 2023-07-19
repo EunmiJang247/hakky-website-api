@@ -44,6 +44,7 @@ const adminCreateReservation = async (reservationBody) => {
     phoneNumber: reservationBody.phoneNumber,
     placeId: reservationBody.placeId,
     products: reservationBody.products,
+    deposit: reservationBody.deposit,
     reservationFrom: reservationBody.reservationFrom,
     reservationTo: reservationBody.reservationTo,
     reservationTime: reservationBody.reservationTime,
