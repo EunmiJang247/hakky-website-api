@@ -25,7 +25,7 @@ const adminCreateReservation = {
       place: Joi.string().required().custom(objectId),
       price: Joi.number().required(),
       deposit: Joi.number().required(),
-      products: Joi.string().required(),
+      products: Joi.array().items(Joi.object()).required(),
       reservationFrom: Joi.date().required(),
       reservationTo: Joi.date().required(),
       reservationTime: Joi.date().required(),
