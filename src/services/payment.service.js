@@ -71,6 +71,7 @@ const refundAndCancel = async (id) => {
   const payment = await Payment.findById(id);
   const reservation = await Reservation.findById(payment.reservationId);
   reservation.isCanceled = true;
+  reservation.save();
   payment.isRefund = true;
   payment.save();
   return payment;
