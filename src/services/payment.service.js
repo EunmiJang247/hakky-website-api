@@ -50,6 +50,7 @@ const createPayment = async (paymentBody, userId, now) => {
     paymentKey: paymentBody.paymentKey,
     orderId: paymentBody.orderId,
     depositDeadline: now.setDate(now.getDate() + 1),
+    placeId: paymentBody.placeId,
   });
 
   return payment;
@@ -77,7 +78,7 @@ const refundAndCancel = async (id) => {
   return payment;
 };
 
-const readPayments = async (keywords, startDate, endDate, applicant, limit, skip) => {
+const readPayments = async (keywords, startDate, endDate, limit, skip) => {
   const query = {};
   if (startDate) {
     query.createdAt = { $gte: startDate };
@@ -88,16 +89,38 @@ const readPayments = async (keywords, startDate, endDate, applicant, limit, skip
   if (startDate && endDate) {
     query.createdAt = { $gte: startDate, $lte: endDate };
   }
-  if (applicant) {
-    if (applicant !== '') {
-      const users = await User.find({ name: { $regex: applicant } });
+  if (keywords) {
+    if (keywords !== '') {
+      const users = await User.find({ name: { $regex: keywords } });
       const nameList = users.map((user) => user._id);
       query.applicant = { $in: nameList };
     }
   }
+
+  const payments = await Payment.find(query).limit(limit).skip(skip);
+  const count = await Payment.countDocuments(query);
+  return {
+    result: payments,
+    count,
+  };
+};
+
+const subAdminReadPayments = async (keywords, placeId, startDate, endDate, limit, skip) => {
+  const query = { placeId };
+  if (startDate) {
+    query.createdAt = { $gte: startDate };
+  }
+  if (endDate) {
+    query.createdAt = { $lte: endDate };
+  }
+  if (startDate && endDate) {
+    query.createdAt = { $gte: startDate, $lte: endDate };
+  }
   if (keywords) {
     if (keywords !== '') {
-      query._id = { $regex: keywords };
+      const users = await User.find({ name: { $regex: keywords } });
+      const nameList = users.map((user) => user._id);
+      query.applicant = { $in: nameList };
     }
   }
 
@@ -218,6 +241,7 @@ module.exports = {
   createPayment,
   readPayment,
   readPayments,
+  subAdminReadPayments,
   serializer,
   tossVirtualAccountCreate,
   refund,

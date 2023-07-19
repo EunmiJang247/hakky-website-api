@@ -10,6 +10,11 @@ router
   .route('/')
   .get(validate(paymentValidation.readPayments), paymentController.readPayments)
   .post(auth(), validate(paymentValidation.createPayment), paymentController.createPayment);
+
+router
+  .route('/subAdmin/')
+  .get(validate(paymentValidation.subAdminReadPayments), paymentController.subAdminReadPayments);
+
 router
   .route('/refund/:paymentId')
   .patch(auth('ADMIN'), validate(paymentValidation.refund), paymentController.refund);

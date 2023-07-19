@@ -32,7 +32,17 @@ const readPayments = {
     keywords: Joi.string().allow(''),
     from: Joi.date(),
     to: Joi.date(),
-    applicant: Joi.string().allow(''),
+    limit: Joi.number().required(),
+    skip: Joi.date().required(),
+  }).required(),
+};
+
+const subAdminReadPayments = {
+  query: Joi.object().keys({
+    keywords: Joi.string().allow(''),
+    placeId: Joi.string().required(),
+    from: Joi.date(),
+    to: Joi.date(),
     limit: Joi.number().required(),
     skip: Joi.date().required(),
   }).required(),
@@ -42,5 +52,6 @@ module.exports = {
   createPayment,
   readPayment,
   readPayments,
+  subAdminReadPayments,
   refund,
 };

@@ -42,7 +42,16 @@ const refundAndCancel = catchAsync(async (req, res) => {
 });
 
 const readPayments = catchAsync(async (req, res) => {
-  const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.applicant);
+  const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.limit, req.query.skip);
+  const result = await Promise.all(payments.result.map(paymentService.serializer));
+  res.send({
+    result,
+    count: payments.count,
+  });
+});
+
+const subAdminReadPayments = catchAsync(async (req, res) => {
+  const payments = await paymentService.readPayments(req.query.keyword, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
   const result = await Promise.all(payments.result.map(paymentService.serializer));
   res.send({
     result,
@@ -54,6 +63,7 @@ module.exports = {
   createPayment,
   readPayment,
   readPayments,
+  subAdminReadPayments,
   refund,
   refundAndCancel,
 };

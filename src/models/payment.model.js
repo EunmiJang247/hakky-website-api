@@ -8,6 +8,10 @@ const paymentSchema = mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
+    placeId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     amount: {
       type: Number,
       required: true,
