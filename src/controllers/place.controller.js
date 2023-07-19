@@ -10,7 +10,8 @@ const createPlace = catchAsync(async (req, res) => {
 
 const getPlaces = catchAsync(async (req, res) => {
   const places = await placeService.getPlaces();
-  res.send(places);
+  const result = await Promise.all(places.map(placeService.serializer));
+  res.send(result);
 });
 
 const getPlace = catchAsync(async (req, res) => {
