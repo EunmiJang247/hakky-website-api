@@ -9,6 +9,15 @@ const createUser = {
   }),
 };
 
+const adminCreateUser = {
+  body: Joi.object().keys({
+    role: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
+    password: Joi.string().required().custom(password),
+    name: Joi.string().required(),
+  }),
+};
+
 const getUsers = {
   query: Joi.object().keys({
     keyword: Joi.string().allow(''),
@@ -62,5 +71,6 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
+  adminCreateUser,
   adminUpdateUser,
 };

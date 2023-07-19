@@ -8,6 +8,11 @@ const createUser = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(user);
 });
 
+const adminCreateUser = catchAsync(async (req, res) => {
+  const user = await userService.adminCreateUser(req.body);
+  res.status(httpStatus.CREATED).send(user);
+});
+
 const getUsers = catchAsync(async (req, res) => {
   const result = await userService.queryUsers(req.query.keyword, req.query.limit, req.query.skip);
   res.send(result);
@@ -42,6 +47,7 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 module.exports = {
+  adminCreateUser,
   createUser,
   getUsers,
   getUser,

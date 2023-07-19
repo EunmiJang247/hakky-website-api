@@ -26,6 +26,25 @@ const createUser = async (userBody) => {
   return user;
 };
 
+const adminCreateUser = async (userBody) => {
+  // todo auth code check
+  const check = await User.findOne({ phoneNumber: userBody.phoneNumber });
+
+  if (check) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, '이미 가입이 완료된 핸드폰 번호입니다.');
+  }
+
+  const user = await User.create({
+    name: userBody.name,
+    phoneNumber: userBody.phoneNumber,
+    password: userBody.password,
+    role: userBody.role,
+    termsOfService: true,
+    privacyPolicy: true,
+  });
+  return user;
+};
+
 const createUserNaver = async (userBody) => {
   const check = await User.findOne({ phoneNumber: userBody.response.mobile });
 
@@ -172,6 +191,7 @@ const deleteUserById = async (userId) => {
 };
 
 module.exports = {
+  adminCreateUser,
   createUser,
   createUserNaver,
   queryUsers,

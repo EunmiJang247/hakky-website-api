@@ -17,6 +17,9 @@ router
   .route('/admin/:userId')
   .patch(auth('ADMIN'), validate(userValidation.adminUpdateUser), userController.adminUpdateUser);
 router
+  .route('/admin/')
+  .post(auth('ADMIN'), validate(userValidation.adminCreateUser), userController.adminCreateUser);
+router
   .route('/:userId')
   .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
   .patch(auth('' || 'ADMIN'), validate(userValidation.updateUser), userController.updateUser)
