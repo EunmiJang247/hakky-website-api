@@ -14,7 +14,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
   const date = new Date(year, month, day);
 
   const payment = await Payment.findById(paymentId);
-  const place = await PlaceIdle.Place.findById(reservationBody.place);
+  const place = await PlaceIdle.Place.findById(reservationBody.placeId);
 
   const reservation = await Reservation.create({
     applicant: userId,

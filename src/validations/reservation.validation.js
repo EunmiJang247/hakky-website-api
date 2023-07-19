@@ -22,7 +22,7 @@ const adminCreateReservation = {
     .keys({
       customerName: Joi.string().required(),
       phoneNumber: Joi.string().required(),
-      place: Joi.string().required().custom(objectId),
+      placeId: Joi.string().required().custom(objectId),
       price: Joi.number().required(),
       deposit: Joi.number().required(),
       products: Joi.array().items(Joi.object()).required(),
