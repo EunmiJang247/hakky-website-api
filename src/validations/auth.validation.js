@@ -52,6 +52,13 @@ const resetPassword = {
   }),
 };
 
+const subAdminResetPassword = {
+  body: Joi.object().keys({
+    // password: Joi.string().required().custom(password),
+    password: Joi.string().required(),
+  }),
+};
+
 const verifyEmail = {
   query: Joi.object().keys({
     token: Joi.string().required(),
@@ -66,5 +73,6 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
+  subAdminResetPassword,
   verifyEmail,
 };

@@ -65,6 +65,19 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
   }
 };
 
+const subAdminResetPassword = async (userId, newPassword) => {
+  try {
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      throw new Error();
+    }
+    await userService.updateUserById(user.id, { password: newPassword });
+    return user;
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
+  }
+};
+
 /**
  * Verify email
  * @param {string} verifyEmailToken
@@ -89,5 +102,6 @@ module.exports = {
   logout,
   refreshAuth,
   resetPassword,
+  subAdminResetPassword,
   verifyEmail,
 };

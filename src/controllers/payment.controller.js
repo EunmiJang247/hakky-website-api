@@ -51,7 +51,7 @@ const readPayments = catchAsync(async (req, res) => {
 });
 
 const subAdminReadPayments = catchAsync(async (req, res) => {
-  const payments = await paymentService.readPayments(req.query.keyword, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
+  const payments = await paymentService.readPayments(req.query.keywords, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
   const result = await Promise.all(payments.result.map(paymentService.serializer));
   res.send({
     result,

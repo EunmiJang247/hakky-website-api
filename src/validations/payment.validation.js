@@ -33,7 +33,7 @@ const readPayments = {
     from: Joi.date(),
     to: Joi.date(),
     limit: Joi.number().required(),
-    skip: Joi.date().required(),
+    skip: Joi.number().required(),
   }).required(),
 };
 
@@ -44,7 +44,7 @@ const subAdminReadPayments = {
     from: Joi.date(),
     to: Joi.date(),
     limit: Joi.number().required(),
-    skip: Joi.date().required(),
+    skip: Joi.number().required(),
   }).required(),
 };
 

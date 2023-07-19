@@ -58,6 +58,12 @@ const resetPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const subAdminResetPassword = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  await authService.subAdminResetPassword(userId, req.body.password);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 const sendVerificationEmail = catchAsync(async (req, res) => {
   const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
   await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
@@ -83,6 +89,7 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
+  subAdminResetPassword,
   sendVerificationEmail,
   verifyEmail,
   checkToken,
