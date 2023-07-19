@@ -15,13 +15,13 @@ router
   .post(auth('ADMIN'), validate(reservationValidation.adminCreateReservation), reservationController.adminCreateReservation)
   .get(auth('ADMIN'), validate(reservationValidation.adminGetReservations), reservationController.adminReadReservations);
 router
+  .route('/admin/:reservationId')
+  .get(auth('ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
+  .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminReadReservations);
+router
   .route('/:reservationId')
   .get(auth(), validate(reservationValidation.getReservation), reservationController.readReservation)
   .patch(auth(), validate(reservationValidation.updateReservation), reservationController.updateReservation);
-router
-  .route('/admin/:reservaionId')
-  .get(auth('ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
-  .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminReadReservations);
 router
   .route('/:reservationId/cancel')
   .patch(auth(), validate(reservationValidation.cancelReservation), reservationController.cancelReservation);

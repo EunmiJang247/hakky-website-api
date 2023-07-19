@@ -35,6 +35,10 @@ const getPlaceDetail = catchAsync(async (req, res) => {
   res.send(place);
 });
 
+// const getPlaceBySubAdmin = catchAsync(async (req, res) => {
+//   const place = await placeService.getPlaceBySubAdmin
+// })
+
 const getPlaceReservationList = catchAsync(async (req, res) => {
   const date = new Date(`${req.params.year}-${req.params.month}-${req.params.day}`);
 
