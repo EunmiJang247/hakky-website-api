@@ -24,6 +24,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     reservationDate: date,
     note: reservationBody.note,
     isAdminCreate: false,
+    isApproval: true,
   });
   return reservation;
 };

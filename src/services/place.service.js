@@ -265,8 +265,8 @@ const updatePlace = async (placeId, updateBody) => {
   return place;
 };
 
-const deletePlaceById = async (noticeId) => {
-  const place = await getPlaceById(noticeId);
+const deletePlaceById = async (placeId) => {
+  const place = await getPlaceById(placeId);
   if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
   }

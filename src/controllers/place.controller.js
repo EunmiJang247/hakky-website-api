@@ -54,7 +54,7 @@ const updatePlace = catchAsync(async (req, res) => {
 });
 
 const deletePlace = catchAsync(async (req, res) => {
-  await placeService.deletePlaceById(req.params.productId);
+  await placeService.deletePlaceById(req.params.placeId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

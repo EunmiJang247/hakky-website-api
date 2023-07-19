@@ -50,7 +50,7 @@ const reservationSchema = mongoose.Schema(
     },
     paymentId: {
       type: String,
-      required: true,
+      required: false,
     },
     products: {
       type: [reservationProductSchema],
