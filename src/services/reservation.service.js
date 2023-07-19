@@ -13,6 +13,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
 
   const date = new Date(year, month, day);
 
+  const payment = await Payment.findById(paymentId);
   const reservation = await Reservation.create({
     applicant: userId,
     placeId: reservationBody.placeId,
@@ -25,6 +26,8 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     note: reservationBody.note,
     isAdminCreate: false,
     isApproval: true,
+    deposit: payment.deposit,
+    price: payment.amount,
   });
   return reservation;
 };
@@ -176,6 +179,18 @@ const serializer = async (reserv) => {
       productNameList.push(`${product.name}::${product.options[0].name}`);
     }),
   );
+  let paymentDoc;
+  if (!payment) {
+    paymentDoc = {};
+  } else {
+    paymentDoc = {
+      method: payment.method,
+      bankName: payment.bankName,
+      virtualAccount: payment.virtualAccount,
+      virtualAccountOwner: payment.virtualAccountOwner,
+      cashReceipt: payment.cashReceipt,
+    };
+  }
 
   const now = new Date();
   let status;
@@ -197,19 +212,13 @@ const serializer = async (reserv) => {
     placeId: reserv.placeId,
     placeName: place.name,
     authorName: place.author.name,
-    price: payment.amount,
-    deposit: payment.deposit,
+    price: reserv.price,
+    deposit: reserv.deposit,
     appointmentStartDate: reserv.reservationFrom,
     appointmentEndDate: reserv.reservationTo,
     depositDeadline: payment.depositDeadline,
     status,
-    payment: {
-      method: payment.method,
-      bankName: payment.bankName,
-      virtualAccount: payment.virtualAccount,
-      virtualAccountOwner: payment.virtualAccountOwner,
-      cashReceipt: payment.cashReceipt,
-    },
+    payment: paymentDoc,
     customerName,
     phoneNumber: reserv.phoneNumber,
     isAdminCreate: reserv.isAdminCreate,
