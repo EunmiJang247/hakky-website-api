@@ -49,7 +49,7 @@ const adminCreateReservation = async (reservationBody) => {
 
   const reservation = await Reservation.create({
     isAdminCreate: true,
-    customerName: reservationBody.cusutomerName,
+    customerName: reservationBody.customerName,
     phoneNumber: reservationBody.phoneNumber,
     placeId: reservationBody.placeId,
     products: reservationBody.products,
