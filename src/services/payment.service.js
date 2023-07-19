@@ -60,6 +60,22 @@ const readPayment = async (id) => {
   return payment;
 };
 
+const refund = async (id) => {
+  const payment = await Payment.findById(id);
+  payment.isRefund = true;
+  payment.save();
+  return payment;
+};
+
+const refundAndCancel = async (id) => {
+  const payment = await Payment.findById(id);
+  const reservation = await Reservation.findById(payment.reservationId);
+  reservation.isCanceled = true;
+  payment.isRefund = true;
+  payment.save();
+  return payment;
+};
+
 const readPayments = async (keywords, startDate, endDate, applicant, limit, skip) => {
   const query = {};
   if (startDate) {
@@ -203,4 +219,6 @@ module.exports = {
   readPayments,
   serializer,
   tossVirtualAccountCreate,
+  refund,
+  refundAndCancel,
 };

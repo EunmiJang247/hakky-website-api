@@ -29,6 +29,18 @@ const readPayment = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const refund = catchAsync(async (req, res) => {
+  const payment = await paymentService.refund(req.params.paymentId);
+  const result = await paymentService.serializer(payment);
+  res.send(result);
+});
+
+const refundAndCancel = catchAsync(async (req, res) => {
+  const payment = await paymentService.refundAndCancel(req.params.paymentId);
+  const result = await paymentService.serializer(payment);
+  res.send(result);
+});
+
 const readPayments = catchAsync(async (req, res) => {
   const payments = await paymentService.readPayments(req.query.keyword, req.query.from, req.query.to, req.query.applicant);
   const result = await Promise.all(payments.result.map(paymentService.serializer));
@@ -42,4 +54,6 @@ module.exports = {
   createPayment,
   readPayment,
   readPayments,
+  refund,
+  refundAndCancel,
 };

@@ -21,6 +21,12 @@ const readPayment = {
   }).required(),
 };
 
+const refund = {
+  params: Joi.object().keys({
+    paymentId: Joi.string().required(),
+  }).required(),
+};
+
 const readPayments = {
   query: Joi.object().keys({
     keywords: Joi.string().allow(''),
@@ -36,4 +42,5 @@ module.exports = {
   createPayment,
   readPayment,
   readPayments,
+  refund,
 };
