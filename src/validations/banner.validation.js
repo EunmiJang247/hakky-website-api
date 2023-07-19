@@ -25,4 +25,6 @@ const updateBanner = {
   }).required(),
 };
 
-module.exports = updateBanner;
+module.exports = {
+  updateBanner,
+};
