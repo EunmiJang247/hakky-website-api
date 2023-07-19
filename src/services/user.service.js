@@ -57,9 +57,6 @@ const queryUsers = async (keyword, limit, skip) => {
           {
             phoneNumber: { $regex: keyword },
           },
-          {
-            _id: { $regex: keyword },
-          },
         ],
       },
     )
@@ -74,8 +71,46 @@ const queryUsers = async (keyword, limit, skip) => {
           {
             phoneNumber: { $regex: keyword },
           },
+        ],
+      },
+    );
+  } else {
+    users = await User.find().limit(limit).skip(skip);
+    count = await User.countDocuments();
+  }
+
+  return {
+    result: users,
+    count,
+  };
+};
+
+const querySubAdmins = async (keyword, limit, skip) => {
+  let users;
+  let count;
+  if (keyword) {
+    users = await User.find(
+      {
+        $or: [
           {
-            _id: { $regex: keyword },
+            name: { $regex: keyword },
+          },
+          {
+            phoneNumber: { $regex: keyword },
+          },
+        ],
+      },
+    )
+      .limit(limit)
+      .skip(skip);
+    count = await User.countDocuments(
+      {
+        $or: [
+          {
+            name: { $regex: keyword },
+          },
+          {
+            phoneNumber: { $regex: keyword },
           },
         ],
       },
@@ -144,4 +179,5 @@ module.exports = {
   getUserByPhoneNumber,
   updateUserById,
   deleteUserById,
+  querySubAdmins,
 };

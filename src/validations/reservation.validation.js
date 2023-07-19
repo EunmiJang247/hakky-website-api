@@ -36,9 +36,7 @@ const adminCreateReservation = {
 
 const adminGetReservations = {
   query: Joi.object().keys({
-    isAdminCreate: Joi.boolean().required(),
     placeId: Joi.string(),
-    applicant: Joi.string(),
     keywords: Joi.string().allow(''),
     from: Joi.date(),
     to: Joi.date(),

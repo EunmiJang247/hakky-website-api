@@ -15,6 +15,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
 
   const payment = await Payment.findById(paymentId);
   const place = await PlaceIdle.Place.findById(reservationBody.placeId);
+  const user = await User.findById(userId);
 
   const reservation = await Reservation.create({
     applicant: userId,
@@ -32,6 +33,8 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     price: payment.amount,
     placeName: place.name,
     authorName: place.author.name,
+    customerName: user.name,
+    phoneNumber: user.phoneNumber,
   });
   return reservation;
 };
@@ -100,13 +103,15 @@ const readReservations = async (status, userId) => {
   };
 };
 
-const adminReadReservations = async (applicant, placeId, keywords, from, to, limit, skip, isAdminCreate) => {
-  const query = { isAdminCreate };
-  if (applicant) {
-    query.applicant = applicant;
+const adminReadReservations = async (placeId, keywords, from, to, limit, skip) => {
+  const query = {};
+  if (keywords) {
+    if (keywords !== '') {
+      query.customerName = { $regex: keywords };
+    }
   }
   if (placeId) {
-    query.place = placeId;
+    query.placeId = placeId;
   }
   if (from) {
     query.createdAt = { $gte: from };
@@ -116,18 +121,6 @@ const adminReadReservations = async (applicant, placeId, keywords, from, to, lim
   }
   if (from && to) {
     query.createdAt = { $gte: from, $lte: to };
-  }
-  if (keywords) {
-    if (keywords !== '') {
-      query._id = { $regex: keywords };
-    }
-  }
-  if (applicant) {
-    if (applicant !== '') {
-      const users = await User.find({ name: { $regex: applicant } });
-      const nameList = users.map((user) => user._id);
-      query.applicant = { $in: nameList };
-    }
   }
 
   const result = await Reservation.find(query).limit(limit).skip(skip);

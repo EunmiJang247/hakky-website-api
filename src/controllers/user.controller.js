@@ -21,6 +21,11 @@ const getUser = catchAsync(async (req, res) => {
   res.send(user);
 });
 
+const getSubAdmins = catchAsync(async (req, res) => {
+  const subAdmins = await userService.querySubAdmins(req.query.keyword, req.query.limit, req.query.skip);
+  res.send(subAdmins);
+});
+
 const updateUser = catchAsync(async (req, res) => {
   await userService.updateUserById(req.params.userId, req.body);
   res.status(httpStatus.NO_CONTENT).end();
@@ -35,6 +40,7 @@ module.exports = {
   createUser,
   getUsers,
   getUser,
+  getSubAdmins,
   updateUser,
   deleteUser,
 };

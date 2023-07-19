@@ -10,7 +10,9 @@ router
   .route('/')
   .post(validate(userValidation.createUser), userController.createUser)
   .get(auth('ADMIN'), validate(userValidation.getUsers), userController.getUsers);
-
+router
+  .route('/subAdmin/')
+  .get(auth('ADMIN'), validate(userValidation.getUsers), userController.getSubAdmins);
 router
   .route('/:userId')
   .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
