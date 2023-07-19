@@ -17,7 +17,7 @@ router
 router
   .route('/admin/:reservationId')
   .get(auth('ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
-  .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminReadReservations);
+  .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminUdateReservation);
 router
   .route('/:reservationId')
   .get(auth(), validate(reservationValidation.getReservation), reservationController.readReservation)
