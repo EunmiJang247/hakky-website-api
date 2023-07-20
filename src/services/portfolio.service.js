@@ -14,7 +14,7 @@ const readPortFolio = async (id) => {
 
 const readPortFolios = async (limit, skip) => {
   const portfolios = await PortFolio.find({}).limit(limit).skip(skip).sort('-id');
-  const count = await PortFolio.countDocuments();
+  const count = await PortFolio.countDocuments({});
   return {
     result: portfolios,
     count,
