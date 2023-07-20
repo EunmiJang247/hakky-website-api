@@ -9,7 +9,7 @@ const createPortfolio = catchAsync(async (req, res) => {
 });
 
 const getPortfolios = catchAsync(async (req, res) => {
-  const portfolios = await portfolioService.readPortFolios();
+  const portfolios = await portfolioService.readPortFolios(req.query.limit, req.query.skip);
   res.send(portfolios);
 });
 

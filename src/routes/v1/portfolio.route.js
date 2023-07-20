@@ -6,7 +6,7 @@ const portfolioController = require('../../controllers/portfolio.controller');
 
 const router = express.Router();
 
-router.route('/').post(validate(portFolioValidation.createPortfolio), portfolioController.createPortfolio).get(portfolioController.getPortfolios);
+router.route('/').post(validate(portFolioValidation.createPortfolio), portfolioController.createPortfolio).get(validate(portFolioValidation.readPortfolios), portfolioController.getPortfolios);
 router
   .route('/:portfolioId/')
   .get(validate(portFolioValidation.readPortfolio), portfolioController.getPortfolio)

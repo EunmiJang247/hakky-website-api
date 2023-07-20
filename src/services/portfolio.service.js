@@ -12,9 +12,13 @@ const readPortFolio = async (id) => {
   return portfolio;
 };
 
-const readPortFolios = async () => {
-  const portfolios = await PortFolio.find({}).sort('-id');
-  return portfolios;
+const readPortFolios = async (limit, skip) => {
+  const portfolios = await PortFolio.find({}).limit(limit).skip(skip).sort('-id');
+  const count = await PortFolio.countDocuments();
+  return {
+    result: portfolios,
+    count,
+  };
 };
 
 const updatePortFolio = async (id, portfolioBody) => {

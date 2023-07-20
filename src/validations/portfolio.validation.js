@@ -8,6 +8,13 @@ const createPortfolio = {
   }).required(),
 };
 
+const readPortfolios = {
+  query: Joi.object().keys({
+    limit: Joi.number().required(),
+    skip: Joi.number().required(),
+  }),
+};
+
 const readPortfolio = {
   params: Joi.object().keys({
     portfolioId: Joi.string().custom(objectId),
@@ -33,6 +40,7 @@ const deletePortFolio = {
 module.exports = {
   createPortfolio,
   readPortfolio,
+  readPortfolios,
   updatePortfolio,
   deletePortFolio,
 };
