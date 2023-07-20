@@ -87,7 +87,6 @@ const adminReadReservation = async (id) => {
 
 const readReservations = async (status, userId) => {
   const statusQuery = {
-    // 전체 모든 유저의 예약이 다 보였었음
     all: { applicant: userId },
     beforeDeposit: { isApproval: false, isCanceled: false, applicant: userId },
     complete: { isApproval: true, isCanceled: false, applicant: userId },
@@ -104,7 +103,6 @@ const readReservations = async (status, userId) => {
   };
 };
 
-// Todo: sort param 순서 때문에 isAdminCreate 넣었습니다. 추후에 고쳐주세요
 const adminReadReservations = async (placeId, keywords, from, to, limit, skip, sort) => {
   const query = {};
   if (keywords) {
