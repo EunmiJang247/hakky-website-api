@@ -10,7 +10,7 @@ router.route('/').post(validate(portFolioValidation.createPortfolio), portfolioC
 router
   .route('/:portfolioId/')
   .get(validate(portFolioValidation.readPortfolio), portfolioController.getPortfolio)
-  .patch(auth('manageUsers'), validate(portFolioValidation.updatePortfolio), portfolioController.updatePortfolio)
-  .delete(auth('manageUsers'), validate(portFolioValidation.deletePortFolio), portfolioController.deletePortfolio);
+  .patch(auth('ADMIN'), validate(portFolioValidation.updatePortfolio), portfolioController.updatePortfolio)
+  .delete(auth('ADMIN'), validate(portFolioValidation.deletePortFolio), portfolioController.deletePortfolio);
 
 module.exports = router;

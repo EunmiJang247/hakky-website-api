@@ -33,7 +33,7 @@ const updatePortfolio = {
 
 const deletePortFolio = {
   params: Joi.object().keys({
-    placeId: Joi.required().custom(objectId),
+    portfolioId: Joi.required().custom(objectId),
   }),
 };
 
