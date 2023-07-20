@@ -31,7 +31,7 @@ const updateIncludeSchedule = catchAsync(async (req, res) => {
 });
 
 const deleteIncludeSchedule = catchAsync(async (req, res) => {
-  await includeScheduleService.deleteIncludeScheduleById(req.params.productId);
+  await includeScheduleService.deleteIncludeScheduleById(req.params.includeScheduleId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
