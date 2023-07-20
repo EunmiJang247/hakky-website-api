@@ -42,6 +42,7 @@ const adminGetReservations = {
     to: Joi.date(),
     limit: Joi.number(),
     skip: Joi.number(),
+    sort: Joi.string(),
   }).required(),
 };
 

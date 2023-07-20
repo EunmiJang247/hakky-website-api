@@ -87,7 +87,8 @@ const adminReadReservation = async (id) => {
 
 const readReservations = async (status, userId) => {
   const statusQuery = {
-    all: {},
+    // 전체 모든 유저의 예약이 다 보였었음
+    all: { applicant: userId },
     beforeDeposit: { isApproval: false, isCanceled: false, applicant: userId },
     complete: { isApproval: true, isCanceled: false, applicant: userId },
     canceled: { isCanceled: true, applicant: userId },
@@ -103,7 +104,8 @@ const readReservations = async (status, userId) => {
   };
 };
 
-const adminReadReservations = async (placeId, keywords, from, to, limit, skip) => {
+// Todo: sort param 순서 때문에 isAdminCreate 넣었습니다. 추후에 고쳐주세요
+const adminReadReservations = async (placeId, keywords, from, to, limit, skip, sort) => {
   const query = {};
   if (keywords) {
     if (keywords !== '') {
@@ -122,8 +124,8 @@ const adminReadReservations = async (placeId, keywords, from, to, limit, skip) =
   if (from && to) {
     query.createdAt = { $gte: from, $lte: to };
   }
-
-  const result = await Reservation.find(query).limit(limit).skip(skip);
+  const sortVar = sort === 'new' ? '-id' : 'id';
+  const result = await Reservation.find(query).limit(limit).skip(skip).sort(sortVar);
   const count = await Reservation.countDocuments(query);
   return {
     result,
@@ -151,6 +153,17 @@ const adminUpdateReservation = async (id, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
   Object.assign(reservation, updateBody);
+  reservation.save();
+  return reservation;
+};
+
+// Todo: 제가 막 만든거라 코드 형식 태형님이랑 다르면 고쳐주세요
+const adminCancelReservation = async (id) => {
+  const reservation = await Reservation.findOne({ _id: id });
+  if (!reservation) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
+  }
+  reservation.isCanceled = true;
   reservation.save();
   return reservation;
 };
@@ -239,5 +252,6 @@ module.exports = {
   adminReadReservation,
   adminReadReservations,
   adminUpdateReservation,
+  adminCancelReservation,
   serializer,
 };
