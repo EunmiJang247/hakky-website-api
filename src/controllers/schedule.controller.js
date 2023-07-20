@@ -30,7 +30,7 @@ const updateSchedule = catchAsync(async (req, res) => {
 });
 
 const deleteSchedule = catchAsync(async (req, res) => {
-  await scheduleService.deleteScheduleById(req.params.productId);
+  await scheduleService.deleteScheduleById(req.params.scheduleId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
