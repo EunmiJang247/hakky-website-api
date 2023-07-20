@@ -16,7 +16,7 @@ const getIncludeSchedules = catchAsync(async (req, res) => {
 });
 
 const getIncludeSchedule = catchAsync(async (req, res) => {
-  const includeSchedule = await includeScheduleService.getIncludeScheduleById(req.params.productId);
+  const includeSchedule = await includeScheduleService.getIncludeScheduleById(req.params.includeScheduleId);
   if (!includeSchedule) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Notice not found');
   }
