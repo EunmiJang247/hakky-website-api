@@ -5,7 +5,8 @@ const { placeService } = require('../services');
 
 const createPlace = catchAsync(async (req, res) => {
   const place = await placeService.createPlace(req.body);
-  res.status(httpStatus.CREATED).send(place);
+  const result = await placeService.serializer(place);
+  res.status(httpStatus.CREATED).send(result);
 });
 
 const getPlaces = catchAsync(async (req, res) => {
