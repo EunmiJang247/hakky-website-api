@@ -14,7 +14,9 @@ router
 router
   .route('/subAdmin/')
   .get(validate(paymentValidation.subAdminReadPayments), paymentController.subAdminReadPayments);
-
+router
+  .route('/statistic/')
+  .get(validate(paymentValidation.statistic), paymentController.statistic);
 router
   .route('/refund/:paymentId')
   .patch(auth('ADMIN'), validate(paymentValidation.refund), paymentController.refund);

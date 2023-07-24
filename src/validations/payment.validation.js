@@ -48,10 +48,22 @@ const subAdminReadPayments = {
   }).required(),
 };
 
+const statistic = {
+  query: Joi.object().keys({
+    placeId: Joi.string().required(),
+    startDate: Joi.date().required(),
+    endDate: Joi.date().required(),
+    refundState: Joi.string().required(),
+    limit: Joi.number().required(),
+    skip: Joi.number().required(),
+  }).required(),
+};
+
 module.exports = {
   createPayment,
   readPayment,
   readPayments,
   subAdminReadPayments,
   refund,
+  statistic,
 };

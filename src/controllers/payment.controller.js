@@ -50,6 +50,25 @@ const readPayments = catchAsync(async (req, res) => {
   });
 });
 
+const statistic = catchAsync(async (req, res) => {
+  const payments = await paymentService.statistic({
+    startDate: req.query.startDate,
+    endDate: req.qeury.endDate,
+    limit: req.query.limit,
+    skip: req.query.skip,
+    placeId: req.query.placeId,
+    refundState: req.query.refundState,
+  });
+
+  const result = await Promise.all(payments.result.map(paymentService.serializer));
+  res.send({
+    result,
+    amount: payments.amount,
+    canceledAmount: payments.canceledAmount,
+    count: payments.paymentCount,
+  });
+});
+
 const subAdminReadPayments = catchAsync(async (req, res) => {
   const payments = await paymentService.subAdminReadPayments(req.query.keywords, req.query.placeId, req.query.from, req.query.to, req.query.limit, req.query.skip);
   const result = await Promise.all(payments.result.map(paymentService.serializer));
@@ -66,4 +85,5 @@ module.exports = {
   subAdminReadPayments,
   refund,
   refundAndCancel,
+  statistic,
 };

@@ -212,6 +212,44 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
   }
 };
 
+const statistic = async ({
+  startDate, endDate, refundState, placeId, limit, skip,
+}) => {
+  const query = { placeId };
+  const canceledQuery = { placeId, isRefund: true };
+  if (startDate) {
+    query.createdAt = { $gte: startDate };
+    canceledQuery.createdAt = { $gte: startDate };
+  }
+  if (endDate) {
+    query.createdAt = { $lte: endDate };
+    canceledQuery.createdAt = { $lte: endDate };
+  }
+  if (startDate && endDate) {
+    query.createdAt = { $gte: startDate, $lte: endDate };
+    canceledQuery.createdAt = { $gte: startDate, $lte: endDate };
+  }
+  if (refundState === 'canceled') {
+    query.isRefund = false;
+  } else if (refundState === 'complete') {
+    query.isRefund = true;
+  }
+  const allPaymentList = await Payment.find(query);
+  const canceledPaymentList = await Payment.find(canceledQuery);
+  const payments = await Payment.find(query).limit(limit).skip(skip);
+  const paymentCount = await Payment.countDocuments(query);
+
+  const amount = allPaymentList.map((payment) => payment.deposit);
+  const canceledAmount = canceledPaymentList.map((payment) => payment.deposit);
+
+  return {
+    result: payments,
+    amount,
+    canceledAmount,
+    count: paymentCount,
+  };
+};
+
 const serializer = async (payment) => {
   const reservation = await Reservation.findById(payment.reservationId);
   const applicant = await User.findById(payment.applicant);
@@ -246,4 +284,5 @@ module.exports = {
   tossVirtualAccountCreate,
   refund,
   refundAndCancel,
+  statistic,
 };
