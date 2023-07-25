@@ -4,8 +4,22 @@ const naverProfile = require('../utils/naverLogin');
 const kakaoProfile = require('../utils/kakaoLogin');
 const ApiError = require('../utils/ApiError');
 const {
-  authService, userService, tokenService, emailService,
+  authService, userService, authCodeService, emailService, tokenService,
 } = require('../services');
+
+const generateAuthcode = catchAsync(async (req, res) => {
+  await authCodeService.createAuthCodeByPhoneNumber(req.body.phoneNumber);
+  res.send();
+});
+
+const verifyAuthcode = catchAsync(async (req, res) => {
+  const result = await authCodeService.getAuthCodeByIdentifier(req.body.identifier, req.body.phoneNumber);
+  if (result) {
+    res.send('verified');
+  } else {
+    res.send('try again');
+  }
+});
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -93,4 +107,6 @@ module.exports = {
   sendVerificationEmail,
   verifyEmail,
   checkToken,
+  generateAuthcode,
+  verifyAuthcode,
 };

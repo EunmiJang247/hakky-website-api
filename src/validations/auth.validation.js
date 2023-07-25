@@ -65,6 +65,19 @@ const verifyEmail = {
   }),
 };
 
+const generateAuthcode = {
+  body: Joi.object().keys({
+    phoneNumber: Joi.string().required(),
+  }),
+};
+
+const verifyAuthcode = {
+  body: Joi.object().keys({
+    phoneNumber: Joi.string().required(),
+    identifier: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   register,
   registerNaver,
@@ -75,4 +88,6 @@ module.exports = {
   resetPassword,
   subAdminResetPassword,
   verifyEmail,
+  generateAuthcode,
+  verifyAuthcode,
 };

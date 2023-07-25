@@ -17,5 +17,7 @@ router.post('/reset-password', validate(authValidation.resetPassword), authContr
 router.post('/subAdmin/reset-password', auth('SUB_ADMIN'), validate(authValidation.subAdminResetPassword), authController.subAdminResetPassword);
 router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);
 router.post('/check-token', auth(), authController.checkToken);
+router.post('/auth-code/generate/', authController.generateAuthcode);
+router.post('/auth-code/verify/', authController.verifyAuthcode);
 
 module.exports = router;

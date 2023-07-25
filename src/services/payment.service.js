@@ -231,7 +231,7 @@ const statistic = async ({
   }
   if (refundState === 'canceled') {
     query.isRefund = false;
-  } else if (refundState === 'complete') {
+  } else if (refundState === 'completed') {
     query.isRefund = true;
   }
   const allPaymentList = await Payment.find(query);
