@@ -53,7 +53,7 @@ const readPayments = catchAsync(async (req, res) => {
 const statistic = catchAsync(async (req, res) => {
   const payments = await paymentService.statistic({
     startDate: req.query.startDate,
-    endDate: req.qeury.endDate,
+    endDate: req.query.endDate,
     limit: req.query.limit,
     skip: req.query.skip,
     placeId: req.query.placeId,
@@ -65,7 +65,7 @@ const statistic = catchAsync(async (req, res) => {
     result,
     amount: payments.amount,
     canceledAmount: payments.canceledAmount,
-    count: payments.paymentCount,
+    count: payments.count,
   });
 });
 

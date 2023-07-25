@@ -155,7 +155,6 @@ const adminUpdateReservation = async (id, updateBody) => {
   return reservation;
 };
 
-// Todo: 제가 막 만든거라 코드 형식 태형님이랑 다르면 고쳐주세요
 const adminCancelReservation = async (id) => {
   const reservation = await Reservation.findOne({ _id: id });
   if (!reservation) {

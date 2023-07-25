@@ -239,8 +239,9 @@ const statistic = async ({
   const payments = await Payment.find(query).limit(limit).skip(skip);
   const paymentCount = await Payment.countDocuments(query);
 
-  const amount = allPaymentList.map((payment) => payment.deposit);
-  const canceledAmount = canceledPaymentList.map((payment) => payment.deposit);
+  const amount = allPaymentList.reduce((prev = 0, payment) => prev + payment.amount, 0);
+
+  const canceledAmount = canceledPaymentList.reduce((prev = 0, payment) => prev + payment.deposit, 0);
 
   return {
     result: payments,

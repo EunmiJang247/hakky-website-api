@@ -15,6 +15,14 @@ router
   .post(auth('ADMIN'), validate(reservationValidation.adminCreateReservation), reservationController.adminCreateReservation)
   .get(auth('ADMIN'), validate(reservationValidation.adminGetReservations), reservationController.adminReadReservations);
 router
+  .route('/subAdmin/')
+  .get(auth('SUB_ADMIN'), validate(reservationValidation.subAdminGetReservations), reservationController.subAdminReadReservations)
+  .post(auth('SUB_ADMIN'), validate(reservationValidation.subAdminCreateReservation), reservationController.subAdminCreateReservation);
+router
+  .route('/subAdmin/:reservationId')
+  .get(auth('SUB_ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
+  .patch(auth('SUB_ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminUdateReservation);
+router
   .route('/admin/:reservationId')
   .get(auth('ADMIN'), validate(reservationValidation.getReservation), reservationController.adminReadReservation)
   .patch(auth('ADMIN'), validate(reservationValidation.updateReservation), reservationController.adminUdateReservation);

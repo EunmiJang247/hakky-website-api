@@ -34,9 +34,36 @@ const adminCreateReservation = {
     .required(),
 };
 
+const subAdminCreateReservation = {
+  body: Joi.object()
+    .keys({
+      customerName: Joi.string().required(),
+      phoneNumber: Joi.string().required(),
+      price: Joi.number().required(),
+      deposit: Joi.number().required(),
+      products: Joi.array().items(Joi.object()).required(),
+      reservationFrom: Joi.date().required(),
+      reservationTo: Joi.date().required(),
+      reservationTime: Joi.date().required(),
+      note: Joi.string().allow(''),
+    })
+    .required(),
+};
+
 const adminGetReservations = {
   query: Joi.object().keys({
     placeId: Joi.string(),
+    keywords: Joi.string().allow(''),
+    from: Joi.date(),
+    to: Joi.date(),
+    limit: Joi.number(),
+    skip: Joi.number(),
+    sort: Joi.string(),
+  }).required(),
+};
+
+const subAdminGetReservations = {
+  query: Joi.object().keys({
     keywords: Joi.string().allow(''),
     from: Joi.date(),
     to: Joi.date(),
@@ -89,6 +116,8 @@ module.exports = {
   getReservations,
   getReservation,
   adminGetReservations,
+  subAdminGetReservations,
+  subAdminCreateReservation,
   updateReservation,
   cancelReservation,
 };

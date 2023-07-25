@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { reservationService } = require('../services');
+const { reservationService, placeService } = require('../services');
 const catchAsync = require('../utils/catchAsync');
 
 const createReservation = catchAsync(async (req, res) => {
@@ -44,6 +44,26 @@ const adminReadReservations = catchAsync(async (req, res) => {
   res.send({ result, count: reservation.count });
 });
 
+const subAdminCreateReservation = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  const place = await placeService.getPlaceBySubAdmin(userId);
+
+  req.body.placeId = place.id;
+  const reservation = await reservationService.adminCreateReservation(req.body);
+  const result = await reservationService.serializer(reservation);
+  res.send({ result, count: reservation.count });
+});
+
+const subAdminReadReservations = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  const place = await placeService.getPlaceBySubAdmin(userId);
+  const reservation = await reservationService.adminReadReservations(
+    place.id, req.query.keywords, req.query.from, req.query.to, req.query.limit, req.query.skip, req.query.sort,
+  );
+  const result = await Promise.all(reservation.result.map(reservationService.serializer));
+  res.send({ result, count: reservation.count });
+});
+
 const updateReservation = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   const reservation = await reservationService.updateReservation(req.params.reservationId, req.body, userId);
@@ -77,6 +97,8 @@ module.exports = {
   adminReadReservations,
   adminUdateReservation,
   adminCancelReservation,
+  subAdminReadReservations,
+  subAdminCreateReservation,
   updateReservation,
   cancelReservation,
 };
