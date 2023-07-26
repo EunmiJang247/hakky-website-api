@@ -52,7 +52,6 @@ const resetPassword = {
 
 const resetPasswordMypage = {
   body: Joi.object().keys({
-    identifier: Joi.string().required(),
     password: Joi.string().required(),
     newPassword: Joi.string().required(),
   }),
