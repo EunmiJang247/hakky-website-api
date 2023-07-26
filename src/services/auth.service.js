@@ -72,7 +72,7 @@ const resetPassword = async (userId, identifier, phoneNumber, newPassword) => {
 
 const resetPasswordMypage = async (userId, password, newPassword) => {
   const user = await userService.getUserById(userId);
-  if (await user.isPasswordMatch(password)) {
+  if (!user || !await user.isPasswordMatch(password)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'PASSWORD_DOES_NOT_MATCHED');
   }
   await userService.updateUserById(user.id, { password: newPassword });
