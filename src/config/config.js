@@ -83,7 +83,7 @@ module.exports = {
   aligo: {
     apiKey: envVars.ALIGO_API_KEY,
     url: envVars.ALIGO_URL,
-    phoneNumber: envVars.phoneNumber,
+    phoneNumber: envVars.ALIGO_PHONE_NUMBER,
     userId: envVars.ALIGO_USER_ID,
   },
 };

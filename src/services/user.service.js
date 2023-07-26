@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const authCodeService = require('./auth-code.service');
 
 /**
  * Create a user
@@ -14,6 +15,13 @@ const createUser = async (userBody) => {
   if (check) {
     throw new ApiError(httpStatus.UNAUTHORIZED, '이미 가입이 완료된 핸드폰 번호입니다.');
   }
+  const checkAuthcode = await authCodeService.getAuthCodeByIdentifier(userBody.identifier, userBody.phoneNumber);
+
+  if (!checkAuthcode) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, '인증 번호 유효시간이 초과되었습니다.');
+  }
+
+  await checkAuthcode.delete();
 
   const user = await User.create({
     name: userBody.name,

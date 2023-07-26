@@ -3,9 +3,9 @@ const Joi = require('joi');
 
 const register = {
   body: Joi.object().keys({
-    authenticationNumber: Joi.string().required(),
     phoneNumber: Joi.string().required(),
     // password: Joi.string().required().custom(password),
+    identifier: Joi.string().required(),
     password: Joi.string().required(),
     name: Joi.string().required(),
   }),
@@ -43,11 +43,9 @@ const forgotPassword = {
 };
 
 const resetPassword = {
-  query: Joi.object().keys({
-    token: Joi.string().required(),
-  }),
   body: Joi.object().keys({
-    // password: Joi.string().required().custom(password),
+    identifier: Joi.string().required(),
+    phoneNumber: Joi.string().required(),
     password: Joi.string().required(),
   }),
 };
