@@ -42,7 +42,8 @@ const adminUpdateUser = catchAsync(async (req, res) => {
 });
 
 const deleteUser = catchAsync(async (req, res) => {
-  await userService.deleteUserById(req.params.userId);
+  const { id: userId } = req.user;
+  await userService.deleteUserById(userId);
   res.status(httpStatus.NO_CONTENT).end();
 });
 
