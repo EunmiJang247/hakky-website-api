@@ -173,12 +173,20 @@ const getUserByPhoneNumber = async (phoneNumber) => User.findOne({ phoneNumber }
  */
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
+  const checkAuthcode = await authCodeService.getAuthCodeByIdentifier(updateBody.identifier, updateBody.phoneNumber);
+
+  if (!checkAuthcode) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, '인증 번호 유효시간이 초과되었습니다.');
+  }
+
+  await checkAuthcode.delete();
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
   if (updateBody.phoneNumber && (await User.isPhoneNumberTaken(updateBody.phoneNumber, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'phoneNumber already taken');
   }
+
   Object.assign(user, updateBody);
   await user.save();
   return user;
