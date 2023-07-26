@@ -50,6 +50,14 @@ const resetPassword = {
   }),
 };
 
+const resetPasswordMypage = {
+  body: Joi.object().keys({
+    identifier: Joi.string().required(),
+    password: Joi.string().required(),
+    newPassword: Joi.string().required(),
+  }),
+};
+
 const subAdminResetPassword = {
   body: Joi.object().keys({
     // password: Joi.string().required().custom(password),
@@ -83,6 +91,7 @@ module.exports = {
   logout,
   refreshTokens,
   forgotPassword,
+  resetPasswordMypage,
   resetPassword,
   subAdminResetPassword,
   verifyEmail,

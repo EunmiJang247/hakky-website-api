@@ -73,6 +73,12 @@ const resetPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const resetPasswordMypage = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  await authService.resetPasswordMypage(userId, req.body.password, req.body.newPassword);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 const subAdminResetPassword = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   await authService.subAdminResetPassword(userId, req.body.password);
@@ -104,6 +110,7 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   resetPassword,
+  resetPasswordMypage,
   subAdminResetPassword,
   sendVerificationEmail,
   verifyEmail,
