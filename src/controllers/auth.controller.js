@@ -17,7 +17,7 @@ const verifyAuthcode = catchAsync(async (req, res) => {
   if (result) {
     res.send('verified');
   } else {
-    res.send('try again');
+    res.status(httpStatus.BAD_REQUEST).send('try again');
   }
 });
 
@@ -68,7 +68,8 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  await authService.resetPassword(req.body.identifier, req.body.phoneNumber, req.body.password);
+  const { id: userId } = req.user;
+  await authService.resetPassword(userId, req.body.identifier, req.body.phoneNumber, req.body.password);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
