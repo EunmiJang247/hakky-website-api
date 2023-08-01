@@ -13,7 +13,7 @@ router.post('/login', validate(authValidation.login), authController.login);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-token', validate(authValidation.refreshTokens), authController.refreshTokens);
 // router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
-router.post('/reset-password', auth(), validate(authValidation.resetPassword), authController.resetPassword);
+router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 router.post('/reset-password-mypage', auth(), validate(authValidation.resetPasswordMypage), authController.resetPasswordMypage);
 router.post('/subAdmin/reset-password', auth('SUB_ADMIN'), validate(authValidation.subAdminResetPassword), authController.subAdminResetPassword);
 router.post('/verify-email', validate(authValidation.verifyEmail), authController.verifyEmail);

@@ -13,7 +13,7 @@ const kakaoProfile = async (code) => {
       data: {
         grant_type: 'authorization_code',
         client_id: restKey,
-        redirect_uri: 'https://revina.co.kr/sign-in',
+        redirect_uri: 'https://www.studio-seba.com/sign-in',
         code,
         client_secret: secretKey,
       },

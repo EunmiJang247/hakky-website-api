@@ -4,7 +4,6 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
-const { authCodeService } = require('.');
 const { AuthCode } = require('../models');
 
 const loginUserWithPhoneNumberAndPassword = async (phoneNumber, password) => {
@@ -47,23 +46,13 @@ const refreshAuth = async (refreshToken) => {
   }
 };
 
-/**
- * Reset password
- * @param {string} resetPasswordToken
- * @param {string} newPassword
- * @returns {Promise}
- */
-const resetPassword = async (userId, identifier, phoneNumber, newPassword) => {
+const resetPassword = async (identifier, phoneNumber, newPassword) => {
   try {
-    const authCodeDoc = await authCodeService.getAuthCodeByIdentifier(identifier, phoneNumber);
-    if (!authCodeDoc) {
-      throw new ApiError(httpStatus.FORBIDDEN, 'authcode does not exist');
-    }
-    const user = await userService.getUserById(userId);
+    const user = await userService.getUserByPhoneNumber(phoneNumber);
     if (!user) {
       throw new Error();
     }
-    await userService.updateUserById(user.id, { password: newPassword });
+    await userService.updateUserById(user.id, { password: newPassword, identifier, phoneNumber });
     await AuthCode.deleteMany({ identifier, phoneNumber });
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');

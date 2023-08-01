@@ -39,8 +39,8 @@ const registerKakao = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, req.query.errorMessage);
   }
 
-  // todo crteate user
   const kakaoInfo = await kakaoProfile(req.body.code);
+  console.log(kakaoInfo);
   res.status(httpStatus.CREATED).send(kakaoInfo);
 });
 
@@ -68,8 +68,7 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const { id: userId } = req.user;
-  await authService.resetPassword(userId, req.body.identifier, req.body.phoneNumber, req.body.password);
+  await authService.resetPassword(req.body.identifier, req.body.phoneNumber, req.body.password);
   res.status(httpStatus.NO_CONTENT).send();
 });
 

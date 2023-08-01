@@ -9,7 +9,8 @@ const generateAuthCode = (min, max) => Math.floor(Math.random() * (max - min)) +
 const getAuthCodeByIdentifier = async (identifier, phoneNumber) => {
   const authCode = await AuthCode.findOne({ identifier, phoneNumber });
   const now = new Date();
-  if (!authCode) {
+
+  if (authCode == null) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect phoneNumber or identifier');
   }
   if (authCode.validTo < now) {
