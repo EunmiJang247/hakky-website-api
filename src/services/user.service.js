@@ -72,20 +72,22 @@ const createUserNaver = async (userBody) => {
 };
 
 const createUserKakao = async (userBody) => {
-  const check = await User.findOne({ phoneNumber: userBody.data.mobile });
+  const phoneNumber = `0${userBody.data.kakao_account.phone_number.split(' ')[1]}`;
+
+  const check = await User.findOne({ phoneNumber });
 
   if (check) {
     return check;
   }
-
   const user = await User.create({
-    name: userBody.data.name,
-    phoneNumber: userBody.data.phone_number,
+    name: userBody.data.kakao_account.name,
+    phoneNumber,
     role: 'user',
     termsOfService: true,
     privacyPolicy: true,
     isKakao: true,
   });
+  console.log(user);
   return user;
 };
 
