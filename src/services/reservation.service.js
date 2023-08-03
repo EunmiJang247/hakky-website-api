@@ -122,7 +122,7 @@ const adminReadReservations = async (placeId, keywords, from, to, limit, skip, s
   if (from && to) {
     query.createdAt = { $gte: from, $lte: to };
   }
-  const sortVar = sort === 'new' ? '-id' : 'id';
+  const sortVar = sort === 'new' ? { _id: -1 } : { _id: 1 };
   const result = await Reservation.find(query).limit(limit).skip(skip).sort(sortVar);
   const count = await Reservation.countDocuments(query);
   return {
