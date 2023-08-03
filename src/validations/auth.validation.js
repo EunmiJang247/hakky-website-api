@@ -17,6 +17,12 @@ const registerNaver = {
   }),
 };
 
+const registerKakao = {
+  body: Joi.object().keys({
+    code: Joi.string().required(),
+  }),
+};
+
 const login = {
   body: Joi.object().keys({
     phoneNumber: Joi.string().required(),
@@ -86,6 +92,7 @@ const verifyAuthcode = {
 module.exports = {
   register,
   registerNaver,
+  registerKakao,
   login,
   logout,
   refreshTokens,

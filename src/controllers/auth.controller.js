@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const naverProfile = require('../utils/naverLogin');
-const kakaoProfile = require('../utils/kakaoLogin');
+const { kakaoProfile } = require('../utils/kakaoLogin');
 const ApiError = require('../utils/ApiError');
 const {
   authService, userService, authCodeService, emailService, tokenService,
@@ -40,7 +40,6 @@ const registerKakao = catchAsync(async (req, res) => {
   }
 
   const kakaoInfo = await kakaoProfile(req.body.code);
-  console.log(kakaoInfo);
   res.status(httpStatus.CREATED).send(kakaoInfo);
 });
 
