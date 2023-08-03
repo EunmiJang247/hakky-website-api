@@ -36,7 +36,7 @@ const createAuthCodeByPhoneNumber = async (phoneNumber) => {
           sender: config.aligo.phoneNumber,
           receiver: phoneNumber,
           msg,
-          testmode_yn: 'Y',
+          testmode_yn: 'N',
         },
       });
     if (result.data.result_code !== '1') {
