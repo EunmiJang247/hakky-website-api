@@ -71,6 +71,24 @@ const createUserNaver = async (userBody) => {
   return user;
 };
 
+const createUserKakao = async (userBody) => {
+  const check = await User.findOne({ phoneNumber: userBody.data.mobile });
+
+  if (check) {
+    return check;
+  }
+
+  const user = await User.create({
+    name: userBody.data.name,
+    phoneNumber: userBody.data.phone_number,
+    role: 'user',
+    termsOfService: true,
+    privacyPolicy: true,
+    isKakao: true,
+  });
+  return user;
+};
+
 const queryUsers = async (keyword, limit, skip) => {
   let users;
   let count;
@@ -210,6 +228,7 @@ module.exports = {
   adminCreateUser,
   createUser,
   createUserNaver,
+  createUserKakao,
   queryUsers,
   getUserById,
   getUserByPhoneNumber,

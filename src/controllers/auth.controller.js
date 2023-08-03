@@ -40,7 +40,9 @@ const registerKakao = catchAsync(async (req, res) => {
   }
 
   const kakaoInfo = await kakaoProfile(req.body.code);
-  res.status(httpStatus.CREATED).send(kakaoInfo);
+  const user = await userService.createUserKakao(kakaoInfo);
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.CREATED).send({ user, tokens });
 });
 
 const login = catchAsync(async (req, res) => {
