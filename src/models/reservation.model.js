@@ -82,7 +82,7 @@ const reservationSchema = mongoose.Schema(
     },
     note: {
       type: String,
-      required: true,
+      required: false,
     },
     adminNote: {
       type: String,
