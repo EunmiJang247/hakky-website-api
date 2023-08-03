@@ -87,7 +87,6 @@ const createUserKakao = async (userBody) => {
     privacyPolicy: true,
     isKakao: true,
   });
-  console.log(user);
   return user;
 };
 
