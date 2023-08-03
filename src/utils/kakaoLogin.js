@@ -33,6 +33,7 @@ const kakaoProfile = async (code) => {
 
     return kakaoData;
   } catch (error) {
+    console.log(error);
     return 400;
   }
 };
