@@ -13,8 +13,8 @@ const kakaoProfile = async (code) => {
       data: {
         grant_type: 'authorization_code',
         client_id: restKey,
-        redirect_uri: 'http://localhost:3000/sign-in',
-        // redirect_uri: 'https://www.studio-seba.com/sign-in',
+        // redirect_uri: 'http://localhost:3000/sign-in',
+        redirect_uri: 'https://www.studio-seba.com/sign-in',
         code,
         client_secret: secretKey,
       },
