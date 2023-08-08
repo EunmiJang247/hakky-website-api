@@ -47,6 +47,12 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).end();
 });
 
+const deleteUserByAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  await userService.deleteUserById(id);
+  res.status(httpStatus.NO_CONTENT).end();
+});
+
 module.exports = {
   adminCreateUser,
   createUser,
@@ -55,5 +61,6 @@ module.exports = {
   getSubAdmins,
   updateUser,
   deleteUser,
+  deleteUserByAdmin,
   adminUpdateUser,
 };

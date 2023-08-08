@@ -23,6 +23,7 @@ router
   .route('/:userId')
   .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
   .patch(auth('' || 'ADMIN'), validate(userValidation.updateUser), userController.updateUser)
-  .delete(auth('' || 'ADMIN'), validate(userValidation.deleteUser), userController.deleteUser);
+  .delete(auth(''), validate(userValidation.deleteUser), userController.deleteUser);
+  .delete(auth(''), validate(userValidation.deleteUser), userController.deleteUserByAdmin);
 
 module.exports = router;
