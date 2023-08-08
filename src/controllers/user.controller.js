@@ -48,8 +48,7 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 const deleteUserByAdmin = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  await userService.deleteUserById(id);
+  await userService.deleteUserById(req.params.id);
   res.status(httpStatus.NO_CONTENT).end();
 });
 
