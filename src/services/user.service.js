@@ -79,8 +79,9 @@ const createUserKakao = async (userBody) => {
   if (check) {
     return check;
   }
+  const { name } = userBody.data.kakao_account;
   const user = await User.create({
-    name: userBody.data.kakao_account.name ? userBody.data.kakao_account.name : undefined,
+    name,
     phoneNumber,
     role: 'user',
     termsOfService: true,
