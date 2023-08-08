@@ -15,7 +15,8 @@ router
   .get(auth('ADMIN'), validate(userValidation.getUsers), userController.getSubAdmins);
 router
   .route('/admin/:userId')
-  .patch(auth('ADMIN'), validate(userValidation.adminUpdateUser), userController.adminUpdateUser);
+  .patch(auth('ADMIN'), validate(userValidation.adminUpdateUser), userController.adminUpdateUser)
+  .delete(auth('ADMIN'), validate(userValidation.deleteUser), userController.deleteUserByAdmin);
 router
   .route('/admin/')
   .post(auth('ADMIN'), validate(userValidation.adminCreateUser), userController.adminCreateUser);
@@ -24,6 +25,5 @@ router
   .get(auth('' || 'ADMIN'), validate(userValidation.getUser), userController.getUser)
   .patch(auth('' || 'ADMIN'), validate(userValidation.updateUser), userController.updateUser)
   .delete(auth(''), validate(userValidation.deleteUser), userController.deleteUser);
-  .delete(auth(''), validate(userValidation.deleteUser), userController.deleteUserByAdmin);
 
 module.exports = router;
