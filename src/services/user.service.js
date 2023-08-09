@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 const authCodeService = require('./auth-code.service');
+const removeEmptyProperties = require('../utils/removeEmptyProperties');
 
 /**
  * Create a user
@@ -95,32 +96,28 @@ const queryUsers = async (keyword, limit, skip) => {
   let users;
   let count;
   if (keyword) {
-    users = await User.find(
-      {
-        $or: [
-          {
-            name: { $regex: keyword },
-          },
-          {
-            phoneNumber: { $regex: keyword },
-          },
-        ],
-      },
-    )
+    users = await User.find({
+      $or: [
+        {
+          name: { $regex: keyword },
+        },
+        {
+          phoneNumber: { $regex: keyword },
+        },
+      ],
+    })
       .limit(limit)
       .skip(skip);
-    count = await User.countDocuments(
-      {
-        $or: [
-          {
-            name: { $regex: keyword },
-          },
-          {
-            phoneNumber: { $regex: keyword },
-          },
-        ],
-      },
-    );
+    count = await User.countDocuments({
+      $or: [
+        {
+          name: { $regex: keyword },
+        },
+        {
+          phoneNumber: { $regex: keyword },
+        },
+      ],
+    });
   } else {
     users = await User.find().limit(limit).skip(skip);
     count = await User.countDocuments();
@@ -136,32 +133,28 @@ const querySubAdmins = async (keyword, limit, skip) => {
   let users;
   let count;
   if (keyword) {
-    users = await User.find(
-      {
-        $or: [
-          {
-            name: { $regex: keyword },
-          },
-          {
-            phoneNumber: { $regex: keyword },
-          },
-        ],
-      },
-    )
+    users = await User.find({
+      $or: [
+        {
+          name: { $regex: keyword },
+        },
+        {
+          phoneNumber: { $regex: keyword },
+        },
+      ],
+    })
       .limit(limit)
       .skip(skip);
-    count = await User.countDocuments(
-      {
-        $or: [
-          {
-            name: { $regex: keyword },
-          },
-          {
-            phoneNumber: { $regex: keyword },
-          },
-        ],
-      },
-    );
+    count = await User.countDocuments({
+      $or: [
+        {
+          name: { $regex: keyword },
+        },
+        {
+          phoneNumber: { $regex: keyword },
+        },
+      ],
+    });
   } else {
     users = await User.find().limit(limit).skip(skip);
     count = await User.countDocuments();
@@ -194,7 +187,6 @@ const getUserByPhoneNumber = async (phoneNumber) => User.findOne({ phoneNumber }
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
   const checkAuthcode = await authCodeService.getAuthCodeByIdentifier(updateBody.identifier, updateBody.phoneNumber);
-
   if (!checkAuthcode) {
     throw new ApiError(httpStatus.UNAUTHORIZED, '인증 번호 유효시간이 초과되었습니다.');
   }
@@ -208,6 +200,42 @@ const updateUserById = async (userId, updateBody) => {
   }
 
   Object.assign(user, updateBody);
+  await user.save();
+  return user;
+};
+
+// 카카오 로그인시 유저 이름 업데이트랑 어드민 업데이트시 에러로 인해 기존의 함수를 건드리지 않고 새로운 함수를 만들어 쓰기로 선택
+/**
+ * Update user by id
+ * @param {ObjectId} userId
+ * @param {Object} updateBody
+ * @returns {Promise<User>}
+ */
+const updateUserByAutoFit = async (userId, updateBody) => {
+  const { phoneNumber, identifier } = updateBody;
+  const user = await getUserById(userId);
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+  // 전화번호가 존재하면 인증번호 확인 로직 실행
+  if (phoneNumber) {
+    if (!identifier) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'identifier is required');
+    }
+    if (await User.isPhoneNumberTaken(updateBody.phoneNumber, userId)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'phoneNumber already taken');
+    }
+
+    const authCode = await authCodeService.getAuthCodeByIdentifier(identifier, phoneNumber);
+    if (!authCode) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, '인증 번호 유효시간이 초과되었습니다.');
+    }
+    await authCode.delete();
+  }
+
+  // 들어온 값에 대해서만 업데이트틑 해줄거니까
+  Object.assign(user, removeEmptyProperties(updateBody));
   await user.save();
   return user;
 };
@@ -235,6 +263,7 @@ module.exports = {
   getUserById,
   getUserByPhoneNumber,
   updateUserById,
+  updateUserByAutoFit,
   deleteUserById,
   querySubAdmins,
 };

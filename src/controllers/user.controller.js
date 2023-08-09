@@ -32,12 +32,12 @@ const getSubAdmins = catchAsync(async (req, res) => {
 });
 
 const updateUser = catchAsync(async (req, res) => {
-  await userService.updateUserById(req.params.userId, req.body);
+  await userService.updateUserByAutoFit(req.params.userId, req.body);
   res.status(httpStatus.NO_CONTENT).end();
 });
 
 const adminUpdateUser = catchAsync(async (req, res) => {
-  await userService.updateUserById(req.params.userId, req.body);
+  await userService.updateUserByAutoFit(req.params.userId, req.body);
   res.status(httpStatus.NO_CONTENT).end();
 });
 

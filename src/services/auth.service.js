@@ -61,7 +61,7 @@ const resetPassword = async (identifier, phoneNumber, newPassword) => {
 
 const resetPasswordMypage = async (userId, password, newPassword) => {
   const user = await userService.getUserById(userId);
-  if (!user || !await user.isPasswordMatch(password)) {
+  if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'PASSWORD_DOES_NOT_MATCHED');
   }
   user.password = newPassword;
@@ -75,7 +75,7 @@ const subAdminResetPassword = async (userId, newPassword) => {
     if (!user) {
       throw new Error();
     }
-    await userService.updateUserById(user.id, { password: newPassword });
+    await userService.updateUserByAutoFit(user.id, { password: newPassword });
     return user;
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password reset failed');
