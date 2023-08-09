@@ -209,17 +209,18 @@ const updateUserById = async (userId, updateBody) => {
  * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
+ * @param {boolean} isAdmin
  * @returns {Promise<User>}
  */
-const updateUserByAutoFit = async (userId, updateBody) => {
+const updateUserByAutoFit = async (userId, updateBody, isAdmin) => {
   const { phoneNumber, identifier } = updateBody;
   const user = await getUserById(userId);
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
-  // 전화번호가 존재하면 인증번호 확인 로직 실행
-  if (phoneNumber) {
+  // 전화번호가 존재하면 인증번호 확인 로직 실행 ( 어드민은 그냥 실행 )
+  if (phoneNumber && !isAdmin) {
     if (!identifier) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'identifier is required');
     }

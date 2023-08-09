@@ -16,15 +16,15 @@ const queryNotices = async ({
   let count;
   if (keyword) {
     if (important) {
-      notices = await Notice.find({ name: { $regex: keyword } })
+      notices = await Notice.find({ title: { $regex: keyword } })
         .limit(limit)
         .skip(skip);
-      count = await Notice.countDocuments({ name: { $regex: keyword } });
+      count = await Notice.countDocuments({ title: { $regex: keyword } });
     } else {
-      notices = await Notice.find({ isImportant: false, name: { $regex: keyword } })
+      notices = await Notice.find({ isImportant: false, title: { $regex: keyword } })
         .limit(limit)
         .skip(skip);
-      count = await Notice.countDocuments({ isImportant: false, name: { $regex: keyword } });
+      count = await Notice.countDocuments({ isImportant: false, title: { $regex: keyword } });
     }
   } else {
     // eslint-disable-next-line no-lonely-if

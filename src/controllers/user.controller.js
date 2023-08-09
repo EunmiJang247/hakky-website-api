@@ -37,7 +37,7 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 const adminUpdateUser = catchAsync(async (req, res) => {
-  await userService.updateUserByAutoFit(req.params.userId, req.body);
+  await userService.updateUserByAutoFit(req.params.userId, req.body, true);
   res.status(httpStatus.NO_CONTENT).end();
 });
 
