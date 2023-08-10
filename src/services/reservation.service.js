@@ -28,7 +28,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     reservationDate: date,
     note: reservationBody.note,
     isAdminCreate: false,
-    isApproval: true,
+    isApproval: false,
     deposit: payment.deposit,
     price: payment.amount,
     placeName: place.name,
