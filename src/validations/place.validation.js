@@ -58,6 +58,7 @@ const updatePlace = {
       address1: Joi.string(),
       address2: Joi.string(),
       postalCode: Joi.string(),
+      product: Joi.array().items(Joi.string().custom(objectId)),
       author: Joi.object().keys({
         name: Joi.string(),
         description: Joi.string(),

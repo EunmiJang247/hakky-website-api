@@ -61,6 +61,47 @@ const readPayment = async (id) => {
   return payment;
 };
 
+const readPaymentBySecretKey = async (secretKey) => {
+  if (!secretKey) {
+    return [];
+  }
+  const query = { secret: secretKey };
+  const payment = await Payment.find(query);
+  return payment;
+};
+
+const updatePaymentByWebhook = async (_payment, status) => {
+  const payment = _payment;
+  console.log('결제 모델', payment);
+  const reservation = await Reservation.findById({ _id: payment.reservationId });
+  console.log('예약 모델', reservation);
+
+  if (status === 'DONE') {
+    payment.isDeposit = true;
+    reservation.isApproval = true;
+    // 입금 오류로 CANCELED 되었다가 정상적으로 입금을 마친 경우
+    if (reservation.isCanceled) {
+      reservation.isCanceled = false;
+    }
+  }
+  if (status === 'CANCELED') {
+    // 입금이 되었던 경우에만 환불완료로 표시
+    if (payment.isDeposit && payment.isApproval) {
+      payment.isRefund = true;
+      payment.isDeposit = false;
+      reservation.isApproval = false;
+    }
+    reservation.isCanceled = true;
+  }
+  if (status === 'WAITING_FOR_DEPOSIT') {
+    payment.isDeposit = false;
+    reservation.isApproval = false;
+  }
+
+  payment.save();
+  reservation.save();
+};
+
 const refund = async (id) => {
   const payment = await Payment.findById(id);
   payment.isRefund = true;
@@ -97,7 +138,7 @@ const readPayments = async (keywords, startDate, endDate, limit, skip) => {
     }
   }
 
-  const payments = await Payment.find(query).limit(limit).skip(skip);
+  const payments = await Payment.find(query).limit(limit).skip(skip).sort({ _id: -1 });
   const count = await Payment.countDocuments(query);
   return {
     result: payments,
@@ -197,12 +238,14 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
       '07': 'Sh수협은행',
       SD: 'SK증권',
     };
+
     const payment = await Payment.findById(paymentDoc._id);
     payment.method = result.data.method;
     payment.bankName = bankCode[result.data.virtualAccount.bankCode];
     payment.virtualAccount = result.data.virtualAccount.accountNumber;
     payment.virtualAccountOwner = result.data.virtualAccount.customerName;
     payment.cashReceipt = !!result.data.cashReceipt;
+    payment.secret = result.data.secret;
 
     payment.save();
 
@@ -286,4 +329,6 @@ module.exports = {
   refund,
   refundAndCancel,
   statistic,
+  readPaymentBySecretKey,
+  updatePaymentByWebhook,
 };

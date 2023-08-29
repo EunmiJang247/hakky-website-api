@@ -1,4 +1,6 @@
 const httpStatus = require('http-status');
+const { default: axios } = require('axios');
+const { config } = require('dotenv');
 const {
   Reservation, Payment, PlaceIdle, User,
 } = require('../models');
@@ -170,6 +172,27 @@ const cancelReservation = async (id, userId) => {
   if (!reservation) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
   }
+  const payment = await Payment.findOne({ _id: reservation.paymentId });
+  // 입금완료된 예약일시 결제취소
+  if (reservation.isApproval) {
+    const result = await axios({
+      url: 'https://api.tosspayments.com/v1/payments/cancel',
+      method: 'POST',
+      data: {
+        cancelReason: '고객 변심',
+        refundReceiveAccount: {
+          // bank: ,
+          // accountNumber: ,
+          // holderName: ,
+        },
+      },
+      headers: {
+        Authorization: `Basic ${config.toss}`,
+        'Content-type': 'application/json',
+      },
+    });
+  }
+
   reservation.isCanceled = true;
   reservation.save();
   return reservation;

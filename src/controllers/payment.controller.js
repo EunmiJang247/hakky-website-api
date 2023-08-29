@@ -1,4 +1,5 @@
 const { paymentService, reservationService } = require('../services');
+const { updatePaymentByWebhook } = require('../services/payment.service');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -78,6 +79,21 @@ const subAdminReadPayments = catchAsync(async (req, res) => {
   });
 });
 
+const tossDepositCallback = catchAsync(async (req, res) => {
+  const tossPayment = req.body;
+  if (tossPayment.secret) {
+    const payments = await paymentService.readPaymentBySecretKey(req.body.secret);
+    if (payments.length === 0) {
+      res.status(400).end();
+    }
+    await updatePaymentByWebhook(payments[0], req.body.status);
+    res.status(200).end();
+  }
+  // payment.save();
+  // const result = await reservationService.serializer(reservation);
+  // res.send(result);
+});
+
 module.exports = {
   createPayment,
   readPayment,
@@ -86,4 +102,5 @@ module.exports = {
   refund,
   refundAndCancel,
   statistic,
+  tossDepositCallback,
 };

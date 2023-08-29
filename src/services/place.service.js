@@ -6,6 +6,7 @@ const {
   User,
 } = require('../models');
 const ApiError = require('../utils/ApiError');
+const removeEmptyProperties = require('../utils/removeEmptyProperties');
 
 const createPlace = async (placeBody) => PlaceIdle.Place.create(placeBody);
 
@@ -268,7 +269,7 @@ const updatePlace = async (placeId, updateBody) => {
   if (!place) {
     throw new ApiError(httpStatus.NOT_FOUND, 'place not found');
   }
-  Object.assign(place, updateBody);
+  Object.assign(place, removeEmptyProperties(updateBody));
   await place.save();
   return place;
 };
@@ -285,10 +286,19 @@ const deletePlaceById = async (placeId) => {
 const serializer = async (place) => {
   const productList = [];
   const subAdmin = await User.findById(place.subAdmin);
-  await Promise.all(place.product.map(async (prod) => {
-    const product = await Product.findById(prod);
-    productList.push(product);
-  }));
+  const promiseList = place.product.map((prod) => Product.findById(prod));
+
+  // promise all 순서보장이 안되서
+  await promiseList.reduce((promise, currentPromise) => promise.then(async () => {
+    const result = await currentPromise;
+    productList.push(result);
+    return result;
+  }), Promise.resolve());
+
+  // await Promise.all(place.product.map(async (prod) => {
+  //   const product = await Product.findById(prod);
+  //   productList.push(product);
+  // }));
   return {
     id: place._id,
     subAdmin: subAdmin._id,

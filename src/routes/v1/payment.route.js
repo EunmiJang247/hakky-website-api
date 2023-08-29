@@ -11,6 +11,8 @@ router
   .get(validate(paymentValidation.readPayments), paymentController.readPayments)
   .post(auth(), validate(paymentValidation.createPayment), paymentController.createPayment);
 
+router.post('/webhook/', paymentController.tossDepositCallback);
+
 router
   .route('/subAdmin/')
   .get(validate(paymentValidation.subAdminReadPayments), paymentController.subAdminReadPayments);

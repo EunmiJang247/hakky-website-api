@@ -27,6 +27,7 @@ const updateOption = {
     time: Joi.number(),
     detail: Joi.string(),
     price: Joi.number(),
+    productId: Joi.string(),
   }).required(),
 };
 
@@ -37,10 +38,12 @@ const updateOptionsOrder = {
   body: Joi.object().keys({
     options: Joi.array().items(
       Joi.object({
+        id: Joi.string(),
         name: Joi.string(),
         time: Joi.number(),
         detail: Joi.string(),
         price: Joi.number(),
+        productId: Joi.string(),
       }),
     ).required(),
   }).required(),

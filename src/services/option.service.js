@@ -37,7 +37,11 @@ const updateOptionsOrder = async (productId, updateBody) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
-  product.options = updateBody;
+  if (!Array.isArray(updateBody.options)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Options is not exist');
+  }
+
+  product.options = updateBody.options;
   product.markModified('options');
   await product.save();
   return product;

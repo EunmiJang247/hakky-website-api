@@ -41,6 +41,10 @@ const paymentSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    secret: {
+      type: String,
+      required: false,
+    },
     orderId: {
       type: String,
       required: true,
