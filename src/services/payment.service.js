@@ -72,10 +72,7 @@ const readPaymentBySecretKey = async (secretKey) => {
 
 const updatePaymentByWebhook = async (_payment, status) => {
   const payment = _payment;
-  console.log('결제 모델', payment);
   const reservation = await Reservation.findById({ _id: payment.reservationId });
-  console.log('예약 모델', reservation);
-
   if (status === 'DONE') {
     payment.isDeposit = true;
     reservation.isApproval = true;
@@ -86,7 +83,7 @@ const updatePaymentByWebhook = async (_payment, status) => {
   }
   if (status === 'CANCELED') {
     // 입금이 되었던 경우에만 환불완료로 표시
-    if (payment.isDeposit && payment.isApproval) {
+    if (payment.isDeposit && reservation.isApproval) {
       payment.isRefund = true;
       payment.isDeposit = false;
       reservation.isApproval = false;
@@ -98,8 +95,8 @@ const updatePaymentByWebhook = async (_payment, status) => {
     reservation.isApproval = false;
   }
 
-  payment.save();
-  reservation.save();
+  await payment.save();
+  await reservation.save();
 };
 
 const refund = async (id) => {
@@ -109,14 +106,33 @@ const refund = async (id) => {
   return payment;
 };
 
-const refundAndCancel = async (id) => {
+const refundAndCancel = async (id, body) => {
   const payment = await Payment.findById(id);
   const reservation = await Reservation.findById(payment.reservationId);
-  reservation.isCanceled = true;
-  reservation.save();
-  payment.isRefund = true;
-  payment.save();
-  return payment;
+
+  try {
+    await axios({
+      url: `https://api.tosspayments.com/v1/payments/${payment.paymentKey}/cancel`,
+      method: 'POST',
+      data: {
+        cancelReason: body.cancelReason,
+        refundReceiveAccount: body.refundReceiveAccount,
+      },
+      headers: {
+        Authorization: `Basic ${config.toss}`,
+        'Content-type': 'application/json',
+      },
+    });
+
+    reservation.isCanceled = true;
+    reservation.save();
+    payment.isRefund = true;
+    payment.save();
+
+    return payment;
+  } catch (e) {
+    return e;
+  }
 };
 
 const readPayments = async (keywords, startDate, endDate, limit, skip) => {

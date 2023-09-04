@@ -20,11 +20,14 @@ router
   .route('/statistic/')
   .get(validate(paymentValidation.statistic), paymentController.statistic);
 router
+  .route('/refund/user/:paymentId')
+  .patch(auth(''), validate(paymentValidation.refundAndCancel), paymentController.refundByUser);
+router
   .route('/refund/:paymentId')
   .patch(auth('ADMIN'), validate(paymentValidation.refund), paymentController.refund);
 router
   .route('/refundAndCancel/:paymentId')
-  .patch(auth('ADMIN'), validate(paymentValidation.refund), paymentController.refundAndCancel);
+  .patch(auth('ADMIN'), validate(paymentValidation.refundAndCancel), paymentController.refundAndCancel);
 router
   .route('/:paymentId/')
   .get(validate(paymentValidation.readPayment), paymentController.readPayment);

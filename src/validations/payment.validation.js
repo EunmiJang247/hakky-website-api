@@ -27,6 +27,18 @@ const refund = {
   }).required(),
 };
 
+const refundAndCancel = {
+  params: Joi.object().keys({
+    paymentId: Joi.string().required(),
+    refundReceiveAccount: Joi.object({
+      bank: Joi.string().required(),
+      accountNumber: Joi.string().required(),
+      holderName: Joi.string().required(),
+    }).required(),
+    cancelReason: Joi.string().required(),
+  }).required(),
+};
+
 const readPayments = {
   query: Joi.object().keys({
     keywords: Joi.string().allow(''),
@@ -65,5 +77,6 @@ module.exports = {
   readPayments,
   subAdminReadPayments,
   refund,
+  refundAndCancel,
   statistic,
 };

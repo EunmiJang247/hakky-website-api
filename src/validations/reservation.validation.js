@@ -52,7 +52,7 @@ const subAdminCreateReservation = {
 
 const adminGetReservations = {
   query: Joi.object().keys({
-    placeId: Joi.string(),
+    placeId: Joi.string().allow(''),
     keywords: Joi.string().allow(''),
     from: Joi.date(),
     to: Joi.date(),

@@ -6,9 +6,10 @@ const {
 } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createReservation = async (reservationBody, paymentId, userId) => {
-  const today = new Date();
+const createReservation = async (reservationBody, paymentId, userId, now) => {
+  const today = new Date(reservationBody.reservationFrom);
 
+  today.setTime(today.getTime() + 9 * 60 * 60 * 1000);
   const month = today.getUTCMonth();
   const day = today.getUTCDate();
   const year = today.getUTCFullYear();
@@ -37,6 +38,7 @@ const createReservation = async (reservationBody, paymentId, userId) => {
     authorName: place.author.name,
     customerName: user.name,
     phoneNumber: user.phoneNumber,
+    depositDeadline: now,
   });
   return reservation;
 };

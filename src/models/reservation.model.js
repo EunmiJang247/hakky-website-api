@@ -76,6 +76,10 @@ const reservationSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    depositDeadline: {
+      type: Date,
+      required: true,
+    },
     reservationTime: {
       type: Number,
       required: true,

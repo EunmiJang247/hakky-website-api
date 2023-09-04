@@ -14,7 +14,7 @@ const createPayment = catchAsync(async (req, res) => {
 
   const now = new Date();
   const payment = await paymentService.createPayment(req.body, userId, now);
-  const reservation = await reservationService.createReservation(req.body, payment._id, userId);
+  const reservation = await reservationService.createReservation(req.body, payment._id, userId, now);
 
   payment.reservationId = reservation._id;
   await paymentService.tossVirtualAccountCreate(payment);
@@ -36,8 +36,19 @@ const refund = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const refundByUser = catchAsync(async (req, res) => {
+  const { id: userId } = req.user;
+  const check = await paymentService.readPayment(req.params.paymentId);
+  if (check.applicant !== userId) {
+    throw new ApiError(403, 'NOT_AUTHORIZED');
+  }
+  const payment = await paymentService.refundAndCancel(req.params.paymentId, req.body);
+  const result = await paymentService.serializer(payment);
+  res.send(result);
+});
+
 const refundAndCancel = catchAsync(async (req, res) => {
-  const payment = await paymentService.refundAndCancel(req.params.paymentId);
+  const payment = await paymentService.refundAndCancel(req.params.paymentId, req.body);
   const result = await paymentService.serializer(payment);
   res.send(result);
 });
@@ -100,6 +111,7 @@ module.exports = {
   readPayments,
   subAdminReadPayments,
   refund,
+  refundByUser,
   refundAndCancel,
   statistic,
   tossDepositCallback,

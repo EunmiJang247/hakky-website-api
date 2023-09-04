@@ -122,21 +122,21 @@ const reservationCheck = (reservations, timeSchedule) => {
       const reservationStartHours = reservationStart.getHours() + 9;
       const reservationStartMinutes = reservationStart.getMinutes();
       const reservationEndHours = reservationEnd.getHours() + 9;
+      const reservationEndMinutes = reservationEnd.getMinutes();
 
       const reservTime = reservList[j].time.split(':');
       const reservHours = parseInt(reservTime[0], 10);
       const reservMinutes = parseInt(reservTime[1], 10);
-
       if (
-        (reservHours === reservationStartHours && reservMinutes === reservationStartMinutes)
-        || (reservHours > reservationStartHours && reservHours < reservationEndHours)
-        || (reservHours === reservationEndHours && reservMinutes === 30)
+        reservHours >= reservationStartHours && reservMinutes >= reservationStartMinutes && reservHours <= reservationEndHours
       ) {
         reservList[j].available = false;
+        if (reservHours === reservationEndHours && reservationEndMinutes === 0 && reservMinutes === 30) {
+          reservList[j].available = true;
+        }
       }
     }
   }
-
   return reservList;
 };
 
@@ -208,6 +208,7 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
     placeId: id,
     reservationDate: date,
     isCanceled: false,
+    depositDeadline: { $gt: new Date() },
   }).sort('reservationFrom').exec();
 
   const includeSchedules = await PlaceIdle.IncludeSchedule.findOne({
