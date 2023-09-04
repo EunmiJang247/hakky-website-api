@@ -39,7 +39,7 @@ const refund = catchAsync(async (req, res) => {
 const refundByUser = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   const check = await paymentService.readPayment(req.params.paymentId);
-  if (check.applicant !== userId) {
+  if (String(check.applicant) !== String(userId)) {
     throw new ApiError(403, 'NOT_AUTHORIZED');
   }
   const payment = await paymentService.refundAndCancel(req.params.paymentId, req.body);

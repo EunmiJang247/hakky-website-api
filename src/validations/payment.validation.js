@@ -30,13 +30,15 @@ const refund = {
 const refundAndCancel = {
   params: Joi.object().keys({
     paymentId: Joi.string().required(),
+  }).required(),
+  body: Joi.object().keys({
     refundReceiveAccount: Joi.object({
       bank: Joi.string().required(),
       accountNumber: Joi.string().required(),
       holderName: Joi.string().required(),
     }).required(),
     cancelReason: Joi.string().required(),
-  }).required(),
+  }),
 };
 
 const readPayments = {

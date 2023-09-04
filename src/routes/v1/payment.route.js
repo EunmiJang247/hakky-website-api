@@ -21,7 +21,7 @@ router
   .get(validate(paymentValidation.statistic), paymentController.statistic);
 router
   .route('/refund/user/:paymentId')
-  .patch(auth(''), validate(paymentValidation.refundAndCancel), paymentController.refundByUser);
+  .patch(auth(), validate(paymentValidation.refundAndCancel), paymentController.refundByUser);
 router
   .route('/refund/:paymentId')
   .patch(auth('ADMIN'), validate(paymentValidation.refund), paymentController.refund);

@@ -30,9 +30,9 @@ router
   .route('/:reservationId')
   .get(auth(), validate(reservationValidation.getReservation), reservationController.readReservation)
   .patch(auth(), validate(reservationValidation.updateReservation), reservationController.updateReservation);
-router
-  .route('/:reservationId/cancel')
-  .patch(auth(), validate(reservationValidation.cancelReservation), reservationController.cancelReservation);
+// router
+//   .route('/:reservationId/cancel')
+//   .patch(auth(), validate(reservationValidation.cancelReservation), reservationController.cancelReservation);
 router
   .route('/admin/:reservationId/cancel')
   .patch(auth('ADMIN'), validate(reservationValidation.cancelReservation), reservationController.adminCancelReservation);
