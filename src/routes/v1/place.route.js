@@ -11,10 +11,14 @@ router
   .route('/subAdmin/')
   .get(auth('SUB_ADMIN'), placeController.getPlaceBySubAdmin);
 router
+  .route('/subAdmin/:placeId')
+  .patch(auth('SUB_ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
+  .delete(auth('SUB_ADMIN'), validate(placeValidation.deletePlace), placeController.deletePlace);
+router
   .route('/:placeId/')
   .get(validate(placeValidation.getPlace), placeController.getPlace)
-  .patch(auth('SUB_ADMIN' || 'ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
-  .delete(auth('SUB_ADMIN' || 'ADMIN'), validate(placeValidation.deletePlace), placeController.deletePlace);
+  .patch(auth('ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
+  .delete(auth('ADMIN'), validate(placeValidation.deletePlace), placeController.deletePlace);
 router
   .route('/detail/:placeId/:year/:month/:day/:dayOfWeek')
   .get(validate(placeValidation.getPlaceDetail), placeController.getPlaceDetail);
