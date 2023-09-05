@@ -10,8 +10,11 @@ router
   .route('/')
   .post(validate(optionValidation.createOption), optionController.createOption);
 router
+  .route('/subAdmin/change-order/:productId')
+  .patch(auth('SUB_ADMIN'), validate(optionValidation.updateOptionsOrder), optionController.updateOptionsOrder);
+router
   .route('/change-order/:productId')
-  .patch(auth('ADMIN' || 'SUB_ADMIN'), validate(optionValidation.updateOptionsOrder), optionController.updateOptionsOrder);
+  .patch(auth('ADMIN'), validate(optionValidation.updateOptionsOrder), optionController.updateOptionsOrder);
 router
   .route('/:productId/:id')
   .get(validate(optionValidation.readOption), optionController.readOption)
