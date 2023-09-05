@@ -13,7 +13,7 @@ router
 router
   .route('/:placeId/')
   .get(validate(placeValidation.getPlace), placeController.getPlace)
-  .patch(auth('ADMIN', 'SUB_ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
+  .patch(auth('SUB_ADMIN'), validate(placeValidation.updatePlace), placeController.updatePlace)
   .delete(auth('ADMIN', 'SUB_ADMIN'), validate(placeValidation.deletePlace), placeController.deletePlace);
 router
   .route('/detail/:placeId/:year/:month/:day/:dayOfWeek')
