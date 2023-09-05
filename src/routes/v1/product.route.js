@@ -11,9 +11,12 @@ router
   .post(validate(productValidation.createProduct), productController.createProduct)
   .get(validate(productValidation.getProducts), productController.getProducts);
 router
+  .route('subAdmin/:productId')
+  .patch(auth('SUB_ADMIN'), validate(productValidation.updateProduct), productController.updateProduct)
+  .delete(auth('SUB_ADMIN'), validate(productValidation.deleteProduct), productController.deleteProduct);
+router
   .route('/:productId')
   .get(validate(productValidation.getProduct), productController.getProduct)
   .patch(auth('ADMIN'), validate(productValidation.updateProduct), productController.updateProduct)
   .delete(auth('ADMIN'), validate(productValidation.deleteProduct), productController.deleteProduct);
-
 module.exports = router;
