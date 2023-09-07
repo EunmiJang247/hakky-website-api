@@ -270,6 +270,7 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
 
     return payment;
   } catch (err) {
+    console.log(err);
     return err;
   }
 };
