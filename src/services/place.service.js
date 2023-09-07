@@ -134,6 +134,10 @@ const reservationCheck = (reservations, timeSchedule) => {
         if (reservHours === reservationEndHours && reservationEndMinutes === 0 && reservMinutes === 30) {
           reservList[j].available = true;
         }
+      } else if (
+        reservHours > reservationStartHours && reservHours < reservationEndHours
+      ) {
+        reservList[j].available = false;
       }
     }
   }
