@@ -56,6 +56,7 @@ const adminCreateReservation = async (reservationBody) => {
 
   const reservation = await Reservation.create({
     isAdminCreate: true,
+    isApproval: true,
     customerName: reservationBody.customerName,
     phoneNumber: reservationBody.phoneNumber,
     placeId: reservationBody.placeId,
@@ -69,6 +70,7 @@ const adminCreateReservation = async (reservationBody) => {
     note: reservationBody.note,
     placeName: place.name,
     authorName: place.author.name,
+    depositDeadline: today.setDate(today.getDate() + 1),
   });
   return reservation;
 };
