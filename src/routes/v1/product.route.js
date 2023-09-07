@@ -11,7 +11,7 @@ router
   .post(validate(productValidation.createProduct), productController.createProduct)
   .get(validate(productValidation.getProducts), productController.getProducts);
 router
-  .route('subAdmin/:productId')
+  .route('/subAdmin/:productId')
   .patch(auth('SUB_ADMIN'), validate(productValidation.updateProduct), productController.updateProduct)
   .delete(auth('SUB_ADMIN'), validate(productValidation.deleteProduct), productController.deleteProduct);
 router

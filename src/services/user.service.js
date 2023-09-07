@@ -134,6 +134,7 @@ const querySubAdmins = async (keyword, limit, skip) => {
   let count;
   if (keyword) {
     users = await User.find({
+      role: 'subAdmin',
       $or: [
         {
           name: { $regex: keyword },
@@ -146,6 +147,7 @@ const querySubAdmins = async (keyword, limit, skip) => {
       .limit(limit)
       .skip(skip);
     count = await User.countDocuments({
+      role: 'subAdmin',
       $or: [
         {
           name: { $regex: keyword },
@@ -156,8 +158,8 @@ const querySubAdmins = async (keyword, limit, skip) => {
       ],
     });
   } else {
-    users = await User.find().limit(limit).skip(skip);
-    count = await User.countDocuments();
+    users = await User.find({ role: 'subAdmin' }).limit(limit).skip(skip);
+    count = await User.find({ role: 'subAdmin' }).countDocuments();
   }
 
   return {

@@ -16,6 +16,10 @@ router
   .route('/change-order/:productId')
   .patch(auth('ADMIN'), validate(optionValidation.updateOptionsOrder), optionController.updateOptionsOrder);
 router
+  .route('/subAdmin/:productId/:id')
+  .patch(auth('SUB_ADMIN'), validate(optionValidation.updateOption), optionController.updateOption)
+  .delete(auth('SUB_ADMIN'), validate(optionValidation.deleteOption), optionController.deleteOptionById);
+router
   .route('/:productId/:id')
   .get(validate(optionValidation.readOption), optionController.readOption)
   .patch(auth('ADMIN'), validate(optionValidation.updateOption), optionController.updateOption)

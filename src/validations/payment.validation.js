@@ -48,6 +48,7 @@ const readPayments = {
     to: Joi.date(),
     limit: Joi.number().required(),
     skip: Joi.number().required(),
+    placeId: Joi.string().required(),
   }).required(),
 };
 

@@ -11,6 +11,18 @@ router
   .post(validate(excludeScheduleValidation.createExcludeSchedule), excludeScheduleController.createExcludeSchedule)
   .get(validate(excludeScheduleValidation.getExcludeSchedules), excludeScheduleController.getExcludeSchedules);
 router
+  .route('/subAdmin/:excludeScheduleId')
+  .patch(
+    auth('SUB_ADMIN'),
+    validate(excludeScheduleValidation.updateExcludeSchedule),
+    excludeScheduleController.updateExcludeSchedule,
+  )
+  .delete(
+    auth('SUB_ADMIN'),
+    validate(excludeScheduleValidation.deleteExcludeSchedule),
+    excludeScheduleController.deleteExcludeSchedule,
+  );
+router
   .route('/:excludeScheduleId')
   .get(validate(excludeScheduleValidation.getExcludeSchedule), excludeScheduleController.getExcludeSchedule)
   .patch(

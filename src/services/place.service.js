@@ -303,6 +303,7 @@ const serializer = async (place) => {
   return {
     id: place._id,
     subAdmin: subAdmin._id,
+    subAdminName: subAdmin.name,
     images: place.images,
     name: place.name,
     phone: place.phone,

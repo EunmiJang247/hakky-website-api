@@ -11,6 +11,18 @@ router
   .post(validate(includeScheduleValidation.createIncludeSchedule), includeScheduleController.createIncludeSchedule)
   .get(validate(includeScheduleValidation.getIncludeSchedules), includeScheduleController.getIncludeSchedules);
 router
+  .route('/subAdmin/:includeScheduleId')
+  .patch(
+    auth('SUB_ADMIN'),
+    validate(includeScheduleValidation.updateIncludeSchedule),
+    includeScheduleController.updateIncludeSchedule,
+  )
+  .delete(
+    auth('SUB_ADMIN'),
+    validate(includeScheduleValidation.deleteIncludeSchedule),
+    includeScheduleController.deleteIncludeSchedule,
+  );
+router
   .route('/:includeScheduleId')
   .get(validate(includeScheduleValidation.getIncludeSchedule), includeScheduleController.getIncludeSchedule)
   .patch(

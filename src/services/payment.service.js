@@ -135,7 +135,7 @@ const refundAndCancel = async (id, body) => {
   }
 };
 
-const readPayments = async (keywords, startDate, endDate, limit, skip) => {
+const readPayments = async (keywords, startDate, endDate, limit, skip, placeId) => {
   const query = {};
   if (startDate) {
     query.createdAt = { $gte: startDate };
@@ -145,6 +145,9 @@ const readPayments = async (keywords, startDate, endDate, limit, skip) => {
   }
   if (startDate && endDate) {
     query.createdAt = { $gte: startDate, $lte: endDate };
+  }
+  if (placeId != null && placeId !== 'all') {
+    query.placeId = placeId;
   }
   if (keywords) {
     if (keywords !== '') {
