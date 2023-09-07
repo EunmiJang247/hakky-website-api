@@ -292,9 +292,9 @@ const statistic = async ({
     canceledQuery.createdAt = { $gte: startDate, $lte: endDate };
   }
   if (refundState === 'canceled') {
-    query.isRefund = false;
-  } else if (refundState === 'completed') {
     query.isRefund = true;
+  } else if (refundState === 'completed') {
+    query.isRefund = false;
   }
   const allPaymentList = await Payment.find(query);
   const canceledPaymentList = await Payment.find(canceledQuery);
