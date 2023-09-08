@@ -1,6 +1,6 @@
 const axios = require('axios');
 const httpStatus = require('http-status');
-const { config } = require('../config/config');
+const config = require('../config/config');
 const ApiError = require('./ApiError');
 const { User } = require('../models');
 
