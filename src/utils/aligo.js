@@ -134,6 +134,7 @@ const textCanceled = async (payment, reservation) => {
         },
       });
     if (cancel.data.result_code !== 1) {
+      console.log(cancel.data.message);
       throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
     }
     const result = await axios.post('https://apis.aligo.in/send/',
