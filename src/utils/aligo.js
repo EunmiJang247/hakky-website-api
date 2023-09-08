@@ -121,22 +121,25 @@ const textCanceled = async (payment, reservation) => {
   const msg = `[사진관 세바] \n안녕하세요 ${user.name}님! ${reservation.reservationDate}에 신청하신 예약이 현재 취소 처리되었습니다.`;
 
   try {
-    const cancel = await axios.post('https://apis.aligo.in/cancel/',
-      null,
-      {
-        headers: {
-          'Content-Type': 'applicant/json',
-        },
-        params: {
-          key: config.aligo.apiKey,
-          user_id: config.aligo.userId,
-          mid: payment.msgId,
-        },
-      });
-    if (cancel.data.result_code !== 1) {
-      console.log(cancel.data.message);
-      throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
+    if (payment.msgId) {
+      const cancel = await axios.post('https://apis.aligo.in/cancel/',
+        null,
+        {
+          headers: {
+            'Content-Type': 'applicant/json',
+          },
+          params: {
+            key: config.aligo.apiKey,
+            user_id: config.aligo.userId,
+            mid: payment.msgId,
+          },
+        });
+      if (cancel.data.result_code !== 1) {
+        console.log(cancel.data.message);
+        throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
+      }
     }
+
     const result = await axios.post('https://apis.aligo.in/send/',
       null,
       {
