@@ -1,6 +1,7 @@
 const { paymentService, reservationService } = require('../services');
 const { updatePaymentByWebhook } = require('../services/payment.service');
 const ApiError = require('../utils/ApiError');
+const { textReservationComplete } = require('../utils/aligo');
 const catchAsync = require('../utils/catchAsync');
 
 const createPayment = catchAsync(async (req, res) => {
@@ -18,6 +19,7 @@ const createPayment = catchAsync(async (req, res) => {
 
   payment.reservationId = reservation._id;
   await paymentService.tossVirtualAccountCreate(payment);
+  await textReservationComplete(payment, reservation);
   payment.save();
   const result = await reservationService.serializer(reservation);
 

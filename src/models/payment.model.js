@@ -20,6 +20,14 @@ const paymentSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    refundedAt: {
+      type: Date,
+      required: false,
+    },
+    msgId: {
+      type: String,
+      required: false,
+    },
     isRefund: {
       type: Boolean,
       required: true,

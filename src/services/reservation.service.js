@@ -1,6 +1,4 @@
 const httpStatus = require('http-status');
-const { default: axios } = require('axios');
-const { config } = require('dotenv');
 const {
   Reservation, Payment, PlaceIdle, User,
 } = require('../models');

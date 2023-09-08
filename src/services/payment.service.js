@@ -3,6 +3,7 @@ const {
   Payment, Product, User, Reservation,
 } = require('../models');
 const config = require('../config/config');
+const { textReservation, textDepositComplete, textCanceled } = require('../utils/aligo');
 
 const chedckValidTime = async (products, reservTime) => {
   let timecheck = 0;
@@ -80,6 +81,8 @@ const updatePaymentByWebhook = async (_payment, status) => {
     if (reservation.isCanceled) {
       reservation.isCanceled = false;
     }
+    await textReservation(payment, reservation);
+    await textDepositComplete(payment, reservation);
   }
   if (status === 'CANCELED') {
     // 입금이 되었던 경우에만 환불완료로 표시
@@ -89,6 +92,7 @@ const updatePaymentByWebhook = async (_payment, status) => {
       reservation.isApproval = false;
     }
     reservation.isCanceled = true;
+    await textCanceled(payment, reservation);
   }
   if (status === 'WAITING_FOR_DEPOSIT') {
     payment.isDeposit = false;
@@ -100,7 +104,9 @@ const updatePaymentByWebhook = async (_payment, status) => {
 };
 
 const refund = async (id) => {
+  const now = new Date();
   const payment = await Payment.findById(id);
+  payment.refundedAt = now;
   payment.isRefund = true;
   payment.save();
   return payment;
@@ -123,9 +129,11 @@ const refundAndCancel = async (id, body) => {
         'Content-type': 'application/json',
       },
     });
+    const now = new Date();
 
     reservation.isCanceled = true;
     reservation.save();
+    payment.refundedAt = now;
     payment.isRefund = true;
     payment.save();
 
@@ -270,7 +278,6 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
 
     return payment;
   } catch (err) {
-    console.log(err);
     return err;
   }
 };
