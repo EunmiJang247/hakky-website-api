@@ -122,6 +122,24 @@ const textCanceled = async (payment, reservation) => {
 
   try {
     if (payment.msgId) {
+      const result = await axios.post('https://apis.aligo.in/send/',
+        null,
+        {
+          headers: {
+            'Content-Type': 'applicant/json',
+          },
+          params: {
+            key: config.aligo.apiKey,
+            user_id: config.aligo.userId,
+            sender: config.aligo.phoneNumber,
+            receiver: user.phoneNumber,
+            msg,
+            testmode_yn: 'N',
+          },
+        });
+      if (result.data.result_code !== '1') {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
+      }
       const cancel = await axios.post('https://apis.aligo.in/cancel/',
         null,
         {
@@ -138,25 +156,6 @@ const textCanceled = async (payment, reservation) => {
         console.log(cancel.data.message);
         throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
       }
-    }
-
-    const result = await axios.post('https://apis.aligo.in/send/',
-      null,
-      {
-        headers: {
-          'Content-Type': 'applicant/json',
-        },
-        params: {
-          key: config.aligo.apiKey,
-          user_id: config.aligo.userId,
-          sender: config.aligo.phoneNumber,
-          receiver: user.phoneNumber,
-          msg,
-          testmode_yn: 'N',
-        },
-      });
-    if (result.data.result_code !== '1') {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
     }
     // eslint-disable-next-line no-param-reassign
     payment.msgId = result.data.msg_id;
