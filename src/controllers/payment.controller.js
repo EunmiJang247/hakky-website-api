@@ -95,11 +95,11 @@ const subAdminReadPayments = catchAsync(async (req, res) => {
 const tossDepositCallback = catchAsync(async (req, res) => {
   const tossPayment = req.body;
   if (tossPayment.secret) {
-    const payments = await paymentService.readPaymentBySecretKey(req.body.secret);
-    if (payments.length === 0) {
-      res.status(400).end();
-    }
-    await updatePaymentByWebhook(payments[0], req.body.status);
+    // const payments = await paymentService.readPaymentBySecretKey(req.body.secret);
+    // if (payments.length === 0) {
+    //   res.status(400).end();
+    // }
+    // await updatePaymentByWebhook(payments[0], req.body.status);
     res.status(200).end();
   }
   // payment.save();
