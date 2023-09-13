@@ -163,7 +163,8 @@ const textCanceled = async (payment, reservation) => {
 
     return 1;
   } catch (err) {
-    throw new ApiError(httpStatus.BAD_REQUEST, err);
+    console.log(err);
+    // throw new ApiError(httpStatus.BAD_REQUEST, err);
   }
 };
 

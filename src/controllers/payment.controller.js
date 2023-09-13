@@ -96,7 +96,6 @@ const tossDepositCallback = catchAsync(async (req, res) => {
   const tossPayment = req.body;
   if (tossPayment.secret) {
     const payments = await paymentService.readPaymentBySecretKey(req.body.secret);
-    console.log(payments);
     if (payments.length === 0) {
       res.status(400).end();
     }
