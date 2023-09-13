@@ -112,6 +112,7 @@ const textDepositComplete = async (payment, reservation) => {
 
     return 1;
   } catch (err) {
+    console.log(err);
     throw new ApiError(httpStatus.BAD_REQUEST, err);
   }
 };
