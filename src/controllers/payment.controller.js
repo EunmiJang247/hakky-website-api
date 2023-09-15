@@ -3,6 +3,7 @@ const { updatePaymentByWebhook } = require('../services/payment.service');
 const ApiError = require('../utils/ApiError');
 const { textReservationComplete } = require('../utils/aligo');
 const catchAsync = require('../utils/catchAsync');
+const { newOlderDate } = require('../utils/new-older-date');
 
 const createPayment = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
@@ -41,6 +42,10 @@ const refund = catchAsync(async (req, res) => {
 const refundByUser = catchAsync(async (req, res) => {
   const { id: userId } = req.user;
   const check = await paymentService.readPayment(req.params.paymentId);
+  const oneYearsOlderDate = newOlderDate({ date: check.createdAt, years: 1 });
+  if (new Date() > oneYearsOlderDate) {
+    throw new ApiError(404, 'FAILED_TO_AUTO_REFUND');
+  }
   if (String(check.applicant) !== String(userId)) {
     throw new ApiError(403, 'NOT_AUTHORIZED');
   }

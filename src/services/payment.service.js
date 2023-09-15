@@ -4,6 +4,8 @@ const {
 } = require('../models');
 const config = require('../config/config');
 const { textReservation, textDepositComplete, textCanceled } = require('../utils/aligo');
+const ApiError = require('../utils/ApiError');
+const { newOlderDate } = require('../utils/new-older-date');
 
 const chedckValidTime = async (products, reservTime) => {
   let timecheck = 0;
@@ -115,6 +117,10 @@ const refund = async (id) => {
 const refundAndCancel = async (id, body) => {
   const payment = await Payment.findById(id);
   const reservation = await Reservation.findById(payment.reservationId);
+  const oneYearsOlderDate = newOlderDate({ date: payment.createdAt, years: 1 });
+  if (new Date() > oneYearsOlderDate) {
+    throw new ApiError(404, 'FAILED_TO_AUTO_REFUND');
+  }
 
   try {
     await axios({
