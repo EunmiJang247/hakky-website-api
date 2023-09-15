@@ -123,20 +123,22 @@ const refundAndCancel = async (id, body) => {
   }
 
   try {
-    await axios({
-      url: `https://api.tosspayments.com/v1/payments/${payment.paymentKey}/cancel`,
-      method: 'POST',
-      data: {
-        cancelReason: body.cancelReason,
-        refundReceiveAccount: body.refundReceiveAccount,
-      },
-      headers: {
-        Authorization: `Basic ${config.toss}`,
-        'Content-type': 'application/json',
-      },
-    });
+    if (payment.isDeposit === true) {
+      await axios({
+        url: `https://api.tosspayments.com/v1/payments/${payment.paymentKey}/cancel`,
+        method: 'POST',
+        data: {
+          cancelReason: body.cancelReason,
+          refundReceiveAccount: body.refundReceiveAccount,
+        },
+        headers: {
+          Authorization: `Basic ${config.toss}`,
+          'Content-type': 'application/json',
+        },
+      });
+    }
     const now = new Date();
-
+  
     reservation.isCanceled = true;
     reservation.save();
     payment.refundedAt = now;
@@ -144,6 +146,7 @@ const refundAndCancel = async (id, body) => {
     payment.save();
 
     return payment;
+    
   } catch (e) {
     return e;
   }
