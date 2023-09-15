@@ -20,6 +20,9 @@ const optionsSchema = mongoose.Schema({
   price: {
     type: Number,
   },
+  setting: {
+    type: String,
+  },
 });
 
 const productSchema = mongoose.Schema(
