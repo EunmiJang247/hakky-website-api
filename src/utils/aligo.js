@@ -56,8 +56,8 @@ const remindReservation = async (payment, reservation) => {
   const minutes = reservation.reservationDate.getMinutes();
 
   const now = new Date();
-  if (month > 9) month = String(`0${month}`);
-  if (day > 9) day = String(`0${day}`);
+  if (month < 9) month = String(`0${month}`);
+  if (day < 9) day = String(`0${day}`);
 
   const sendDate = new Date(year, month - 1, day);
   try {
