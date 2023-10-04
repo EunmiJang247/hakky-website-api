@@ -100,8 +100,7 @@ const textReservationComplete = async (payment, reservation) => {
   촬영상품. ${reservation.products[0].name}\n
   촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
   예약금 50% 입금 확인 후 예약이 완료됩니다. (예약자 이름으로 입금해주세요.)\n\n
-  ${payment}
-  입금계좌: ${payment.bankName} ${payment.virtualAccount} ${payment.virtualAccountOwner}\n\n
+  입금계좌: ${payment.bankName} ${payment.virtualAccount} 주식회사 세바\n\n
   *24시간 이내에 입금확인이 되지 않으면 예약이 자동취소됩니다.\n
   *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일) 전, 1회만 가능합니다.\n
   *취소시, 촬영일 기준 1주(7일) 이전까지는 전액 환불 가능하며, 그 이후에는 어떠한 경우에도 환불이 불가능하니 신중히 예약해주세요.\n
@@ -194,7 +193,8 @@ const textCanceled = async (payment, reservation) => {
   촬영상품. ${reservation.products[0].name}\n\n
 
   위 내용의 촬영 예약건이 고객님의 사정에의하여 취소되었습니다.
-  총 ${payment.amount.toLocaleString('ko-KR')}원 중 예약 목적으로 입금하셨던 선수금 ${payment.deposit.toLocaleString('ko-KR')}원이 고객님께서 신청하신 환불계좌로 입금 될 것 입니다.\n
+  총 ${payment.amount.toLocaleString('ko-KR')}원 중 예약 목적으로 입금하셨던\n
+  선수금 ${payment.deposit.toLocaleString('ko-KR')}원이 고객님께서 신청하신 환불계좌로 입금 될 것 입니다.\n
   정상적으로 환불처리가 진행되지 않을 시에 채널톡, 또는 예약하신 지점으로 문의주시기 바랍니다.`;
 
   try {
@@ -231,7 +231,6 @@ const textCanceled = async (payment, reservation) => {
         });
       if (cancel.data.result_code !== 1) {
         console.log(cancel.data.message);
-        throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
       }
       // eslint-disable-next-line no-param-reassign
       payment.msgId = result.data.msg_id;
