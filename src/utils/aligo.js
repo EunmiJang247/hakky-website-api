@@ -198,43 +198,41 @@ const textCanceled = async (payment, reservation) => {
   정상적으로 환불처리가 진행되지 않을 시에 채널톡, 또는 예약하신 지점으로 문의주시기 바랍니다.`;
 
   try {
-    if (payment.msgId) {
-      const result = await axios.post('https://apis.aligo.in/send/',
-        null,
-        {
-          headers: {
-            'Content-Type': 'applicant/json',
-          },
-          params: {
-            key: config.aligo.apiKey,
-            user_id: config.aligo.userId,
-            sender: config.aligo.phoneNumber,
-            receiver: user.phoneNumber,
-            msg,
-            testmode_yn: 'N',
-          },
-        });
-      if (result.data.result_code !== '1') {
-        throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
-      }
-      const cancel = await axios.post('https://apis.aligo.in/cancel/',
-        null,
-        {
-          headers: {
-            'Content-Type': 'applicant/json',
-          },
-          params: {
-            key: config.aligo.apiKey,
-            user_id: config.aligo.userId,
-            mid: payment.msgId,
-          },
-        });
-      if (cancel.data.result_code !== 1) {
-        console.log(cancel.data.message);
-      }
-      // eslint-disable-next-line no-param-reassign
-      payment.msgId = result.data.msg_id;
+    const result = await axios.post('https://apis.aligo.in/send/',
+      null,
+      {
+        headers: {
+          'Content-Type': 'applicant/json',
+        },
+        params: {
+          key: config.aligo.apiKey,
+          user_id: config.aligo.userId,
+          sender: config.aligo.phoneNumber,
+          receiver: user.phoneNumber,
+          msg,
+          testmode_yn: 'N',
+        },
+      });
+    if (result.data.result_code !== '1') {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
     }
+    const cancel = await axios.post('https://apis.aligo.in/cancel/',
+      null,
+      {
+        headers: {
+          'Content-Type': 'applicant/json',
+        },
+        params: {
+          key: config.aligo.apiKey,
+          user_id: config.aligo.userId,
+          mid: payment.msgId,
+        },
+      });
+    if (cancel.data.result_code !== 1) {
+      console.log(cancel.data.message);
+    }
+    // eslint-disable-next-line no-param-reassign
+    payment.msgId = result.data.msg_id;
     await payment.save();
 
     return 1;
