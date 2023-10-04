@@ -136,17 +136,21 @@ const adminReadReservations = async (placeId, keywords, from, to, limit, skip, s
 };
 
 const updateReservation = async (id, updateBody, userId) => {
-  const reservation = await Reservation.findOne({ _id: id, applicant: userId });
-  if (!reservation) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
+  try {
+    const reservation = await Reservation.findOne({ _id: id, applicant: userId });
+    if (!reservation) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Reservation not found');
+    }
+    if (reservation.isChanged === true) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Reservation is already changed');
+    }
+    Object.assign(reservation, updateBody);
+    reservation.isChanged = true;
+    reservation.save();
+    return reservation;
+  } catch (err) {
+    throw new ApiError('5분 후 다시 시도해주세요.', httpStatus.BAD_REQUEST);
   }
-  if (reservation.isChanged === true) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Reservation is already changed');
-  }
-  Object.assign(reservation, updateBody);
-  reservation.isChanged = true;
-  reservation.save();
-  return reservation;
 };
 
 const adminUpdateReservation = async (id, updateBody) => {
