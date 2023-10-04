@@ -17,6 +17,7 @@ const dateUtil = (from, to) => {
   const fromHoursAndMinutes = hourAndMinutes(fromHourUtil, fromMinutes);
   const fromDayOfWeek = from.getDay();
 
+  to.setMinutes(to.getMinutes() + 30);
   const toHour = to.getHours() + 9;
   const toHourUtil = amPm(toHour);
   const toMinutes = to.getMinutes();
@@ -31,7 +32,7 @@ const remindReservation = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약확인]\n\n
-  ${user.name}님\n\n
+  ${user.name}님\n
   일시. ${date}\n
   촬영상품. ${reservation.products[0].name}\n
   총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
@@ -94,7 +95,7 @@ const textReservationComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
-  ${user.name}님\n\n
+  ${user.name}님\n
   일시. ${date}\n
   촬영상품. ${reservation.products[0].name}\n
   촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
@@ -138,7 +139,7 @@ const textDepositComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
-  ${user.name}님\n\n
+  ${user.name}님\n
   일시. ${date}\n
   촬영상품. ${reservation.products[0].name}\n
   총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
@@ -187,7 +188,7 @@ const textCanceled = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약취소]\n\n
-  ${user.name}님\n\n
+  ${user.name}님\n
   일시. ${date}\n
   촬영상품. ${reservation.products[0].name}\n\n
 
