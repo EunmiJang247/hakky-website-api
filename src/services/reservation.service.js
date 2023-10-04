@@ -146,7 +146,7 @@ const updateReservation = async (id, updateBody, userId) => {
     }
     Object.assign(reservation, updateBody);
     reservation.isChanged = true;
-    reservation.save();
+    await reservation.save();
     return reservation;
   } catch (err) {
     throw new ApiError('5분 후 다시 시도해주세요.', httpStatus.BAD_REQUEST);
