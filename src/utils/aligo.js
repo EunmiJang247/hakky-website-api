@@ -213,7 +213,6 @@ const textCanceled = async (payment, reservation) => {
           testmode_yn: 'N',
         },
       });
-    console.log(result.data);
     if (result.data.result_code !== '1') {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
     }

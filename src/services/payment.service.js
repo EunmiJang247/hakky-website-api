@@ -87,6 +87,7 @@ const updatePaymentByWebhook = async (_payment, status) => {
     await remindReservation(payment, reservation);
     await textDepositComplete(payment, reservation);
   }
+  console.log(status)
   if (status === 'CANCELED') {
     // 입금이 되었던 경우에만 환불완료로 표시
     if (payment.isDeposit && reservation.isApproval) {
