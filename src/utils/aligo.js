@@ -216,20 +216,22 @@ const textCanceled = async (payment, reservation) => {
     if (result.data.result_code !== '1') {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
     }
-    const cancel = await axios.post('https://apis.aligo.in/cancel/',
-      null,
-      {
-        headers: {
-          'Content-Type': 'applicant/json',
-        },
-        params: {
-          key: config.aligo.apiKey,
-          user_id: config.aligo.userId,
-          mid: payment.msgId,
-        },
-      });
-    if (cancel.data.result_code !== 1) {
-      console.log(cancel.data.message);
+    if (payment.msgId) {
+      const cancel = await axios.post('https://apis.aligo.in/cancel/',
+        null,
+        {
+          headers: {
+            'Content-Type': 'applicant/json',
+          },
+          params: {
+            key: config.aligo.apiKey,
+            user_id: config.aligo.userId,
+            mid: payment.msgId,
+          },
+        });
+      if (cancel.data.result_code !== 1) {
+        console.log(cancel.data.message);
+      }
     }
     // eslint-disable-next-line no-param-reassign
     payment.msgId = result.data.msg_id;
