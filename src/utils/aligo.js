@@ -122,7 +122,6 @@ const textReservationComplete = async (payment, reservation) => {
           testmode_yn: 'N',
         },
       });
-    console.log(result.data.result_code);
     if (result.data.result_code !== '1') {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
     }
