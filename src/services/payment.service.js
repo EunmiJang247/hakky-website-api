@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const axios = require('axios');
 const {
   Payment, Product, User, Reservation,
@@ -274,17 +275,16 @@ const tossVirtualAccountCreate = async (paymentDoc) => {
       SD: 'SK증권',
     };
 
-    const payment = await Payment.findById(paymentDoc._id);
-    payment.method = result.data.method;
-    payment.bankName = bankCode[result.data.virtualAccount.bankCode];
-    payment.virtualAccount = result.data.virtualAccount.accountNumber;
-    payment.virtualAccountOwner = result.data.virtualAccount.customerName;
-    payment.cashReceipt = !!result.data.cashReceipt;
-    payment.secret = result.data.secret;
+    paymentDoc.method = result.data.method;
+    paymentDoc.bankName = bankCode[result.data.virtualAccount.bankCode];
+    paymentDoc.virtualAccount = result.data.virtualAccount.accountNumber;
+    paymentDoc.virtualAccountOwner = result.data.virtualAccount.customerName;
+    paymentDoc.cashReceipt = !!result.data.cashReceipt;
+    paymentDoc.secret = result.data.secret;
 
-    payment.save();
+    paymentDoc.save();
 
-    return payment;
+    return paymentDoc;
   } catch (err) {
     return err;
   }
