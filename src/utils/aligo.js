@@ -4,9 +4,49 @@ const config = require('../config/config');
 const ApiError = require('./ApiError');
 const { User } = require('../models');
 
-const textReservation = async (payment, reservation) => {
+const amPm = (hour) => (hour < 12 ? `오전${hour}시` : `오후${hour - 12}시`);
+const hourAndMinutes = (hours, minutes) => (minutes < 30 ? `${hours}` : `${hours}${minutes}분`);
+
+const dateUtil = (from, to) => {
+  const fromYear = from.getFullYear();
+  const fromMonth = from.getMonth();
+  const fromDate = from.getDate();
+  const fromHour = from.setHours(from.getHours() + 9);
+  const fromHourUtil = amPm(fromHour);
+  const fromMinutes = from.getMinutes();
+  const fromHoursAndMinutes = hourAndMinutes(fromHourUtil, fromMinutes);
+  const fromDayOfWeek = from.getDay();
+
+  const toHour = to.setHours(to.getHours() + 9);
+  const toHourUtil = amPm(toHour);
+  const toMinutes = to.getMinutes();
+  const toHoursAndMinutes = hourAndMinutes(toHourUtil, toMinutes);
+
+  const dayOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+
+  return `${fromYear}년 ${fromMonth}월 ${fromDate}일 ${dayOfWeek[fromDayOfWeek]} ${fromHoursAndMinutes} ~ ${toHoursAndMinutes}`;
+};
+
+const remindReservation = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
-  const msg = `[사진관 세바] \n안녕하세요 ${user.name}님! 예약하신 일자까지 한달 남으셨습니다!`;
+  const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const msg = `[사진관, 세바 (${reservation.placeName}) 예약확인]\n\n
+  ${user.name}님\n\n
+  일시. ${date}\n
+  촬영상품. ${reservation.products[0].name}\n
+  총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
+  예정되어 있는 촬영일 기준 한 달 전입니다.\n
+  예약하신 날 뵐께요 :)\n\n
+  [예약 완료하신 분들 필독사항]\n
+  안내를 미숙지하여 발생하는 모든 사항은 책임지지 않습니다.\n
+  *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일)전, 1회만 가능합니다.\n
+  *취소시, 촬영일 기준 1주(7일) 이전까지는 전액 환불 가능하며, 그 이후에는 어떠한 경우에도 환불이 불가능합니다.\n
+  *예약하신 이후 상품변경(일부상품변경, 컷수변경 포함)은 불가합니다. 상품변경을 희망하시는 경우 전체취소하시고 새롭게 예약해주셔야 합니다.\n
+  *예약하신 날짜와 시간을 잘 체크하시고 당일날 찾아주세요.\n
+  *각 지점에 따라 주차환경이 다르니, 미리 체크해주시기 바랍니다.\n
+  *예약은 서로간의 약속입니다. 공간이 작은 관계로 너무 빨리 오시지 마시고, 예약시간에 맞춰 도착해주세요. 15분 이상 늦으시면 노쇼처리되며, 예약금은 환불되지 않습니다. \n
+  *고객님이 예약하신 시간은 촬영,셀렉,리터칭,인화(가족사진의 경우 액자제작 포함)까지의 총 시간입니다.\n
+  *위의 내용 외에 문의 내용이 있으실 경우에는 채널톡, 또는 예약하신 지점의 인스타그램 DM을 통해 문의주시기 바랍니다.`;
 
   const year = reservation.reservationDate.getFullYear();
   const month = reservation.reservationDate.getMonth();
@@ -52,7 +92,18 @@ const textReservation = async (payment, reservation) => {
 
 const textReservationComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
-  const msg = `[사진관 세바] \n안녕하세요 ${user.name}님! ${reservation.reservationDate}에 신청하신 예약이 현재 입금대기중입니다. \n 발급받으신 가상계좌에 24시간 내로 입금을 완료해주시면 예약이 정상처리됩니다!`;
+  const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
+  ${user.name}님\n\n
+  일시. ${date}\n
+  촬영상품. ${reservation.products[0].name}\n
+  촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
+  예약금 50% 입금 확인 후 예약이 완료됩니다. (예약자 이름으로 입금해주세요.)\n\n
+  입금계좌: 기업 969-038275-04-025 (주)세바\n\n
+  *24시간 이내에 입금확인이 되지 않으면 예약이 자동취소됩니다.\n
+  *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일) 전, 1회만 가능합니다.\n
+  *취소시, 촬영일 기준 1주(7일) 이전까지는 전액 환불 가능하며, 그 이후에는 어떠한 경우에도 환불이 불가능하니 신중히 예약해주세요.\n
+  *예약하신 이후 상품변경(일부상품변경/추가, 컷수변경/추가 포함)은 불가합니다. 상품변경을 희망하시는 경우 이전 예약을 전체취소하시고 새롭게 예약해주셔야 합니다.`;
 
   try {
     const result = await axios.post('https://apis.aligo.in/send/',
@@ -85,7 +136,22 @@ const textReservationComplete = async (payment, reservation) => {
 
 const textDepositComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
-  const msg = `[사진관 세바] \n안녕하세요 ${user.name}님! ${reservation.reservationDate}에 신청하신 예약이 현재 입금완료 처리되었습니다.`;
+  const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
+  ${user.name}님\n\n
+  일시. ${date}\n
+  촬영상품. ${reservation.products[0].name}\n
+  총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
+  [예약 완료하신 분들 필독사항]\n
+  안내를 미숙지하여 발생하는 모든 사항은 책임지지 않습니다.\n
+  *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일)전, 1회만 가능합니다.\n
+  *취소시, 촬영일 기준 1주(7일) 이전까지는 전액 환불 가능하며, 그 이후에는 어떠한 경우에도 환불이 불가능합니다.\n
+  *예약하신 이후 상품변경(일부상품변경, 컷수변경 포함)은 불가합니다. 상품변경을 희망하시는 경우 전체취소하시고 새롭게 예약해주셔야 합니다.\n
+  *예약하신 날짜와 시간을 잘 체크하시고 당일날 찾아주세요.\n
+  *각 지점에 따라 주차환경이 다르니, 미리 체크해주시기 바랍니다.\n
+  *예약은 서로간의 약속입니다. 공간이 작은 관계로 너무 빨리 오시지 마시고, 예약시간에 맞춰 도착해주세요. 15분 이상 늦으시면 노쇼처리되며, 예약금은 환불되지 않습니다. \n
+  *고객님이 예약하신 시간은 촬영,셀렉,리터칭,인화(가족사진의 경우 액자제작 포함)까지의 총 시간입니다.\n
+  *위의 내용 외에 문의 내용이 있으실 경우에는 채널톡, 또는 예약하신 지점의 인스타그램 DM을 통해 문의주시기 바랍니다.`;
 
   try {
     const result = await axios.post('https://apis.aligo.in/send/',
@@ -119,7 +185,15 @@ const textDepositComplete = async (payment, reservation) => {
 
 const textCanceled = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
-  const msg = `[사진관 세바] \n안녕하세요 ${user.name}님! ${reservation.reservationDate}에 신청하신 예약이 현재 취소 처리되었습니다.`;
+  const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const msg = `[사진관, 세바 (${reservation.placeName}) 예약취소]\n\n
+  ${user.name}님\n\n
+  일시. ${date}\n
+  촬영상품. ${reservation.products[0].name}\n\n
+
+  위 내용의 촬영 예약건이 고객님의 사정에의하여 취소되었습니다.
+  총 ${payment.amount.toLocaleString('ko-KR')}원 중 예약 목적으로 입금하셨던 선수금 ${payment.deposit.toLocaleString('ko-KR')}원이 고객님께서 신청하신 환불계좌로 입금 될 것 입니다.\n
+  정상적으로 환불처리가 진행되지 않을 시에 채널톡, 또는 예약하신 지점으로 문의주시기 바랍니다.`;
 
   try {
     if (payment.msgId) {
@@ -157,9 +231,9 @@ const textCanceled = async (payment, reservation) => {
         console.log(cancel.data.message);
         throw new ApiError(httpStatus.BAD_REQUEST, cancel.data.message);
       }
+      // eslint-disable-next-line no-param-reassign
+      payment.msgId = result.data.msg_id;
     }
-    // eslint-disable-next-line no-param-reassign
-    payment.msgId = result.data.msg_id;
     await payment.save();
 
     return 1;
@@ -170,7 +244,7 @@ const textCanceled = async (payment, reservation) => {
 };
 
 module.exports = {
-  textReservation,
+  remindReservation,
   textReservationComplete,
   textDepositComplete,
   textCanceled,

@@ -3,7 +3,7 @@ const {
   Payment, Product, User, Reservation,
 } = require('../models');
 const config = require('../config/config');
-const { textReservation, textDepositComplete, textCanceled } = require('../utils/aligo');
+const { remindReservation, textDepositComplete, textCanceled } = require('../utils/aligo');
 const ApiError = require('../utils/ApiError');
 const { newOlderDate } = require('../utils/new-older-date');
 
@@ -83,7 +83,7 @@ const updatePaymentByWebhook = async (_payment, status) => {
     if (reservation.isCanceled) {
       reservation.isCanceled = false;
     }
-    await textReservation(payment, reservation);
+    await remindReservation(payment, reservation);
     await textDepositComplete(payment, reservation);
   }
   if (status === 'CANCELED') {
@@ -138,7 +138,7 @@ const refundAndCancel = async (id, body) => {
       });
     }
     const now = new Date();
-  
+
     reservation.isCanceled = true;
     reservation.save();
     payment.refundedAt = now;
@@ -146,7 +146,6 @@ const refundAndCancel = async (id, body) => {
     payment.save();
 
     return payment;
-    
   } catch (e) {
     return e;
   }
