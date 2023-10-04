@@ -50,17 +50,16 @@ const remindReservation = async (payment, reservation) => {
   *위의 내용 외에 문의 내용이 있으실 경우에는 채널톡, 또는 예약하신 지점의 인스타그램 DM을 통해 문의주시기 바랍니다.`;
 
   const year = reservation.reservationDate.getFullYear();
-  const month = reservation.reservationDate.getMonth();
+  let month = reservation.reservationDate.getMonth() + 1;
   let day = reservation.reservationDate.getDate();
   const hour = reservation.reservationDate.getHours();
   const minutes = reservation.reservationDate.getMinutes();
 
   const now = new Date();
+  if (month > 9) month = String(`0${month}`);
   if (day > 9) day = String(`0${day}`);
 
   const sendDate = new Date(year, month - 1, day);
-  console.log(`${year}${month}${day}`);
-  console.log(`${hour}${minutes}`);
   try {
     if (now < sendDate) {
       const result = await axios.post('https://apis.aligo.in/send/',
