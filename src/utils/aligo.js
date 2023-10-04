@@ -11,13 +11,13 @@ const dateUtil = (from, to) => {
   const fromYear = from.getFullYear();
   const fromMonth = from.getMonth();
   const fromDate = from.getDate();
-  const fromHour = from.setHours(from.getHours() + 9);
+  const fromHour = from.getHours() + 9;
   const fromHourUtil = amPm(fromHour);
   const fromMinutes = from.getMinutes();
   const fromHoursAndMinutes = hourAndMinutes(fromHourUtil, fromMinutes);
   const fromDayOfWeek = from.getDay();
 
-  const toHour = to.setHours(to.getHours() + 9);
+  const toHour = to.getHours() + 9;
   const toHourUtil = amPm(toHour);
   const toMinutes = to.getMinutes();
   const toHoursAndMinutes = hourAndMinutes(toHourUtil, toMinutes);
@@ -99,7 +99,7 @@ const textReservationComplete = async (payment, reservation) => {
   촬영상품. ${reservation.products[0].name}\n
   촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
   예약금 50% 입금 확인 후 예약이 완료됩니다. (예약자 이름으로 입금해주세요.)\n\n
-  입금계좌: 기업 969-038275-04-025 (주)세바\n\n
+  입금계좌: ${payment.bankName} ${payment.virtualAccount} ${payment.virtualAccountOwner}\n\n
   *24시간 이내에 입금확인이 되지 않으면 예약이 자동취소됩니다.\n
   *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일) 전, 1회만 가능합니다.\n
   *취소시, 촬영일 기준 1주(7일) 이전까지는 전액 환불 가능하며, 그 이후에는 어떠한 경우에도 환불이 불가능하니 신중히 예약해주세요.\n
