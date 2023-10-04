@@ -20,10 +20,13 @@ const createPayment = catchAsync(async (req, res) => {
 
   payment.reservationId = reservation._id;
   await paymentService.tossVirtualAccountCreate(payment);
-  payment.save();
 
   const paymentDoc = await paymentService.readPayment(payment._id);
-  await textReservationComplete(paymentDoc, reservation);
+  setTimeout(async () => {
+    await textReservationComplete(paymentDoc, reservation);
+  }, 2000);
+
+  payment.save();
   const result = await reservationService.serializer(reservation);
 
   res.send(result);
