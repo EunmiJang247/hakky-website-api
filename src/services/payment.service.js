@@ -77,7 +77,6 @@ const readPaymentBySecretKey = async (secretKey) => {
 const updatePaymentByWebhook = async (_payment, status) => {
   const payment = _payment;
   const reservation = await Reservation.findById({ _id: payment.reservationId });
-  console.log(status);
   if (status === 'DONE') {
     payment.isDeposit = true;
     reservation.isApproval = true;

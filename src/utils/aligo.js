@@ -77,10 +77,11 @@ const remindReservation = async (payment, reservation) => {
             testmode_yn: 'N',
           },
         });
+      console.log(result.data);
+      
       if (result.data.result_code !== '1') {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
       }
-      console.log(result.data);
       // eslint-disable-next-line no-param-reassign
       payment.msgId = result.data.msg_id;
       await payment.save();
