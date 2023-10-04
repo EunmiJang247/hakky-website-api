@@ -87,7 +87,6 @@ const updatePaymentByWebhook = async (_payment, status) => {
     await remindReservation(payment, reservation);
     await textDepositComplete(payment, reservation);
   }
-  console.log(status)
   if (status === 'CANCELED') {
     // 입금이 되었던 경우에만 환불완료로 표시
     if (payment.isDeposit && reservation.isApproval) {
@@ -125,20 +124,19 @@ const refundAndCancel = async (id, body) => {
   }
 
   try {
-    if (payment.isDeposit === true) {
-      await axios({
-        url: `https://api.tosspayments.com/v1/payments/${payment.paymentKey}/cancel`,
-        method: 'POST',
-        data: {
-          cancelReason: body.cancelReason,
-          refundReceiveAccount: body.refundReceiveAccount,
-        },
-        headers: {
-          Authorization: `Basic ${config.toss}`,
-          'Content-type': 'application/json',
-        },
-      });
-    }
+    await axios({
+      url: `https://api.tosspayments.com/v1/payments/${payment.paymentKey}/cancel`,
+      method: 'POST',
+      data: {
+        cancelReason: body.cancelReason,
+        refundReceiveAccount: body.refundReceiveAccount,
+      },
+      headers: {
+        Authorization: `Basic ${config.toss}`,
+        'Content-type': 'application/json',
+      },
+    });
+
     const now = new Date();
 
     reservation.isCanceled = true;
