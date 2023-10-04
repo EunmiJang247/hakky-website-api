@@ -51,13 +51,13 @@ const remindReservation = async (payment, reservation) => {
 
   const year = reservation.reservationDate.getFullYear();
   const month = reservation.reservationDate.getMonth();
-  const day = reservation.reservationDate.getDate();
+  let day = reservation.reservationDate.getDate();
   const hour = reservation.reservationDate.getHours();
   const minutes = reservation.reservationDate.getMinutes();
 
   const now = new Date();
+  if (day > 9) day = String(`0${day}`);
   const sendDate = new Date(year, month - 1, day);
-
   try {
     if (now < sendDate) {
       const result = await axios.post('https://apis.aligo.in/send/',
