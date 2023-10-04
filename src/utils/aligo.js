@@ -100,6 +100,7 @@ const textReservationComplete = async (payment, reservation) => {
   촬영상품. ${reservation.products[0].name}\n
   촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
   예약금 50% 입금 확인 후 예약이 완료됩니다. (예약자 이름으로 입금해주세요.)\n\n
+  ${payment}
   입금계좌: ${payment.bankName} ${payment.virtualAccount} ${payment.virtualAccountOwner}\n\n
   *24시간 이내에 입금확인이 되지 않으면 예약이 자동취소됩니다.\n
   *변경시, 개인사정에 의한 촬영일정변경은 촬영 2주(14일) 전, 1회만 가능합니다.\n
