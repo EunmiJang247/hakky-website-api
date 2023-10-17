@@ -23,6 +23,9 @@ const optionsSchema = mongoose.Schema({
   setting: {
     type: String,
   },
+  isPrivateMenu: {
+    type: Boolean,
+  },
 });
 
 const productSchema = mongoose.Schema(
