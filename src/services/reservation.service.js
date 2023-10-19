@@ -42,7 +42,7 @@ const createReservation = async (reservationBody, paymentId, userId, now) => {
 };
 
 const adminCreateReservation = async (reservationBody) => {
-  const today = new Date();
+  const today = new Date(reservationBody.reservationFrom);
 
   const month = today.getUTCMonth();
   const day = today.getUTCDate();
