@@ -9,6 +9,7 @@ const createOption = {
       detail: Joi.string().required(),
       price: Joi.number().required(),
       setting: Joi.string().required(),
+      isPrivateMenu: Joi.boolean(),
     })
     .required(),
 };
@@ -32,6 +33,7 @@ const updateOption = {
       detail: Joi.string(),
       price: Joi.number(),
       setting: Joi.string(),
+      isPrivateMenu: Joi.boolean(),
       productId: Joi.string(),
     })
     .required(),
@@ -52,6 +54,7 @@ const updateOptionsOrder = {
             detail: Joi.string(),
             price: Joi.number(),
             setting: Joi.string(),
+            isPrivateMenu: Joi.boolean(),
             productId: Joi.string(),
           }),
         )
