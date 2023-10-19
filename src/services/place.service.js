@@ -210,9 +210,9 @@ const getPlaceDetail = async (id, date, dayOfWeek) => {
   }
   const reservations = await Reservation.find({
     placeId: id,
-    reservationDate: date,
+    // reservationDate: date,
     isCanceled: false,
-    // depositDeadline: { $gt: new Date() },
+    depositDeadline: { $gt: new Date() },
   }).sort('reservationFrom').exec();
   console.log(reservations);
   const includeSchedules = await PlaceIdle.IncludeSchedule.findOne({
