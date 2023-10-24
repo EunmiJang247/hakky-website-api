@@ -29,7 +29,7 @@ const dateUtil = (from, to) => {
   const toMinutes = to.getMinutes();
   const toHoursAndMinutes = hourAndMinutes(toHourUtil, toMinutes);
   to.setMinutes(to.getMinutes() - 30);
-  const dayOfWeek = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+  const dayOfWeek = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
 
   return `${fromYear}년 ${fromMonth}월 ${fromDate}일 ${dayOfWeek[fromDayOfWeek]} ${fromHoursAndMinutes} ~ ${toHoursAndMinutes}`;
 };
