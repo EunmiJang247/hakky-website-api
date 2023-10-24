@@ -9,7 +9,7 @@ const hourAndMinutes = (hours, minutes) => (minutes < 30 ? `${hours}` : `${hours
 
 const dateUtil = (from, to) => {
   const fromYear = from.getFullYear();
-  const fromMonth = from.getMonth();
+  const fromMonth = from.getMonth() + 1;
   const fromDate = from.getDate();
   const fromHour = from.getHours() + 9;
   const fromHourUtil = amPm(fromHour);
@@ -28,13 +28,23 @@ const dateUtil = (from, to) => {
   return `${fromYear}년 ${fromMonth}월 ${fromDate}일 ${dayOfWeek[fromDayOfWeek]} ${fromHoursAndMinutes} ~ ${toHoursAndMinutes}`;
 };
 
+const productNameList = (products) => {
+  let names = '';
+  products.forEach((product) => {
+    names += `${product.name}\n`;
+  });
+
+  return names;
+};
+
 const remindReservation = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const productNames = productNameList(reservation.products);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약확인]\n\n
   ${user.name}님\n
   일시. ${date}\n
-  촬영상품. ${reservation.products[0].name}\n
+  촬영상품. ${productNames}\n
   총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
   예정되어 있는 촬영일 기준 한 달 전입니다.\n
   예약하신 날 뵐께요 :)\n\n
@@ -79,8 +89,6 @@ const remindReservation = async (payment, reservation) => {
             testmode_yn: 'N',
           },
         });
-      console.log(result.data);
-      
       if (result.data.result_code !== '1') {
         throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect phoneNumber');
       }
@@ -98,10 +106,11 @@ const remindReservation = async (payment, reservation) => {
 const textReservationComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const productNames = productNameList(reservation.products);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
   ${user.name}님\n
   일시. ${date}\n
-  촬영상품. ${reservation.products[0].name}\n
+  촬영상품. ${productNames}\n
   촬영금액. ${payment.amount.toLocaleString('ko-KR')}원\n
   예약금 50% 입금 확인 후 예약이 완료됩니다. (예약자 이름으로 입금해주세요.)\n\n
   입금계좌: ${payment.bankName} ${payment.virtualAccount} 주식회사 세바\n\n
@@ -142,10 +151,11 @@ const textReservationComplete = async (payment, reservation) => {
 const textDepositComplete = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const productNames = productNameList(reservation.products);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약안내]\n\n
   ${user.name}님\n
   일시. ${date}\n
-  촬영상품. ${reservation.products[0].name}\n
+  촬영상품. ${productNames}\n
   총 ${payment.amount.toLocaleString('ko-KR')}원 중 ${payment.deposit.toLocaleString('ko-KR')}원 입금 확인되었습니다.\n\n
   [예약 완료하신 분들 필독사항]\n
   안내를 미숙지하여 발생하는 모든 사항은 책임지지 않습니다.\n
@@ -183,6 +193,7 @@ const textDepositComplete = async (payment, reservation) => {
 
     return 1;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     throw new ApiError(httpStatus.BAD_REQUEST, err);
   }
@@ -191,10 +202,11 @@ const textDepositComplete = async (payment, reservation) => {
 const textCanceled = async (payment, reservation) => {
   const user = await User.findById(payment.applicant);
   const date = dateUtil(reservation.reservationFrom, reservation.reservationTo);
+  const productNames = productNameList(reservation.products);
   const msg = `[사진관, 세바 (${reservation.placeName}) 예약취소]\n\n
   ${user.name}님\n
   일시. ${date}\n
-  촬영상품. ${reservation.products[0].name}\n\n
+  촬영상품. ${productNames}\n\n
 
   위 내용의 촬영 예약건이 고객님의 사정에의하여 취소되었습니다.
   총 ${payment.amount.toLocaleString('ko-KR')}원 중 예약 목적으로 입금하셨던\n
@@ -234,6 +246,7 @@ const textCanceled = async (payment, reservation) => {
           },
         });
       if (cancel.data.result_code !== 1) {
+        // eslint-disable-next-line no-console
         console.log(cancel.data.message);
       }
     }
@@ -243,6 +256,7 @@ const textCanceled = async (payment, reservation) => {
 
     return 1;
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err);
     // throw new ApiError(httpStatus.BAD_REQUEST, err);
   }
