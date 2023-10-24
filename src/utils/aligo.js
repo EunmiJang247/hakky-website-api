@@ -4,7 +4,13 @@ const config = require('../config/config');
 const ApiError = require('./ApiError');
 const { User } = require('../models');
 
-const amPm = (hour) => (hour < 12 ? `오전${hour}시` : `오후${hour - 12}시`);
+const amPm = (hour) => {
+  if (hour === 12) {
+    return `오후${hour}시`;
+  }
+
+  return hour < 13 ? `오전${hour}시` : `오후${hour - 12}시`;
+};
 const hourAndMinutes = (hours, minutes) => (minutes < 30 ? `${hours}` : `${hours}${minutes}분`);
 
 const dateUtil = (from, to) => {
@@ -31,7 +37,7 @@ const dateUtil = (from, to) => {
 const productNameList = (products) => {
   let names = '';
   products.forEach((product) => {
-    names += `${product.name}\n`;
+    names += `${product.name}(${product.options[0].name})\n`;
   });
 
   return names;
