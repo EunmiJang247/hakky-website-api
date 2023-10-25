@@ -118,10 +118,10 @@ const adminReadReservations = async (placeId, keywords, from, to, limit, skip, s
     query.placeId = placeId;
   }
   if (from) {
-    query.createdAt = { $gte: from };
+    query.reservationDate = { $gte: from };
   }
   if (to) {
-    query.createdAt = { $lte: to };
+    query.reservationDate = { $lte: to };
   }
   if (from && to) {
     query.createdAt = { $gte: from, $lte: to };
