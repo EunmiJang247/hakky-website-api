@@ -15,10 +15,14 @@ const youtubeSerializer = async (youtube) => {
   &part=snippet&part=statistics`);
 
   return {
+    id: youtube._id,
+    createdAt: youtube.createdAt,
     link: youtube.link,
     thumbnail: res.data.items[0].snippet.thumbnails.standard.url,
     title: res.data.items[0].snippet.title,
     viewCount: res.data.items[0].statistics.viewCount,
+    publishedAt: res.data.items[0].snippet.publishedAt,
+    likeCount: res.data.items[0].statistics.likeCount,
   };
 };
 
