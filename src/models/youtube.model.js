@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
-const faqSchema = mongoose.Schema(
+const youtubeSchema = mongoose.Schema(
   {
-    question: {
+    name: {
       type: String,
       required: true,
     },
-    answer: {
+    link: {
       type: String,
       required: true,
     },
@@ -18,12 +18,12 @@ const faqSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-faqSchema.plugin(toJSON);
-faqSchema.plugin(paginate);
+youtubeSchema.plugin(toJSON);
+youtubeSchema.plugin(paginate);
 
 /**
  * @typedef Token
  */
-const Faq = mongoose.model('Faq', faqSchema);
+const Youtube = mongoose.model('Youtube', youtubeSchema);
 
-module.exports = Faq;
+module.exports = Youtube;

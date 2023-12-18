@@ -46,8 +46,8 @@ const registerKakao = catchAsync(async (req, res) => {
 });
 
 const login = catchAsync(async (req, res) => {
-  const { phoneNumber, password } = req.body;
-  const user = await authService.loginUserWithPhoneNumberAndPassword(phoneNumber, password);
+  const { loginId, password } = req.body;
+  const user = await authService.loginUserWithloginIdAndPassword(loginId, password);
   const tokens = await tokenService.generateAuthTokens(user);
   res.send({ user, tokens });
 });

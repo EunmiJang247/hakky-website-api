@@ -11,15 +11,49 @@ const excludeScheduleRouter = require('./exclude-schedule.route');
 const productRouter = require('./product.route');
 const placeRouter = require('./place.route');
 const noticeRouter = require('./notice.route');
-const faqRouter = require('./faq.route');
+const teamRouter = require('./team.route');
+const tournamentRouter = require('./tournament.route');
+const divisionRouter = require('./division.route');
+const playerRouter = require('./player.route');
+const leagueRouter = require('./league.route');
+const mainMenuRouter = require('./main-menu.route');
 const uploadRouter = require('./upload.route');
 const docsRoute = require('./docs.route');
 const authRouter = require('./auth.route');
+const youtubeRouter = require('./youtube.route');
 const config = require('../../config/config');
 
 const router = express.Router();
 
 const defaultRoutes = [
+  {
+    path: '/team',
+    route: teamRouter,
+  },
+  {
+    path: '/league',
+    route: leagueRouter,
+  },
+  {
+    path: '/division',
+    route: divisionRouter,
+  },
+  {
+    path: '/tournament',
+    route: tournamentRouter,
+  },
+  {
+    path: '/youtube',
+    route: youtubeRouter,
+  },
+  {
+    path: '/main-menu',
+    route: mainMenuRouter,
+  },
+  {
+    path: '/player',
+    route: playerRouter,
+  },
   {
     path: '/reservation',
     route: reservationRouter,
@@ -67,10 +101,6 @@ const defaultRoutes = [
   {
     path: '/notice',
     route: noticeRouter,
-  },
-  {
-    path: '/faq',
-    route: faqRouter,
   },
   {
     path: '/file',

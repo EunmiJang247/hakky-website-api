@@ -6,8 +6,8 @@ const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
 const { AuthCode } = require('../models');
 
-const loginUserWithPhoneNumberAndPassword = async (phoneNumber, password) => {
-  const user = await userService.getUserByPhoneNumber(phoneNumber);
+const loginUserWithloginIdAndPassword = async (loginId, password) => {
+  const user = await userService.getUserByLoginId(loginId);
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect phoneNumber or password');
   }
@@ -102,7 +102,7 @@ const verifyEmail = async (verifyEmailToken) => {
 };
 
 module.exports = {
-  loginUserWithPhoneNumberAndPassword,
+  loginUserWithloginIdAndPassword,
   logout,
   refreshAuth,
   resetPassword,

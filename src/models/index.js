@@ -1,7 +1,13 @@
 module.exports.Token = require('./token.model');
 module.exports.User = require('./user.model');
 module.exports.Notice = require('./notice.model');
-module.exports.Faq = require('./faq.model');
+module.exports.Team = require('./team.model');
+module.exports.Division = require('./division.model');
+module.exports.Tournament = require('./tournament.model');
+module.exports.Youtube = require('./youtube.model');
+module.exports.League = require('./league.model');
+module.exports.MainMenu = require('./main-menu.model');
+module.exports.Player = require('./player.model');
 module.exports.Reservation = require('./reservation.model');
 module.exports.PlaceIdle = require('./place.model');
 module.exports.Product = require('./product.model');

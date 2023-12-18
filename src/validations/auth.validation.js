@@ -1,13 +1,10 @@
 const Joi = require('joi');
-// const { password } = require('./custom.validation');
+const { password } = require('./custom.validation');
 
 const register = {
   body: Joi.object().keys({
-    phoneNumber: Joi.string().required(),
-    // password: Joi.string().required().custom(password),
-    identifier: Joi.string().required(),
-    password: Joi.string().required(),
-    name: Joi.string().required(),
+    loginId: Joi.string().required(),
+    password: Joi.string().required().custom(password),
   }),
 };
 
@@ -25,7 +22,7 @@ const registerKakao = {
 
 const login = {
   body: Joi.object().keys({
-    phoneNumber: Joi.string().required(),
+    loginId: Joi.string().required(),
     password: Joi.string().required(),
   }),
 };

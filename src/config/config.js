@@ -28,13 +28,6 @@ const envVarsSchema = Joi.object()
     S3_SECRET_ACCESS_KEY: Joi.string().required().description('S3 secret access key'),
     S3_REGION: Joi.string().required().description('S3 region'),
     S3_BUCKET: Joi.string().required().description('S3 bucket'),
-
-    TOSS_PAYMENT_SECRET: Joi.string().required().description('Toss secret'),
-
-    ALIGO_API_KEY: Joi.string().required().description('aligo secret'),
-    ALIGO_URL: Joi.string().required().description('aligo api url'),
-    ALIGO_USER_ID: Joi.string().required().description('aligo user id'),
-    ALIGO_PHONE_NUMBER: Joi.string().required().description('aligo phone number'),
   })
   .unknown();
 
@@ -79,12 +72,5 @@ module.exports = {
     secretAccessKey: envVars.S3_SECRET_ACCESS_KEY,
     region: envVars.S3_REGION,
     bucket: envVars.S3_BUCKET,
-  },
-  toss: envVars.TOSS_PAYMENT_SECRET,
-  aligo: {
-    apiKey: envVars.ALIGO_API_KEY,
-    url: envVars.ALIGO_URL,
-    phoneNumber: envVars.ALIGO_PHONE_NUMBER,
-    userId: envVars.ALIGO_USER_ID,
   },
 };

@@ -10,27 +10,10 @@ const removeEmptyProperties = require('../utils/removeEmptyProperties');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
-  // todo auth code check
-  const check = await User.findOne({ phoneNumber: userBody.phoneNumber });
-
-  if (check) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, '이미 가입이 완료된 핸드폰 번호입니다.');
-  }
-  const checkAuthcode = await authCodeService.getAuthCodeByIdentifier(userBody.identifier, userBody.phoneNumber);
-
-  if (!checkAuthcode) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, '인증 번호 유효시간이 초과되었습니다.');
-  }
-
-  await checkAuthcode.delete();
-
   const user = await User.create({
-    name: userBody.name,
-    phoneNumber: userBody.phoneNumber,
+    loginId: userBody.loginId,
     password: userBody.password,
-    role: 'user',
-    termsOfService: true,
-    privacyPolicy: true,
+    role: 'admin',
   });
   return user;
 };
@@ -178,7 +161,7 @@ const getUserById = async (id) => {
  * @param {string} phoneNumber
  * @returns {Promise<User>}
  */
-const getUserByPhoneNumber = async (phoneNumber) => User.findOne({ phoneNumber });
+const getUserByLoginId = async (loginId) => User.findOne({ loginId });
 
 /**
  * Update user by id
@@ -264,7 +247,7 @@ module.exports = {
   createUserKakao,
   queryUsers,
   getUserById,
-  getUserByPhoneNumber,
+  getUserByLoginId,
   updateUserById,
   updateUserByAutoFit,
   deleteUserById,
