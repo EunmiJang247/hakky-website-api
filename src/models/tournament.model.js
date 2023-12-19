@@ -3,37 +3,40 @@ const { toJSON, paginate } = require('./plugins');
 
 const tournamentSchema = mongoose.Schema(
   {
-    leagueId: {
-      type: mongoose.Types.ObjectId,
-      ref: 'League',
-      required: true,
-    },
     divisionId: {
       type: mongoose.Types.ObjectId,
       ref: 'Division',
       required: true,
     },
+    tournamentDate: {
+      type: Date,
+      required: true,
+    },
+    venuePlace: {
+      type: String,
+      required: true,
+    },
+    time: {
+      type: String,
+      required: true,
+    },
+    supervisor: {
+      type: String,
+      required: true,
+    },
+    referee: {
+      type: String,
+      required: true,
+    },
     homeTeamId: {
       type: mongoose.Types.ObjectId,
       ref: 'Division',
-      required: true,
+      required: false,
     },
     awayTeamId: {
       type: mongoose.Types.ObjectId,
       ref: 'Division',
-      required: true,
-    },
-    leagueName: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    team: {
-      type: Array,
-      require: false,
+      required: false,
     },
   },
   {
