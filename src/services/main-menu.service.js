@@ -1,6 +1,17 @@
 const httpStatus = require('http-status');
-const { MainMenu } = require('../models');
+const { MainMenu, Division } = require('../models');
 const ApiError = require('../utils/ApiError');
+
+const leagueSerializer = async (league) => {
+  const divisionsFromServer = await Division.find({ leagueId: league.id });
+  const divisions = divisionsFromServer.map((d) => ({ divisionName: d.name, divisionId: d.id }));
+
+  return {
+    id: league.id,
+    name: league.name,
+    divisions,
+  };
+};
 
 /**
  * Query for faqs
@@ -11,7 +22,9 @@ const ApiError = require('../utils/ApiError');
 const queryMainMenu = async () => {
   const mainMenus = await MainMenu.find();
   const menuArray = mainMenus[0].menus;
-  return menuArray;
+  // 리그의 디비전들을 돌려줌
+  const result = await Promise.all(menuArray.map(leagueSerializer));
+  return result;
 };
 
 /**
