@@ -13,6 +13,6 @@ router
   .route('/:tournamentId')
   .get(auth('ADMIN'), validate(tournamentValidation.getTournament), tournamentController.getTournament)
   .patch(auth('ADMIN'), validate(tournamentValidation.updateTournament), tournamentController.updateTournament)
-  .delete(auth('ADMIN'), validate(tournamentValidation.getTournaments), tournamentController.getTournaments);
+  .delete(auth('ADMIN'), validate(tournamentValidation.getTournaments), tournamentController.deleteTournament);
 
 module.exports = router;

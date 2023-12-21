@@ -88,10 +88,20 @@ const queryTournamentsCalendar = async ({ startDate, endDate }) => {
   return result;
 };
 
+const deleteTournamentById = async (tournamentId) => {
+  const team = await getTournamentById(tournamentId);
+  if (!team) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
+  }
+  await team.remove();
+  return team;
+};
+
 module.exports = {
   createTournament,
   queryTournaments,
   getTournamentById,
   updateTournamentById,
   queryTournamentsCalendar,
+  deleteTournamentById,
 };

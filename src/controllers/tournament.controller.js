@@ -33,10 +33,16 @@ const getTournamentsCalendar = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const deleteTournament = catchAsync(async (req, res) => {
+  await tournamentService.deleteTournamentById(req.params.tournamentId);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   createTournaments,
   getTournament,
   updateTournament,
   getTournaments,
   getTournamentsCalendar,
+  deleteTournament,
 };
