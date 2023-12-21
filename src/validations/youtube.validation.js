@@ -3,7 +3,6 @@ const { objectId } = require('./custom.validation');
 
 const createYoutube = {
   body: Joi.object().keys({
-    name: Joi.string().required(),
     link: Joi.string().required(),
   }),
 };
@@ -21,8 +20,18 @@ const getYoutube = {
   }),
 };
 
+const updateYoutube = {
+  params: Joi.object().keys({
+    youtubeId: Joi.required().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    link: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createYoutube,
   getYoutubes,
   getYoutube,
+  updateYoutube,
 };

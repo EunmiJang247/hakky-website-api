@@ -38,6 +38,30 @@ const tournamentSchema = mongoose.Schema(
       ref: 'Division',
       required: false,
     },
+    optionsGoalsHome: {
+      type: Array,
+      required: false,
+    },
+    optionPaneltiesHome: {
+      type: Array,
+      required: false,
+    },
+    optionGoalieSavesHome: {
+      type: Array,
+      required: false,
+    },
+    optionsGoalsAway: {
+      type: Array,
+      required: false,
+    },
+    optionPaneltiesAway: {
+      type: Array,
+      required: false,
+    },
+    optionGoalieSavesAway: {
+      type: Array,
+      required: false,
+    },
   },
   {
     timestamps: true,

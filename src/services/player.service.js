@@ -16,12 +16,17 @@ const createPlayer = async (playerBody) => Player.create(playerBody);
  * @returns {Promise<QueryResult>}
  */
 const queryPlayers = async ({ limit, skip }) => {
-  const teams = await Player.find().limit(limit).skip(skip);
+  const players = await Player.find().limit(limit).skip(skip);
   const count = await Player.countDocuments();
   return {
-    result: teams,
+    result: players,
     count,
   };
+};
+
+const queryActivePlayersWithTeamId = async (teamId) => {
+  const players = await Player.find({ teamId });
+  return players;
 };
 
 /**
@@ -65,6 +70,7 @@ const deletePlayerById = async (playerId) => {
 module.exports = {
   createPlayer,
   queryPlayers,
+  queryActivePlayersWithTeamId,
   getPlayerById,
   updatePlayerById,
   deletePlayerById,

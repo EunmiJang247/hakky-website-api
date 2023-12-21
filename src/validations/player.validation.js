@@ -11,7 +11,7 @@ const createPlayer = {
     height: Joi.string().required(),
     birth: Joi.string().required(),
     backNumber: Joi.string().required(),
-    teamName: Joi.string().required(),
+    teamId: Joi.string().custom(objectId),
     active: Joi.string().required(),
   }),
 };

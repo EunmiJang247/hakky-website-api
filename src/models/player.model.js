@@ -35,8 +35,9 @@ const playerSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    teamName: {
-      type: String,
+    teamId: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Team',
       required: true,
     },
     active: {

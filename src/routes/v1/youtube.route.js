@@ -11,7 +11,7 @@ router.route('/').get(validate(youtubeValidation.getYoutubes), youtubeController
 router
   .route('/:youtubeId')
   .get(auth('ADMIN'), validate(youtubeValidation.getYoutube), youtubeController.getYoutube)
-  .patch(auth('ADMIN'), validate(youtubeValidation.createYoutube), youtubeController.updateYoutube)
+  .patch(auth('ADMIN'), validate(youtubeValidation.updateYoutube), youtubeController.updateYoutube)
   .delete(auth('ADMIN'), validate(youtubeValidation.getYoutube), youtubeController.deleteYoutube);
 
 module.exports = router;

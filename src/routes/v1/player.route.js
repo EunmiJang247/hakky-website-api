@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.route('/').post(validate(playerValidation.createPlayer), playerController.createPlayer);
 router.route('/').get(validate(playerValidation.getPlayers), playerController.getPlayers);
+router.route('/active').get(playerController.getActivePlayers);
 router
   .route('/:playerId')
   .get(auth('ADMIN'), validate(playerValidation.getPlayer), playerController.getPlayer)

@@ -8,11 +8,11 @@ const router = express.Router();
 
 router.route('/').post(auth('ADMIN'), validate(tournamentValidation.createTournaments), tournamentController.createTournaments);
 router.route('/').get(validate(tournamentValidation.getTournaments), tournamentController.getTournaments);
-router.route('/calendar').get(validate(tournamentValidation.getTournaments), tournamentController.getTournamentsCalendar);
+router.route('/calendar').get(validate(tournamentValidation.getTournamentsCalendar), tournamentController.getTournamentsCalendar);
 router
   .route('/:tournamentId')
-  .get(auth('ADMIN'), validate(tournamentValidation.getTournaments), tournamentController.getTournaments)
-  .patch(auth('ADMIN'), validate(tournamentValidation.getTournaments), tournamentController.getTournaments)
+  .get(auth('ADMIN'), validate(tournamentValidation.getTournament), tournamentController.getTournament)
+  .patch(auth('ADMIN'), validate(tournamentValidation.updateTournament), tournamentController.updateTournament)
   .delete(auth('ADMIN'), validate(tournamentValidation.getTournaments), tournamentController.getTournaments);
 
 module.exports = router;

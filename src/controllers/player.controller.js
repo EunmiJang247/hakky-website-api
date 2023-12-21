@@ -34,10 +34,16 @@ const deletePlayer = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getActivePlayers = catchAsync(async (req, res) => {
+  const result = await playerService.queryActivePlayersWithTeamId(req.query.teamId);
+  res.send(result);
+});
+
 module.exports = {
   createPlayer,
   getPlayers,
   getPlayer,
   updatePlayer,
   deletePlayer,
+  getActivePlayers,
 };

@@ -3,10 +3,6 @@ const { toJSON, paginate } = require('./plugins');
 
 const youtubeSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     link: {
       type: String,
       required: true,
