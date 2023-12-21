@@ -32,7 +32,7 @@ const updateLeague = {
       name: Joi.string().required(),
       year: Joi.string().required(),
       active: Joi.string().required(),
-      regulation: Joi.string().required(),
+      regulation: Joi.string().allow(''),
     })
     .min(1),
 };

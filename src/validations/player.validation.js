@@ -43,7 +43,7 @@ const updatePlayer = {
       height: Joi.string().required(),
       birth: Joi.string().required(),
       backNumber: Joi.string().required(),
-      teamName: Joi.string().required(),
+      teamId: Joi.string().required(),
       active: Joi.string().required(),
     })
     .min(1),

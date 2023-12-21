@@ -17,7 +17,7 @@ const leagueSchema = mongoose.Schema(
     },
     regulation: {
       type: String,
-      required: true,
+      required: false,
     },
   },
   {
