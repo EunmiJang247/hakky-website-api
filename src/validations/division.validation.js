@@ -5,7 +5,6 @@ const { objectId } = require('./custom.validation');
 const createDivision = {
   body: Joi.object().keys({
     leagueId: Joi.string().required(),
-    leagueName: Joi.string().required(),
     name: Joi.string().required(),
     team: Joi.array().items(Joi.object().keys({
       id: Joi.string().required(),

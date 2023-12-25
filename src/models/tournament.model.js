@@ -62,6 +62,22 @@ const tournamentSchema = mongoose.Schema(
       type: Array,
       required: false,
     },
+    optionsPlayersHome: {
+      type: Array,
+      required: false,
+    },
+    optionsPlayersAway: {
+      type: Array,
+      required: false,
+    },
+    teams: {
+      type: Object,
+      required: false,
+    },
+    players: {
+      type: Object,
+      required: false,
+    },
   },
   {
     timestamps: true,

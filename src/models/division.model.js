@@ -8,15 +8,19 @@ const divisionSchema = mongoose.Schema(
       ref: 'League',
       required: true,
     },
-    leagueName: {
-      type: String,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
     },
     team: {
+      type: Array,
+      require: false,
+    },
+    playerScore: {
+      type: Array,
+      require: false,
+    },
+    teamScore: {
       type: Array,
       require: false,
     },

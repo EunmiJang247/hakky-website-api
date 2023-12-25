@@ -9,11 +9,11 @@ const createDivision = catchAsync(async (req, res) => {
 });
 
 const getDivisions = catchAsync(async (req, res) => {
-  const result = await divisionService.queryDivisions({
+  const divisions = await divisionService.queryDivisions({
     limit: req.query.limit,
     skip: req.query.skip,
   });
-  res.send(result);
+  res.send(divisions);
 });
 
 const getDivision = catchAsync(async (req, res) => {

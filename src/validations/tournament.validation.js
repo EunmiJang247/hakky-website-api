@@ -17,6 +17,8 @@ const createTournaments = {
     optionsGoalsAway: Joi.array(),
     optionPaneltiesAway: Joi.array(),
     optionGoalieSavesAway: Joi.array(),
+    optionsPlayersHome: Joi.array(),
+    optionsPlayersAway: Joi.array(),
   }),
 };
 
@@ -58,6 +60,8 @@ const updateTournament = {
     optionsGoalsAway: Joi.array(),
     optionPaneltiesAway: Joi.array(),
     optionGoalieSavesAway: Joi.array(),
+    optionsPlayersHome: Joi.array(),
+    optionsPlayersAway: Joi.array(),
   }),
 };
 
