@@ -71,11 +71,11 @@ const tournamentSchema = mongoose.Schema(
       required: false,
     },
     teams: {
-      type: Object,
+      type: [Object],
       required: false,
     },
     players: {
-      type: Object,
+      type: [Object],
       required: false,
     },
   },

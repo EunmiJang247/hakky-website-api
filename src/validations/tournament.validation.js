@@ -17,8 +17,8 @@ const createTournaments = {
     optionsGoalsAway: Joi.array(),
     optionPaneltiesAway: Joi.array(),
     optionGoalieSavesAway: Joi.array(),
-    optionsPlayersHome: Joi.array(),
     optionsPlayersAway: Joi.array(),
+    optionsPlayersHome: Joi.array(),
   }),
 };
 
@@ -30,6 +30,15 @@ const getTournamentsCalendar = {
 };
 
 const getTournaments = {
+  query: Joi.object().keys({
+    divisionId: Joi.string().required(),
+  }),
+};
+
+const deleteTournaments = {
+  params: Joi.object().keys({
+    tournamentId: Joi.string().required(),
+  }),
   query: Joi.object().keys({
     divisionId: Joi.string().required(),
   }),
@@ -54,14 +63,14 @@ const updateTournament = {
     referee: Joi.string().required(),
     homeTeamId: Joi.string().custom(objectId).required(),
     awayTeamId: Joi.string().custom(objectId).required(),
+    optionsPlayersHome: Joi.array(),
+    optionsPlayersAway: Joi.array(),
     optionsGoalsHome: Joi.array(),
     optionPaneltiesHome: Joi.array(),
     optionGoalieSavesHome: Joi.array(),
     optionsGoalsAway: Joi.array(),
     optionPaneltiesAway: Joi.array(),
     optionGoalieSavesAway: Joi.array(),
-    optionsPlayersHome: Joi.array(),
-    optionsPlayersAway: Joi.array(),
   }),
 };
 
@@ -71,4 +80,5 @@ module.exports = {
   getTournaments,
   getTournament,
   updateTournament,
+  deleteTournaments,
 };

@@ -109,12 +109,12 @@ const queryTournamentsCalendar = async ({ startDate, endDate }) => {
 };
 
 const deleteTournamentById = async (tournamentId) => {
-  const team = await getTournamentById(tournamentId);
-  if (!team) {
+  const tournament = await getTournamentById(tournamentId);
+  if (!tournament) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
   }
-  await team.remove();
-  return team;
+  await tournament.remove();
+  return tournament;
 };
 
 const tournamentParse = (req) => {
@@ -138,14 +138,14 @@ const tournamentParse = (req) => {
   if (req.body.homeTeamId) {
     const index = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
     if (index === -1) {
-      teams.push({ teamId: req.body.homeTeamId, score: {} });
+      teams.push({ teamId: req.body.homeTeamId, score: { goal: 0 } });
     }
   }
 
   if (req.body.awayTeamId) {
     const index = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
     if (index === -1) {
-      teams.push({ teamId: req.body.awayTeamId, score: {} });
+      teams.push({ teamId: req.body.awayTeamId, score: { goal: 0 } });
     }
   }
 

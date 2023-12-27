@@ -296,6 +296,9 @@ const parseTournamentResult = async (divisionId) => {
       }
 
       if ((homeTeamGoalCount === awayTeamGoalCount) && !awayTeamOTGoalTrue && !awayTeamOTGoalTrue) {
+        if (homeTeamGoalCount === 0 && awayTeamGoalCount === 0) {
+          return '';
+        }
         return 'Tie';
       }
     };
