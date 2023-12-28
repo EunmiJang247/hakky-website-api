@@ -1,16 +1,5 @@
 const express = require('express');
-const reservationRouter = require('./reservation.route');
-const paymentRouter = require('./payment.route');
-const optionRouter = require('./option.route');
 const userRouter = require('./user.route');
-const portfolioRouter = require('./portfolio.route');
-const bannerRouter = require('./banner.route');
-const scheduleRouter = require('./schedule.route');
-const includeScheduleRouter = require('./include-schedule.route');
-const excludeScheduleRouter = require('./exclude-schedule.route');
-const productRouter = require('./product.route');
-const placeRouter = require('./place.route');
-const noticeRouter = require('./notice.route');
 const teamRouter = require('./team.route');
 const tournamentRouter = require('./tournament.route');
 const divisionRouter = require('./division.route');
@@ -55,52 +44,8 @@ const defaultRoutes = [
     route: playerRouter,
   },
   {
-    path: '/reservation',
-    route: reservationRouter,
-  },
-  {
-    path: '/payment',
-    route: paymentRouter,
-  },
-  {
-    path: '/option',
-    route: optionRouter,
-  },
-  {
-    path: '/banner',
-    route: bannerRouter,
-  },
-  {
     path: '/user',
     route: userRouter,
-  },
-  {
-    path: '/place',
-    route: placeRouter,
-  },
-  {
-    path: '/portfolio',
-    route: portfolioRouter,
-  },
-  {
-    path: '/schedule',
-    route: scheduleRouter,
-  },
-  {
-    path: '/include-schedule',
-    route: includeScheduleRouter,
-  },
-  {
-    path: '/exclude-schedule',
-    route: excludeScheduleRouter,
-  },
-  {
-    path: '/product',
-    route: productRouter,
-  },
-  {
-    path: '/notice',
-    route: noticeRouter,
   },
   {
     path: '/file',
