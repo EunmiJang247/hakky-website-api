@@ -36,6 +36,8 @@ const createTournament = async (tournamentBody, players, teams) => {
 const tournamentSerializer = async (tournament) => {
   const homeTeam = await Team.findById(tournament.homeTeamId);
   const awayTeam = await Team.findById(tournament.awayTeamId);
+  const homeTeamGoalCount = tournament.teams[0].score.goal + (tournament.teams[0].score.otGoal ? tournament.teams[0].score.otGoal : 0);
+  const awayTeamGoalCount = tournament.teams[1].score.goal + (tournament.teams[1].score.otGoal ? tournament.teams[1].score.otGoal : 0);
 
   return {
     id: tournament._id,
@@ -51,6 +53,10 @@ const tournamentSerializer = async (tournament) => {
     updatedAt: tournament.updatedAt,
     homeTeamName: homeTeam.name,
     awayTeamName: awayTeam.name,
+    teams: tournament.teams,
+    players: tournament.players,
+    homeTeamGoalCount,
+    awayTeamGoalCount,
   };
 };
 
@@ -66,12 +72,32 @@ const queryTournaments = async ({ divisionId }) => {
 
 const getTournamentById = async (id) => Tournament.findById(id);
 
-const updateTournamentById = async (tournamentId, updateBody) => {
+const updateTournamentById = async (tournamentId, updateBody, players, teams) => {
   const tournament = await getTournamentById(tournamentId);
   if (!tournament) {
     throw new ApiError(httpStatus.NOT_FOUND, 'playerId not found');
   }
-  Object.assign(tournament, updateBody);
+  const updateTournament = {
+    tournamentDate: updateBody.tournamentDate,
+    awayTeamId: updateBody.awayTeamId,
+    homeTeamId: updateBody.homeTeamId,
+    referee: updateBody.referee,
+    supervisor: updateBody.supervisor,
+    time: updateBody.time,
+    venuePlace: updateBody.venuePlace,
+    divisionId: updateBody.divisionId,
+    optionsPlayersHome: updateBody.optionsPlayersHome,
+    optionsPlayersAway: updateBody.optionsPlayersAway,
+    optionsGoalsHome: updateBody.optionsGoalsHome,
+    optionPaneltiesHome: updateBody.optionPaneltiesHome,
+    optionGoalieSavesHome: updateBody.optionGoalieSavesHome,
+    optionsGoalsAway: updateBody.optionsGoalsAway,
+    optionPaneltiesAway: updateBody.optionPaneltiesAway,
+    optionGoalieSavesAway: updateBody.optionGoalieSavesAway,
+    players,
+    teams,
+  };
+  Object.assign(tournament, updateTournament);
   await tournament.save();
   return tournament;
 };

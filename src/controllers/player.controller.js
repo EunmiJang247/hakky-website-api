@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { playerService } = require('../services');
+const { playerService, teamService } = require('../services');
 
 const createPlayer = catchAsync(async (req, res) => {
   const player = await playerService.createPlayer(req.body);
@@ -17,11 +17,26 @@ const getPlayers = catchAsync(async (req, res) => {
 });
 
 const getPlayer = catchAsync(async (req, res) => {
-  const team = await playerService.getPlayerById(req.params.playerId);
-  if (!team) {
+  const player = await playerService.getPlayerById(req.params.playerId);
+  const playerTeam = await teamService.getTeamById(player.teamId);
+  if (!player) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Team not found');
   }
-  res.send(team);
+  const result = {
+    id: player._id,
+    name: player.name,
+    englishName: player.englishName,
+    file: player.file,
+    mainHand: player.mainHand,
+    position: player.position,
+    height: player.height,
+    birth: player.birth,
+    backNumber: player.backNumber,
+    teamId: player.teamId,
+    active: player.active,
+    teamName: playerTeam.name,
+  };
+  res.send(result);
 });
 
 const updatePlayer = catchAsync(async (req, res) => {

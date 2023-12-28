@@ -158,7 +158,9 @@ const getTournament = catchAsync(async (req, res) => {
 });
 
 const updateTournament = catchAsync(async (req, res) => {
-  const result = await tournamentService.updateTournamentById(req.params.tournamentId, req.body);
+  const { players, teams } = tournamentService.tournamentParse(req);
+  const result = await tournamentService.updateTournamentById(req.params.tournamentId, req.body, players, teams);
+
   const division = await divisionService.getDivisionById(req.body.divisionId);
   const { playerScore, teamScore } = await divisionService.parseTournamentResult(req.body.divisionId);
   const divisionBeUpdatedTournament = {
@@ -174,10 +176,10 @@ const updateTournament = catchAsync(async (req, res) => {
 });
 
 const getTournaments = catchAsync(async (req, res) => {
-  const result = await tournamentService.queryTournaments({
+  const tournament = await tournamentService.queryTournaments({
     divisionId: req.query.divisionId,
   });
-  res.send(result);
+  res.send(tournament);
 });
 
 const getTournamentsCalendar = catchAsync(async (req, res) => {
