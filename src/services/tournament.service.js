@@ -1,6 +1,9 @@
 // const httpStatus = require('http-status');
 const httpStatus = require('http-status');
-const { Tournament, Team } = require('../models');
+const _ = require('lodash');
+const {
+  Tournament, Team, Division, Player,
+} = require('../models');
 const ApiError = require('../utils/ApiError');
 // const ApiError = require('../utils/ApiError');
 
@@ -11,15 +14,15 @@ const ApiError = require('../utils/ApiError');
  */
 const createTournament = async (tournamentBody, players, teams) => {
   const tournament = Tournament.create({
-    tournamentDate: tournamentBody.tournamentDate,
-    awayTeamId: tournamentBody.awayTeamId,
-    homeTeamId: tournamentBody.homeTeamId,
-    referee: tournamentBody.referee,
-    supervisor: tournamentBody.supervisor,
-    time: tournamentBody.time,
-    venuePlace: tournamentBody.venuePlace,
     divisionId: tournamentBody.divisionId,
+    tournamentDate: tournamentBody.tournamentDate,
+    time: tournamentBody.time,
+    supervisor: tournamentBody.supervisor,
+    referee: tournamentBody.referee,
+    homeTeamId: tournamentBody.homeTeamId,
+    awayTeamId: tournamentBody.awayTeamId,
     optionsPlayersHome: tournamentBody.optionsPlayersHome,
+    venuePlace: tournamentBody.venuePlace,
     optionsPlayersAway: tournamentBody.optionsPlayersAway,
     optionsGoalsHome: tournamentBody.optionsGoalsHome,
     optionPaneltiesHome: tournamentBody.optionPaneltiesHome,
@@ -33,11 +36,13 @@ const createTournament = async (tournamentBody, players, teams) => {
   return tournament;
 };
 
-const tournamentSerializer = async (tournament) => {
+const tournamentsSerializer = async (tournament) => {
   const homeTeam = await Team.findById(tournament.homeTeamId);
   const awayTeam = await Team.findById(tournament.awayTeamId);
   const homeTeamGoalCount = tournament.teams[0].score.goal + (tournament.teams[0].score.otGoal ? tournament.teams[0].score.otGoal : 0);
   const awayTeamGoalCount = tournament.teams[1].score.goal + (tournament.teams[1].score.otGoal ? tournament.teams[1].score.otGoal : 0);
+  const homeTeamLogo = homeTeam.file;
+  const awayTeamLogo = awayTeam.file;
 
   return {
     id: tournament._id,
@@ -57,12 +62,153 @@ const tournamentSerializer = async (tournament) => {
     players: tournament.players,
     homeTeamGoalCount,
     awayTeamGoalCount,
+    homeTeamLogo,
+    awayTeamLogo,
   };
+};
+
+const tournamentSerializer = async (tournament) => {
+  const homeTeamGoalCount = tournament.teams[0].score.goal + (tournament.teams[0].score.otGoal ? tournament.teams[0].score.otGoal : 0);
+  const awayTeamGoalCount = tournament.teams[1].score.goal + (tournament.teams[1].score.otGoal ? tournament.teams[1].score.otGoal : 0);
+  const division = await Division.findById(tournament.divisionId);
+  const divisionName = division.name;
+  const homeTeam = await Team.findById(tournament.homeTeamId);
+  const homeTeamName = homeTeam.name;
+  const awayTeam = await Team.findById(tournament.awayTeamId);
+  const awayTeamName = awayTeam.name;
+  const homeTeamLogo = homeTeam.file;
+  const awayTeamLogo = awayTeam.file;
+  const optionsGoalsHome = await Promise.all(tournament.optionsGoalsHome.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.goal) {
+      const player = await Player.findById(option.goal);
+      const playerName = player.name;
+      optionCloned.goalPlayerName = playerName;
+    }
+    if (option.a1) {
+      const player = await Player.findById(option.a1);
+      const playerName = player.name;
+      optionCloned.a1PlayerName = playerName;
+    }
+    if (option.a2) {
+      const player = await Player.findById(option.a2);
+      const playerName = player.name;
+      optionCloned.a2PlayerName = playerName;
+    }
+    return optionCloned;
+  }));
+  const optionsGoalsAway = await Promise.all(tournament.optionsGoalsAway.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.goal) {
+      const player = await Player.findById(option.goal);
+      const playerName = player.name;
+      optionCloned.goalPlayerName = playerName;
+    }
+    if (option.a1) {
+      const player = await Player.findById(option.a1);
+      const playerName = player.name;
+      optionCloned.a1PlayerName = playerName;
+    }
+    if (option.a2) {
+      const player = await Player.findById(option.a2);
+      const playerName = player.name;
+      optionCloned.a2PlayerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionsPlayersHome = await Promise.all(tournament.optionsPlayersHome.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.playerId) {
+      const player = await Player.findById(option.playerId);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionsPlayersAway = await Promise.all(tournament.optionsPlayersAway.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.playerId) {
+      const player = await Player.findById(option.playerId);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionPaneltiesHome = await Promise.all(tournament.optionPaneltiesHome.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.no) {
+      const player = await Player.findById(option.no);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionPaneltiesAway = await Promise.all(tournament.optionPaneltiesAway.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.no) {
+      const player = await Player.findById(option.no);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionGoalieSavesHome = await Promise.all(tournament.optionGoalieSavesHome.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.goalie) {
+      const player = await Player.findById(option.goalie);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const optionGoalieSavesAway = await Promise.all(tournament.optionGoalieSavesAway.map(async (option) => {
+    const optionCloned = _.cloneDeep(option);
+    if (option.goalie) {
+      const player = await Player.findById(option.goalie);
+      const playerName = player.name;
+      optionCloned.playerName = playerName;
+    }
+    return optionCloned;
+  }));
+
+  const result = {
+    optionsGoalsHome,
+    optionPaneltiesHome,
+    optionGoalieSavesHome,
+    optionsGoalsAway,
+    optionPaneltiesAway,
+    optionGoalieSavesAway,
+    optionsPlayersHome,
+    optionsPlayersAway,
+    id: tournament._id,
+    tournamentDate: tournament.tournamentDate,
+    awayTeamId: tournament.awayTeamId,
+    homeTeamId: tournament.homeTeamId,
+    referee: tournament.referee,
+    supervisor: tournament.supervisor,
+    time: tournament.time,
+    venuePlace: tournament.venuePlace,
+    divisionId: tournament.divisionId,
+    divisionName,
+    homeTeamName,
+    awayTeamName,
+    homeTeamGoalCount,
+    awayTeamGoalCount,
+    homeTeamLogo,
+    awayTeamLogo,
+  };
+  return result;
 };
 
 const queryTournaments = async ({ divisionId }) => {
   const tournaments = await Tournament.find({ divisionId });
-  const result = await Promise.all(tournaments.map(tournamentSerializer));
+  const result = await Promise.all(tournaments.map(tournamentsSerializer));
   const count = await Tournament.countDocuments();
   return {
     result,
@@ -70,10 +216,14 @@ const queryTournaments = async ({ divisionId }) => {
   };
 };
 
-const getTournamentById = async (id) => Tournament.findById(id);
+const getTournamentById = async (id) => {
+  const tournament = await Tournament.findById(id);
+  const result = await tournamentSerializer(tournament);
+  return result;
+};
 
 const updateTournamentById = async (tournamentId, updateBody, players, teams) => {
-  const tournament = await getTournamentById(tournamentId);
+  const tournament = await Tournament.findById(tournamentId);
   if (!tournament) {
     throw new ApiError(httpStatus.NOT_FOUND, 'playerId not found');
   }

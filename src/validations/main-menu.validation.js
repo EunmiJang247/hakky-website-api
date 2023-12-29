@@ -5,7 +5,6 @@ const updateMainMenu = {
     .items(
       Joi.object({
         id: Joi.string(),
-        name: Joi.string(),
       }),
     )
     .required(),

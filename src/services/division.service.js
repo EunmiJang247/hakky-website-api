@@ -4,6 +4,7 @@ const {
   League,
   Tournament,
   Team,
+  Player,
 } = require('../models');
 const ApiError = require('../utils/ApiError');
 
@@ -21,6 +22,21 @@ const divisionSerializer = async (division) => {
     const teamName = team.name;
     return { id: t.id, name: teamName };
   }));
+  const teamScoreResult = await Promise.all(division.teamScore.map(async (t) => {
+    const team = await Team.findById(t.teamId);
+    const teamName = team.name;
+    return { teamId: t.teamId, teamName, score: t.score };
+  }));
+  const playerScoreResult = await Promise.all(division.playerScore.map(async (t) => {
+    const player = await Player.findById(t.playerId);
+    const playerName = player.name;
+    const teamFromServer = await Team.findById(player.teamId);
+    const playerTeamName = teamFromServer.name;
+
+    return {
+      playerId: t.playerId, playerName, score: t.score, playerTeamName,
+    };
+  }));
 
   return {
     id: division._id,
@@ -28,6 +44,8 @@ const divisionSerializer = async (division) => {
     leagueId: division.leagueId,
     leagueName: leagueInfo.name,
     name: division.name,
+    teamScore: teamScoreResult,
+    playerScore: playerScoreResult,
   };
 };
 

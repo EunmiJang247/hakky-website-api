@@ -1,14 +1,15 @@
 const httpStatus = require('http-status');
-const { MainMenu, Division } = require('../models');
+const { MainMenu, Division, League } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const leagueSerializer = async (league) => {
   const divisionsFromServer = await Division.find({ leagueId: league.id });
   const divisions = divisionsFromServer.map((d) => ({ divisionName: d.name, divisionId: d.id }));
+  const leagueFromServer = await League.findById(league.id);
 
   return {
     id: league.id,
-    name: league.name,
+    name: leagueFromServer.name,
     divisions,
   };
 };
