@@ -28,15 +28,16 @@ const divisionSerializer = async (division) => {
     return { teamId: t.teamId, teamName, score: t.score };
   }));
   const playerScoreResult = await Promise.all(division.playerScore.map(async (t) => {
-    const player = await Player.findById(t.playerId);
-    const playerName = player.name;
-    const { position } = player;
-    const teamFromServer = await Team.findById(player.teamId);
-    const playerTeamName = teamFromServer.name;
-
-    return {
-      playerId: t.playerId, playerName, position, score: t.score, playerTeamName,
-    };
+    if (t.playerId) {
+      const player = await Player.findById(t.playerId);
+      const playerName = player.name;
+      const { position } = player;
+      const teamFromServer = await Team.findById(player.teamId);
+      const playerTeamName = teamFromServer.name;
+      return {
+        playerId: t.playerId, playerName, position, score: t.score, playerTeamName,
+      };
+    }
   }));
 
   return {
@@ -53,7 +54,6 @@ const divisionSerializer = async (division) => {
 const queryDivisions = async ({ limit, skip }) => {
   const divisions = await Division.find().limit(limit).skip(skip);
   const count = await Division.countDocuments();
-
   const result = await Promise.all(divisions.map(divisionSerializer));
   return {
     result,

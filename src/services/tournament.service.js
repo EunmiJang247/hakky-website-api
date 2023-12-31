@@ -2,7 +2,7 @@
 const httpStatus = require('http-status');
 const _ = require('lodash');
 const {
-  Tournament, Team, Division, Player,
+  Tournament, Team, Division, Player, League,
 } = require('../models');
 const ApiError = require('../utils/ApiError');
 // const ApiError = require('../utils/ApiError');
@@ -72,6 +72,8 @@ const tournamentSerializer = async (tournament) => {
   const awayTeamGoalCount = tournament.teams[1].score.goal + (tournament.teams[1].score.otGoal ? tournament.teams[1].score.otGoal : 0);
   const division = await Division.findById(tournament.divisionId);
   const divisionName = division.name;
+  const league = await League.findById(division.leagueId);
+  const { year } = league;
   const homeTeam = await Team.findById(tournament.homeTeamId);
   const homeTeamName = homeTeam.name;
   const awayTeam = await Team.findById(tournament.awayTeamId);
@@ -202,6 +204,7 @@ const tournamentSerializer = async (tournament) => {
     awayTeamGoalCount,
     homeTeamLogo,
     awayTeamLogo,
+    year,
   };
   return result;
 };
