@@ -40,7 +40,7 @@ const getTeamById = async (id) => Team.findById(id);
 const updateTeamById = async (teamId, updateBody) => {
   const team = await getTeamById(teamId);
   if (!team) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Faq not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'Team not found');
   }
   Object.assign(team, updateBody);
   await team.save();

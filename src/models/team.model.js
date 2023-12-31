@@ -3,6 +3,22 @@ const { toJSON, paginate } = require('./plugins');
 
 const teamSchema = mongoose.Schema(
   {
+    viceChiefName: {
+      type: String,
+      required: true,
+    },
+    place: {
+      type: String,
+      required: true,
+    },
+    pd: {
+      type: String,
+      required: true,
+    },
+    coach: {
+      type: String,
+      required: true,
+    },
     name: {
       type: String,
       required: true,

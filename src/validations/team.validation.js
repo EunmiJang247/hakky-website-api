@@ -3,6 +3,10 @@ const { objectId } = require('./custom.validation');
 
 const createTeam = {
   body: Joi.object().keys({
+    viceChiefName: Joi.string().required(),
+    place: Joi.string().required(),
+    pd: Joi.string().required(),
+    coach: Joi.string().required(),
     borrowTime: Joi.string().required(),
     chiefName: Joi.string().required(),
     name: Joi.string().required(),
@@ -30,6 +34,10 @@ const updateTeam = {
   }),
   body: Joi.object()
     .keys({
+      viceChiefName: Joi.string().required(),
+      place: Joi.string().required(),
+      pd: Joi.string().required(),
+      coach: Joi.string().required(),
       borrowTime: Joi.string().required(),
       chiefName: Joi.string().required(),
       name: Joi.string().required(),

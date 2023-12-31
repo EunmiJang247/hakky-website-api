@@ -30,11 +30,12 @@ const divisionSerializer = async (division) => {
   const playerScoreResult = await Promise.all(division.playerScore.map(async (t) => {
     const player = await Player.findById(t.playerId);
     const playerName = player.name;
+    const { position } = player;
     const teamFromServer = await Team.findById(player.teamId);
     const playerTeamName = teamFromServer.name;
 
     return {
-      playerId: t.playerId, playerName, score: t.score, playerTeamName,
+      playerId: t.playerId, playerName, position, score: t.score, playerTeamName,
     };
   }));
 
@@ -128,6 +129,27 @@ const parseTournamentResult = async (divisionId) => {
       if (teams[k].score.otGoal > 0) {
         otGoalCout += 1;
       }
+    }
+    if (goalsCount === 0 && otGoalCout === 0) {
+      teams.forEach((team) => {
+        const index = teamScore.findIndex(((score) => score.teamId === team.teamId));
+        if (index === -1) {
+          teamScore.push({ teamId: team.teamId, score: { GP: 0 } });
+        } else {
+          const gamesPlayed = teamScore[index].score.GP ? Number(teamScore[index].score.GP) : 0;
+          teamScore[index].score.GP = gamesPlayed;
+        }
+
+        players.forEach((playerRecord) => {
+          const indexPlayer = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
+          if (indexPlayer === -1) {
+            playerScore.push({ playerId: playerRecord.playerId, score: { GP: 0 } });
+          } else {
+            const gamesPlayed = playerScore[indexPlayer].score.GP ? Number(playerScore[indexPlayer].score.GP) : 0;
+            playerScore[indexPlayer].score.GP = gamesPlayed;
+          }
+        });
+      });
     }
     if (goalsCount !== 0 || (goalsCount === 0 && otGoalCout !== 0)) {
       // GP player
@@ -481,6 +503,21 @@ const parseTournamentResult = async (divisionId) => {
   return { playerScore, teamScore };
 };
 
+const getAllDivisionsWithTeamId = async (teamId) => {
+  const allDivisions = await Division.find({ teamScore: { $elemMatch: { teamId } } });
+  const divisionScroe = allDivisions.map((d) => {
+    const teamScore = d.teamScore.find((score) => score.teamId === teamId);
+    const result = {
+      leagueId: d.leagueId,
+      name: d.name,
+      teamScore,
+      playerScore: d.playerScore,
+    };
+    return result;
+  });
+  return divisionScroe;
+};
+
 module.exports = {
   createDivision,
   queryDivisions,
@@ -488,4 +525,5 @@ module.exports = {
   updateDivisionById,
   deleteDivisionById,
   parseTournamentResult,
+  getAllDivisionsWithTeamId,
 };

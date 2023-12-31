@@ -10,6 +10,13 @@ router.route('/').post(validate(teamValidation.createTeam), teamController.creat
 router.route('/').get(validate(teamValidation.getTeams), teamController.getTeams);
 router.route('/active').get(teamController.getActiveTeams);
 router
+  .route('/yearly-score/:teamId')
+  .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeamYearlyScore);
+router
+  .route('/players/:teamId')
+  .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeamPlayers);
+
+router
   .route('/:teamId')
   .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeam)
   .patch(auth('ADMIN'), validate(teamValidation.updateTeam), teamController.updateTeam)
