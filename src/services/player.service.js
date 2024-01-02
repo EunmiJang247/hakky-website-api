@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Player } = require('../models');
+const { Player, Tournament } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -18,6 +18,15 @@ const createPlayer = async (playerBody) => Player.create(playerBody);
 const queryPlayers = async ({ limit, skip }) => {
   const players = await Player.find().limit(limit).skip(skip).populate('teamId', 'name');
   const count = await Player.countDocuments();
+  return {
+    result: players,
+    count,
+  };
+};
+
+const queryPlayersByTeam = async ({ limit, skip, teamId }) => {
+  const players = await Player.find({ teamId }).limit(limit).skip(skip);
+  const count = await Player.find({ teamId }).countDocuments();
   return {
     result: players,
     count,
@@ -59,17 +68,23 @@ const updatePlayerById = async (playerId, updateBody) => {
  */
 
 const deletePlayerById = async (playerId) => {
-  const team = await getPlayerById(playerId);
-  if (!team) {
+  const player = await getPlayerById(playerId);
+  if (!player) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
   }
-  await team.remove();
-  return team;
+  // 등록되어있는 대회가 있으면 삭제 못함
+  const tournament = await Tournament.find({ players: { $elemMatch: { playerId } } });
+  if (tournament.length > 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Resist Tournament Exist');
+  }
+  await player.remove();
+  return player;
 };
 
 module.exports = {
   createPlayer,
   queryPlayers,
+  queryPlayersByTeam,
   queryActivePlayersWithTeamId,
   getPlayerById,
   updatePlayerById,

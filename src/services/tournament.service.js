@@ -288,7 +288,7 @@ const queryTournamentsCalendar = async ({ startDate, endDate }) => {
 };
 
 const deleteTournamentById = async (tournamentId) => {
-  const tournament = await getTournamentById(tournamentId);
+  const tournament = await Tournament.findById(tournamentId);
   if (!tournament) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Player not found');
   }
@@ -561,10 +561,10 @@ const tournamentParse = (req) => {
       const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
       if (index === -1) {
-        players.push({ playerId: goalieHome.goalie, score: { goalsBlocked: Number(goalieHome.total), acceptGoal: Number(goalieHome.acceptGoal), runningTime: Number(goalieHome.runningTime) } });
+        players.push({ playerId: goalieHome.goalie, score: { goalsBlocked: Number(goalieHome.total), goalsAccepted: Number(goalieHome.acceptGoal), runningTime: Number(goalieHome.runningTime) } });
       } else {
         const goalsBlocked = players[index].score.goalsBlocked ? Number(players[index].score.goalsBlocked) + Number(goalieHome.total) : Number(goalieHome.total);
-        const goalsAccepted = players[index].score.acceptGoal ? Number(players[index].score.acceptGoal) + Number(goalieHome.acceptGoal) : Number(goalieHome.acceptGoal);
+        const goalsAccepted = players[index].score.goalsAccepted ? Number(players[index].score.goalsAccepted) + Number(goalieHome.acceptGoal) : Number(goalieHome.acceptGoal);
         const runningTime = players[index].score.runningTime ? Number(players[index].score.runningTime) + Number(goalieHome.runningTime) : Number(goalieHome.runningTime);
         players[index].score.goalsBlocked = goalsBlocked;
         players[index].score.goalsAccepted = goalsAccepted;
@@ -575,7 +575,7 @@ const tournamentParse = (req) => {
         teams.push({ teamId: req.body.homeTeamId, score: { goalsBlocked: Number(goalieHome.total), goalsAccepted: Number(goalieHome.acceptGoal) } });
       } else {
         const goalsBlockedTeam = teams[indexTeam].score.goalsBlocked ? Number(teams[indexTeam].score.goalsBlocked) + Number(goalieHome.total) : Number(goalieHome.total);
-        const goalsAccepted = teams[indexTeam].score.acceptGoal ? Number(teams[indexTeam].score.acceptGoal) + Number(goalieHome.acceptGoal) : Number(goalieHome.acceptGoal);
+        const goalsAccepted = teams[indexTeam].score.goalsAccepted ? Number(teams[indexTeam].score.goalsAccepted) + Number(goalieHome.acceptGoal) : Number(goalieHome.acceptGoal);
         teams[indexTeam].score.goalsBlocked = goalsBlockedTeam;
         teams[indexTeam].score.goalsAccepted = goalsAccepted;
       }
@@ -588,10 +588,10 @@ const tournamentParse = (req) => {
       const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
       if (index === -1) {
-        players.push({ playerId: goalieAway.goalie, score: { goalsBlocked: Number(goalieAway.total), acceptGoal: Number(goalieAway.acceptGoal), runningTime: Number(goalieAway.runningTime) } });
+        players.push({ playerId: goalieAway.goalie, score: { goalsBlocked: Number(goalieAway.total), goalsAccepted: Number(goalieAway.acceptGoal), runningTime: Number(goalieAway.runningTime) } });
       } else {
         const goalsBlocked = players[index].score.goalsBlocked ? Number(players[index].score.goalsBlocked) + Number(goalieAway.total) : Number(goalieAway.total);
-        const goalsAccepted = players[index].score.acceptGoal ? Number(players[index].score.acceptGoal) + Number(goalieAway.acceptGoal) : Number(goalieAway.acceptGoal);
+        const goalsAccepted = players[index].score.goalsAccepted ? Number(players[index].score.goalsAccepted) + Number(goalieAway.acceptGoal) : Number(goalieAway.acceptGoal);
         const runningTime = players[index].score.runningTime ? Number(players[index].score.runningTime) + Number(goalieAway.runningTime) : Number(goalieAway.runningTime);
         players[index].score.goalsBlocked = goalsBlocked;
         players[index].score.goalsAccepted = goalsAccepted;
@@ -602,7 +602,7 @@ const tournamentParse = (req) => {
         teams.push({ teamId: req.body.awayTeamId, score: { goalsBlocked: Number(goalieAway.total), goalsAccepted: Number(goalieAway.acceptGoal) } });
       } else {
         const goalsBlockedTeam = teams[indexTeam].score.goalsBlocked ? Number(teams[indexTeam].score.goalsBlocked) + Number(goalieAway.total) : Number(goalieAway.total);
-        const goalsAccepted = teams[indexTeam].score.acceptGoal ? Number(teams[indexTeam].score.acceptGoal) + Number(goalieAway.acceptGoal) : Number(goalieAway.acceptGoal);
+        const goalsAccepted = teams[indexTeam].score.goalsAccepted ? Number(teams[indexTeam].score.goalsAccepted) + Number(goalieAway.acceptGoal) : Number(goalieAway.acceptGoal);
         teams[indexTeam].score.goalsBlocked = goalsBlockedTeam;
         teams[indexTeam].score.goalsAccepted = goalsAccepted;
       }

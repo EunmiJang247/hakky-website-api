@@ -9,7 +9,7 @@ const playerSchema = mongoose.Schema(
     },
     englishName: {
       type: String,
-      required: true,
+      required: false,
     },
     file: {
       type: Object,
@@ -17,7 +17,7 @@ const playerSchema = mongoose.Schema(
     },
     mainHand: {
       type: String,
-      required: true,
+      required: false,
     },
     position: {
       type: String,
@@ -25,11 +25,11 @@ const playerSchema = mongoose.Schema(
     },
     height: {
       type: String,
-      required: true,
+      required: false,
     },
     birth: {
       type: String,
-      required: true,
+      required: false,
     },
     backNumber: {
       type: String,

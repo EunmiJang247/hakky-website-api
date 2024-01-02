@@ -96,12 +96,16 @@ const updateDivisionById = async (divisionId, updateBody) => {
  */
 
 const deleteDivisionById = async (divisionId) => {
-  const team = await getDivisionById(divisionId);
-  if (!team) {
+  const division = await Division.findById(divisionId);
+  if (!division) {
     throw new ApiError(httpStatus.NOT_FOUND, 'division not found');
   }
-  await team.remove();
-  return team;
+  const tournaments = await Tournament.find({ divisionId });
+  if (tournaments.length > 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'RegistTournamentExist');
+  }
+  await division.remove();
+  return division;
 };
 
 const parseTournamentResult = async (divisionId) => {
@@ -139,20 +143,20 @@ const parseTournamentResult = async (divisionId) => {
           const gamesPlayed = teamScore[index].score.GP ? Number(teamScore[index].score.GP) : 0;
           teamScore[index].score.GP = gamesPlayed;
         }
+      });
 
-        players.forEach((playerRecord) => {
-          const indexPlayer = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (indexPlayer === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { GP: 0 } });
-          } else {
-            const gamesPlayed = playerScore[indexPlayer].score.GP ? Number(playerScore[indexPlayer].score.GP) : 0;
-            playerScore[indexPlayer].score.GP = gamesPlayed;
-          }
-        });
+      players.forEach((playerRecord) => {
+        const indexPlayer = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
+        if (indexPlayer === -1) {
+          playerScore.push({ playerId: playerRecord.playerId, score: { GP: 0 } });
+        } else {
+          const gamesPlayed = playerScore[indexPlayer].score.GP ? Number(playerScore[indexPlayer].score.GP) : 0;
+          playerScore[indexPlayer].score.GP = gamesPlayed;
+        }
       });
     }
     if (goalsCount !== 0 || (goalsCount === 0 && otGoalCout !== 0)) {
-      // GP player
+      // GP player 골이 발생한 경우 GP를 올려준다.
       players.forEach((playerRecord) => {
         const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
         if (index === -1) {
@@ -166,116 +170,83 @@ const parseTournamentResult = async (divisionId) => {
       // player records
       players.forEach((playerRecord) => {
         // 선수의 골이 있는 경우 | G, PTS
-        if (playerRecord.score ? playerRecord.score.goal : false) {
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { G: playerRecord.score.goal, PTS: playerRecord.score.goal } });
-          } else {
-            const goal = playerScore[index].score.G ? Number(playerScore[index].score.G) + playerRecord.score.goal : playerRecord.score.goal;
-            const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.goal : playerRecord.score.goal;
-            playerScore[index].score.G = goal;
-            playerScore[index].score.PTS = pts;
-          }
+        const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
+
+        if (playerRecord.score.goal) {
+          const goal = playerScore[index].score.G ? Number(playerScore[index].score.G) + playerRecord.score.goal : playerRecord.score.goal;
+          const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.goal : playerRecord.score.goal;
+          playerScore[index].score.G = goal;
+          playerScore[index].score.PTS = pts;
         }
 
         // A1, PTS
-        if (playerRecord.score ? playerRecord.score.a1 : false) {
+        if (playerRecord.score.a1) {
           // 선수의 a1이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { A: playerRecord.score.a1, PTS: playerRecord.score.a1 } });
-          } else {
-            const assist = playerScore[index].score.A ? Number(playerScore[index].score.A) + playerRecord.score.a1 : playerRecord.score.a1;
-            const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.a1 : playerRecord.score.a1;
-            playerScore[index].score.A = assist;
-            playerScore[index].score.PTS = pts;
-          }
+          const assist = playerScore[index].score.A ? Number(playerScore[index].score.A) + playerRecord.score.a1 : playerRecord.score.a1;
+          const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.a1 : playerRecord.score.a1;
+          playerScore[index].score.A = assist;
+          playerScore[index].score.PTS = pts;
         }
 
         // A2, PTS
-        if (playerRecord.score ? playerRecord.score.a2 : false) {
+        if (playerRecord.score.a2) {
           // 선수의 a2이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { A: playerRecord.score.a2, PTS: playerRecord.score.a2 } });
-          } else {
-            const assist = playerScore[index].score.A ? Number(playerScore[index].score.A) + playerRecord.score.a2 : playerRecord.score.a2;
-            const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.a2 : playerRecord.score.a2;
-            playerScore[index].score.A = assist;
-            playerScore[index].score.PTS = pts;
-          }
+          const assist = playerScore[index].score.A ? Number(playerScore[index].score.A) + playerRecord.score.a2 : playerRecord.score.a2;
+          const pts = playerScore[index].score.PTS ? Number(playerScore[index].score.PTS) + playerRecord.score.a2 : playerRecord.score.a2;
+          playerScore[index].score.A = assist;
+          playerScore[index].score.PTS = pts;
         }
 
         // PIM
         if (playerRecord.score ? playerRecord.score.penaltyMin : false) {
-          // 선수의 penaltyMin이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { PIM: playerRecord.score.penaltyMin } });
-          } else {
-            const pim = playerScore[index].score.PIM ? Number(playerScore[index].score.PIM) + playerRecord.score.penaltyMin : playerRecord.score.penaltyMin;
-            playerScore[index].score.PIM = pim;
-          }
+          const pim = playerScore[index].score.PIM ? Number(playerScore[index].score.PIM) + playerRecord.score.penaltyMin : playerRecord.score.penaltyMin;
+          playerScore[index].score.PIM = pim;
         }
 
         // P
-        if (playerRecord.score ? playerRecord.score.penaltyCount : false) {
-          // 선수의 penaltyCount이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { P: playerRecord.score.penaltyCount } });
-          } else {
-            const p = playerScore[index].score.P ? Number(playerScore[index].score.P) + playerRecord.score.penaltyCount : playerRecord.score.penaltyCount;
-            playerScore[index].score.P = p;
-          }
+        if (playerRecord.score.penaltyCount) {
+          const p = playerScore[index].score.P ? Number(playerScore[index].score.P) + playerRecord.score.penaltyCount : playerRecord.score.penaltyCount;
+          playerScore[index].score.P = p;
         }
 
         // SA
-        if (playerRecord.score ? playerRecord.score.goalsBlocked : false) {
+        if (playerRecord.score.goalsBlocked) {
           // 선수의 goalsBlocked 이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { SA: playerRecord.score.goalsBlocked } });
-          } else {
-            const sa = playerScore[index].score.SA ? Number(playerScore[index].score.SA) + playerRecord.score.goalsBlocked : playerRecord.score.goalsBlocked;
-            playerScore[index].score.SA = sa;
-          }
+          const sa = playerScore[index].score.SA ? Number(playerScore[index].score.SA) + playerRecord.score.goalsBlocked : playerRecord.score.goalsBlocked;
+          playerScore[index].score.SA = sa;
         }
 
         // GA, SV, SV%
-        if (playerRecord.score ? playerRecord.score.goalsAccepted : false) {
+        if (playerRecord.score.goalsAccepted) {
           // 선수의 goalsAccepted 이 있는 경우
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({
-              playerId: playerRecord.playerId,
-              score: {
-                GA: playerRecord.score.goalsAccepted,
-                SV: playerRecord.score.goalsBlocked - playerRecord.score.goalsAccepted,
-                SVPercent: (1 - (playerRecord.score.goalsAccepted / playerRecord.score.goalsBlocked)) * 100,
-              },
-            });
-          } else {
-            const ga = playerScore[index].score.GA ? Number(playerScore[index].score.GA) + playerRecord.score.goalsAccepted : playerRecord.score.goalsAccepted;
-            const sv = playerScore[index].score.SV
-              ? (Number(playerScore[index].score.SV) + playerRecord.score.goalsBlocked - playerRecord.score.goalsAccepted)
-              : (playerRecord.score.goalsBlocked - playerRecord.score.goalsAccepted);
-            const svPercent = (1 - (playerRecord.score.goalsAccepted / playerRecord.score.goalsBlocked)) * 100;
-            playerScore[index].score.GA = ga;
-            playerScore[index].score.SV = sv;
-            playerScore[index].score.SVPercent = svPercent;
-          }
+          const ga = playerScore[index].score.GA ? Number(playerScore[index].score.GA) + playerRecord.score.goalsAccepted : playerRecord.score.goalsAccepted;
+          playerScore[index].score.GA = ga;
         }
 
+        if (typeof playerScore[index].score.SA === 'undefined' && typeof playerScore[index].score.GA === 'number') {
+          const sv = 0 - playerScore[index].score.GA;
+          const svPercent = 0;
+          playerScore[index].score.SV = sv;
+          playerScore[index].score.SVPercent = svPercent;
+        }
+
+        if (typeof playerScore[index].score.SA === 'number' && typeof playerScore[index].score.GA === 'undefined') {
+          const sv = playerScore[index].score.SA;
+          const svPercent = 1;
+          playerScore[index].score.SV = sv;
+          playerScore[index].score.SVPercent = svPercent;
+        }
+
+        if (typeof playerScore[index].score.SA === 'number' && typeof playerScore[index].score.GA === 'number') {
+          const sv = playerScore[index].score.SA - playerScore[index].score.GA;
+          const svPercent = (1 - (playerScore[index].score.GA / playerScore[index].score.SA)) * 100;
+          playerScore[index].score.SV = sv;
+          playerScore[index].score.SVPercent = svPercent;
+        }
         // TOI
-        if (playerRecord.score ? playerRecord.score.runningTime : false) {
-          const index = playerScore.findIndex(((score) => score.playerId === playerRecord.playerId));
-          if (index === -1) {
-            playerScore.push({ playerId: playerRecord.playerId, score: { runningTime: playerRecord.score.runningTime } });
-          } else {
-            const toi = playerScore[index].score.TOI ? Number(playerScore[index].score.TOI) + playerRecord.score.runningTime : playerRecord.score.runningTime;
-            playerScore[index].score.TOI = toi;
-          }
+        if (playerRecord.score.runningTime) {
+          const toi = playerScore[index].score.TOI ? Number(playerScore[index].score.TOI) + playerRecord.score.runningTime : playerRecord.score.runningTime;
+          playerScore[index].score.TOI = toi;
         }
       });
 
@@ -497,8 +468,24 @@ const parseTournamentResult = async (divisionId) => {
   }
   // GD 계산
   teamScore.forEach((team, index) => {
-    const gd = Number(team.score.GF) - Number(team.score.GA);
-    teamScore[index].score.GD = gd;
+    if (typeof team.score.GF === 'undefined' && typeof team.score.GA === 'undefined') {
+      teamScore[index].score.GD = 0;
+    }
+
+    if (typeof team.score.GF === 'undefined' && typeof team.score.GA === 'number') {
+      const gd = 0 - Number(team.score.GA);
+      teamScore[index].score.GD = gd;
+    }
+
+    if (typeof team.score.GF === 'number' && typeof team.score.GA === 'undefined') {
+      const gd = Number(team.score.GF) - 0;
+      teamScore[index].score.GD = gd;
+    }
+
+    if (typeof team.score.GF === 'number' && typeof team.score.GA === 'number') {
+      const gd = Number(team.score.GF) - Number(team.score.GA);
+      teamScore[index].score.GD = gd;
+    }
   });
   return { playerScore, teamScore };
 };

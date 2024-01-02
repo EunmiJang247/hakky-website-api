@@ -22,11 +22,11 @@ const tournamentSchema = mongoose.Schema(
     },
     supervisor: {
       type: String,
-      required: true,
+      required: false,
     },
     referee: {
       type: String,
-      required: true,
+      required: false,
     },
     homeTeamId: {
       type: mongoose.Types.ObjectId,

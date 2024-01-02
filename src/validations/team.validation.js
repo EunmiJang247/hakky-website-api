@@ -3,15 +3,15 @@ const { objectId } = require('./custom.validation');
 
 const createTeam = {
   body: Joi.object().keys({
-    viceChiefName: Joi.string().required(),
-    place: Joi.string().required(),
-    pd: Joi.string().required(),
-    coach: Joi.string().required(),
-    borrowTime: Joi.string().required(),
-    chiefName: Joi.string().required(),
     name: Joi.string().required(),
-    active: Joi.string().required(),
     file: Joi.object().required(),
+    active: Joi.string().required(),
+    viceChiefName: Joi.string().allow(''),
+    place: Joi.string().allow(''),
+    pd: Joi.string().allow(''),
+    coach: Joi.string().allow(''),
+    borrowTime: Joi.string().allow(''),
+    chiefName: Joi.string().allow(''),
   }),
 };
 
@@ -34,12 +34,12 @@ const updateTeam = {
   }),
   body: Joi.object()
     .keys({
-      viceChiefName: Joi.string().required(),
-      place: Joi.string().required(),
-      pd: Joi.string().required(),
-      coach: Joi.string().required(),
-      borrowTime: Joi.string().required(),
-      chiefName: Joi.string().required(),
+      viceChiefName: Joi.string().allow(''),
+      place: Joi.string().allow(''),
+      pd: Joi.string().allow(''),
+      coach: Joi.string().allow(''),
+      borrowTime: Joi.string().allow(''),
+      chiefName: Joi.string().allow(''),
       name: Joi.string().required(),
       active: Joi.string().required(),
       file: Joi.object().required(),

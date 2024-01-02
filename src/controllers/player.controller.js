@@ -16,6 +16,15 @@ const getPlayers = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getPlayersByTeam = catchAsync(async (req, res) => {
+  const result = await playerService.queryPlayersByTeam({
+    limit: req.query.limit,
+    skip: req.query.skip,
+    teamId: req.query.teamId,
+  });
+  res.send(result);
+});
+
 const getPlayer = catchAsync(async (req, res) => {
   const player = await playerService.getPlayerById(req.params.playerId);
   const playerTeam = await teamService.getTeamById(player.teamId);
@@ -57,6 +66,7 @@ const getActivePlayers = catchAsync(async (req, res) => {
 module.exports = {
   createPlayer,
   getPlayers,
+  getPlayersByTeam,
   getPlayer,
   updatePlayer,
   deletePlayer,

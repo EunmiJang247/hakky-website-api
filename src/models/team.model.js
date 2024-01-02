@@ -5,19 +5,19 @@ const teamSchema = mongoose.Schema(
   {
     viceChiefName: {
       type: String,
-      required: true,
+      required: false,
     },
     place: {
       type: String,
-      required: true,
+      required: false,
     },
     pd: {
       type: String,
-      required: true,
+      required: false,
     },
     coach: {
       type: String,
-      required: true,
+      required: false,
     },
     name: {
       type: String,
@@ -25,11 +25,11 @@ const teamSchema = mongoose.Schema(
     },
     borrowTime: {
       type: String,
-      required: true,
+      required: false,
     },
     chiefName: {
       type: String,
-      required: true,
+      required: false,
     },
     active: {
       type: String,

@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { League } = require('../models');
+const { League, MainMenu, Division } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -62,6 +62,23 @@ const deleteLeagueById = async (leagueId) => {
   const league = await getLeagueById(leagueId);
   if (!league) {
     throw new ApiError(httpStatus.NOT_FOUND, 'League not found');
+  }
+  // 메인메뉴에 등록되어있다면 삭제 불가
+  const mainMenus = await MainMenu.find();
+  const menuCount = mainMenus[0].menus.reduce((acc, menu) => {
+    if (menu.id === leagueId) {
+      // eslint-disable-next-line no-param-reassign
+      acc = 1;
+    }
+    return acc;
+  }, 0);
+  if (Number(menuCount) > 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'MainMenu Registered');
+  }
+  // 디비전에 등록되어있다면 삭제 불가
+  const divisions = await Division.find({ leagueId });
+  if (divisions.length > 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Division Registered');
   }
   await league.remove();
   return league;
