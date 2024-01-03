@@ -10,7 +10,7 @@ router.route('/').post(auth('ADMIN'), validate(divisionValidation.createDivision
 router.route('/').get(validate(divisionValidation.getDivisions), divisionController.getDivisions);
 router
   .route('/:divisionId')
-  .get(auth('ADMIN'), validate(divisionValidation.getDivision), divisionController.getDivision)
+  .get(validate(divisionValidation.getDivision), divisionController.getDivision)
   .patch(auth('ADMIN'), validate(divisionValidation.updateDivision), divisionController.updateDivision)
   .delete(auth('ADMIN'), validate(divisionValidation.deleteDivision), divisionController.deleteDivision);
 
