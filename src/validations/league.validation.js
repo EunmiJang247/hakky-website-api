@@ -2,11 +2,8 @@ const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
 const createLeague = {
-  body: Joi.object().keys({
-    name: Joi.string().required(),
-    year: Joi.string().required(),
-    active: Joi.string().required(),
-    regulation: Joi.string().allow(''),
+  params: Joi.object().keys({
+    leagueId: Joi.string().custom(objectId),
   }),
 };
 

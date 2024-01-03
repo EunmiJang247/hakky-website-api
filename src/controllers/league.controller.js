@@ -16,6 +16,11 @@ const getLeagues = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getRegulation = catchAsync(async (req, res) => {
+  const result = await leagueService.queryRegulation(req.params.leagueId);
+  res.send(result);
+});
+
 const getActiveLeagues = catchAsync(async (req, res) => {
   const result = await leagueService.queryActiveLeagues();
   res.send(result);
@@ -42,6 +47,7 @@ const deleteLeague = catchAsync(async (req, res) => {
 module.exports = {
   createLeague,
   getLeagues,
+  getRegulation,
   getLeague,
   getActiveLeagues,
   updateLeague,

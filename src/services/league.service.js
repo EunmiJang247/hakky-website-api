@@ -24,6 +24,12 @@ const queryLeagues = async ({ limit, skip }) => {
   };
 };
 
+const queryRegulation = async (leagueId) => {
+  const league = await League.findById(leagueId);
+  const { regulation } = league;
+  return regulation;
+};
+
 const queryActiveLeagues = async () => {
   const teams = await League.find({ active: 'Y' });
   return teams;
@@ -87,6 +93,7 @@ const deleteLeagueById = async (leagueId) => {
 module.exports = {
   createLeague,
   queryLeagues,
+  queryRegulation,
   queryActiveLeagues,
   getLeagueById,
   updateLeagueById,

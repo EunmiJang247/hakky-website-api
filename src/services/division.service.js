@@ -505,6 +505,19 @@ const getAllDivisionsWithTeamId = async (teamId) => {
   return divisionScroe;
 };
 
+const getAllDivisionsWithPlayer = async (playerId) => {
+  const allDivisions = await Division.find({ playerScore: { $elemMatch: { playerId } } });
+  const divisionScroe = allDivisions.map((d) => {
+    const result = {
+      leagueId: d.leagueId,
+      name: d.name,
+      playerScore: d.playerScore,
+    };
+    return result;
+  });
+  return divisionScroe;
+};
+
 module.exports = {
   createDivision,
   queryDivisions,
@@ -513,4 +526,5 @@ module.exports = {
   deleteDivisionById,
   parseTournamentResult,
   getAllDivisionsWithTeamId,
+  getAllDivisionsWithPlayer,
 };

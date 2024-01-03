@@ -1,7 +1,8 @@
 const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { playerService, teamService } = require('../services');
+const { playerService, teamService, divisionService } = require('../services');
+const { League } = require('../models');
 
 const createPlayer = catchAsync(async (req, res) => {
   const player = await playerService.createPlayer(req.body);
@@ -22,6 +23,26 @@ const getPlayersByTeam = catchAsync(async (req, res) => {
     skip: req.query.skip,
     teamId: req.query.teamId,
   });
+  res.send(result);
+});
+
+const participatedDivisionsParser = async (participatedDivisions) => {
+  const league = await League.findById(participatedDivisions.leagueId);
+  const leagueName = league.name;
+  const leagueYear = league.year;
+  const result = {
+    leagueName,
+    leagueYear,
+    leagueId: participatedDivisions.leagueId,
+    name: participatedDivisions.name,
+    playerScore: participatedDivisions.playerScore,
+  };
+  return result;
+};
+
+const getPlayerScore = catchAsync(async (req, res) => {
+  const participatedDivisions = await divisionService.getAllDivisionsWithPlayer(req.params.playerId);
+  const result = await Promise.all(participatedDivisions.map(participatedDivisionsParser));
   res.send(result);
 });
 
@@ -67,6 +88,7 @@ module.exports = {
   createPlayer,
   getPlayers,
   getPlayersByTeam,
+  getPlayerScore,
   getPlayer,
   updatePlayer,
   deletePlayer,

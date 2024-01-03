@@ -10,9 +10,11 @@ router.route('/').post(validate(leagueValidation.createLeague), leagueController
 router.route('/').get(validate(leagueValidation.getLeagues), leagueController.getLeagues);
 router.route('/active').get(leagueController.getActiveLeagues);
 
+router.route('/regulation/:leagueId').get(validate(leagueValidation.createLeague), leagueController.getRegulation);
+
 router
   .route('/:leagueId')
-  .get(auth('ADMIN'), validate(leagueValidation.getLeague), leagueController.getLeague)
+  .get(validate(leagueValidation.getLeague), leagueController.getLeague)
   .patch(auth('ADMIN'), validate(leagueValidation.updateLeague), leagueController.updateLeague)
   .delete(auth('ADMIN'), validate(leagueValidation.deleteLeague), leagueController.deleteLeague);
 

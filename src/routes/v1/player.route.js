@@ -10,6 +10,7 @@ router.route('/').post(validate(playerValidation.createPlayer), playerController
 router.route('/').get(validate(playerValidation.getPlayers), playerController.getPlayers);
 router.route('/active').get(playerController.getActivePlayers);
 router.route('/byteam').get(validate(playerValidation.getPlayersByTeam), playerController.getPlayersByTeam);
+router.route('/score/:playerId').get(validate(playerValidation.getPlayer), playerController.getPlayerScore);
 router
   .route('/:playerId')
   .get(auth('ADMIN'), validate(playerValidation.getPlayer), playerController.getPlayer)
