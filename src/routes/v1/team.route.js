@@ -11,15 +11,15 @@ router.route('/').post(validate(teamValidation.createTeam), teamController.creat
 router.route('/active').get(teamController.getActiveTeams);
 router
   .route('/yearly-score/:teamId')
-  .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeamYearlyScore);
+  .get(validate(teamValidation.getTeam), teamController.getTeamYearlyScore);
 
 router
   .route('/players/:teamId')
-  .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeamPlayers);
+  .get(validate(teamValidation.getTeam), teamController.getTeamPlayers);
 
 router
   .route('/:teamId')
-  .get(auth('ADMIN'), validate(teamValidation.getTeam), teamController.getTeam)
+  .get(validate(teamValidation.getTeam), teamController.getTeam)
   .patch(auth('ADMIN'), validate(teamValidation.updateTeam), teamController.updateTeam)
   .delete(auth('ADMIN'), validate(teamValidation.deleteTeam), teamController.deleteTeam);
 

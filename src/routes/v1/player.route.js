@@ -13,7 +13,7 @@ router.route('/byteam').get(validate(playerValidation.getPlayersByTeam), playerC
 router.route('/score/:playerId').get(validate(playerValidation.getPlayer), playerController.getPlayerScore);
 router
   .route('/:playerId')
-  .get(auth('ADMIN'), validate(playerValidation.getPlayer), playerController.getPlayer)
+  .get(validate(playerValidation.getPlayer), playerController.getPlayer)
   .patch(auth('ADMIN'), validate(playerValidation.updatePlayer), playerController.updatePlayer)
   .delete(auth('ADMIN'), validate(playerValidation.deletePlayer), playerController.deletePlayer);
 

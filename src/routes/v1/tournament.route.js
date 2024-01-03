@@ -11,7 +11,7 @@ router.route('/').get(validate(tournamentValidation.getTournaments), tournamentC
 router.route('/calendar').get(validate(tournamentValidation.getTournamentsCalendar), tournamentController.getTournamentsCalendar);
 router
   .route('/:tournamentId')
-  .get(auth('ADMIN'), validate(tournamentValidation.getTournament), tournamentController.getTournament)
+  .get(validate(tournamentValidation.getTournament), tournamentController.getTournament)
   .patch(auth('ADMIN'), validate(tournamentValidation.updateTournament), tournamentController.updateTournament)
   .delete(auth('ADMIN'), validate(tournamentValidation.deleteTournaments), tournamentController.deleteTournament);
 

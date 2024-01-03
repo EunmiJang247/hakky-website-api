@@ -10,7 +10,7 @@ router.route('/').post(auth('ADMIN'), validate(youtubeValidation.createYoutube),
 router.route('/').get(validate(youtubeValidation.getYoutubes), youtubeController.getYoutubes);
 router
   .route('/:youtubeId')
-  .get(auth('ADMIN'), validate(youtubeValidation.getYoutube), youtubeController.getYoutube)
+  .get(validate(youtubeValidation.getYoutube), youtubeController.getYoutube)
   .patch(auth('ADMIN'), validate(youtubeValidation.updateYoutube), youtubeController.updateYoutube)
   .delete(auth('ADMIN'), validate(youtubeValidation.getYoutube), youtubeController.deleteYoutube);
 
