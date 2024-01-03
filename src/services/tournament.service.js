@@ -303,14 +303,14 @@ const tournamentParse = (req) => {
   req.body.optionsPlayersHome.forEach((playerHome) => {
     const index = players.findIndex(((player) => player.playerId === playerHome.playerId));
     if (index === -1) {
-      players.push({ playerId: playerHome.playerId, score: {} });
+      players.push({ playerId: playerHome.playerId, score: { goal: 0 } });
     }
   });
 
   req.body.optionsPlayersAway.forEach((playerHome) => {
     const index = players.findIndex(((player) => player.playerId === playerHome.playerId));
     if (index === -1) {
-      players.push({ playerId: playerHome.playerId, score: {} });
+      players.push({ playerId: playerHome.playerId, score: { goal: 0 } });
     }
   });
 
