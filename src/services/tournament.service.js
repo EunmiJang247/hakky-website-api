@@ -86,16 +86,19 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.goal);
       const playerName = player.name;
       optionCloned.goalPlayerName = playerName;
+      optionCloned.goalPlayerImage = player.file.tempUrl;
     }
     if (option.a1) {
       const player = await Player.findById(option.a1);
       const playerName = player.name;
       optionCloned.a1PlayerName = playerName;
+      optionCloned.a1PlayerImage = player.file.tempUrl;
     }
     if (option.a2) {
       const player = await Player.findById(option.a2);
       const playerName = player.name;
       optionCloned.a2PlayerName = playerName;
+      optionCloned.a2PlayerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));
@@ -105,16 +108,19 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.goal);
       const playerName = player.name;
       optionCloned.goalPlayerName = playerName;
+      optionCloned.goalPlayerImage = player.file.tempUrl;
     }
     if (option.a1) {
       const player = await Player.findById(option.a1);
       const playerName = player.name;
       optionCloned.a1PlayerName = playerName;
+      optionCloned.a1PlayerImage = player.file.tempUrl;
     }
     if (option.a2) {
       const player = await Player.findById(option.a2);
       const playerName = player.name;
       optionCloned.a2PlayerName = playerName;
+      optionCloned.a2PlayerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));
@@ -145,6 +151,7 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.no);
       const playerName = player.name;
       optionCloned.playerName = playerName;
+      optionCloned.playerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));
@@ -155,6 +162,7 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.no);
       const playerName = player.name;
       optionCloned.playerName = playerName;
+      optionCloned.playerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));
@@ -165,6 +173,7 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.goalie);
       const playerName = player.name;
       optionCloned.playerName = playerName;
+      optionCloned.playerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));
@@ -175,6 +184,7 @@ const tournamentSerializer = async (tournament) => {
       const player = await Player.findById(option.goalie);
       const playerName = player.name;
       optionCloned.playerName = playerName;
+      optionCloned.playerImage = player.file.tempUrl;
     }
     return optionCloned;
   }));

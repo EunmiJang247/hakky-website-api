@@ -24,8 +24,11 @@ const divisionSerializer = async (division) => {
   }));
   const teamScoreResult = await Promise.all(division.teamScore.map(async (t) => {
     const team = await Team.findById(t.teamId);
+    const teamLogo = team.file.tempUrl;
     const teamName = team.name;
-    return { teamId: t.teamId, teamName, score: t.score };
+    return {
+      teamId: t.teamId, teamName, score: t.score, teamLogo,
+    };
   }));
   const playerScoreResult = await Promise.all(division.playerScore.map(async (t) => {
     if (t.playerId) {
@@ -34,8 +37,9 @@ const divisionSerializer = async (division) => {
       const { position } = player;
       const teamFromServer = await Team.findById(player.teamId);
       const playerTeamName = teamFromServer.name;
+      const playerImage = player.file.tempUrl;
       return {
-        playerId: t.playerId, playerName, position, score: t.score, playerTeamName,
+        playerId: t.playerId, playerName, position, score: t.score, playerTeamName, playerImage,
       };
     }
   }));
