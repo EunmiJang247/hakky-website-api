@@ -11,6 +11,10 @@ const leagueSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    leagueType: {
+      type: String,
+      required: false,
+    },
     active: {
       type: String,
       required: true,
