@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.route('/').post(validate(playerValidation.createPlayer), playerController.createPlayer);
 router.route('/').get(validate(playerValidation.getPlayers), playerController.getPlayers);
+router.route('/all-active-player').get(validate(playerValidation.getAllActivePlayers), playerController.getAllActivePlayers);
 router.route('/active').get(playerController.getActivePlayers);
 router.route('/byteam').get(validate(playerValidation.getPlayersByTeam), playerController.getPlayersByTeam);
 router.route('/score/:playerId').get(validate(playerValidation.getPlayer), playerController.getPlayerScore);

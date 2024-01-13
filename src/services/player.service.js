@@ -24,6 +24,15 @@ const queryPlayers = async ({ limit, skip }) => {
   };
 };
 
+const queryAllActivePlayers = async ({ limit, skip, keywords }) => {
+  const players = await Player.find({ active: 'Y', name: { $regex: keywords } }).limit(limit).skip(skip).populate('teamId', 'name');
+  const count = await Player.find({ active: 'Y', name: { $regex: keywords } }).countDocuments();
+  return {
+    result: players,
+    count,
+  };
+};
+
 const queryPlayersByTeam = async ({ limit, skip, teamId }) => {
   const players = await Player.find({ teamId }).limit(limit).skip(skip);
   const count = await Player.find({ teamId }).countDocuments();
@@ -84,6 +93,7 @@ const deletePlayerById = async (playerId) => {
 module.exports = {
   createPlayer,
   queryPlayers,
+  queryAllActivePlayers,
   queryPlayersByTeam,
   queryActivePlayersWithTeamId,
   getPlayerById,

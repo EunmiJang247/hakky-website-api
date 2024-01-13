@@ -17,6 +17,15 @@ const getPlayers = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getAllActivePlayers = catchAsync(async (req, res) => {
+  const result = await playerService.queryAllActivePlayers({
+    keywords: req.query.keywords,
+    limit: req.query.limit,
+    skip: req.query.skip,
+  });
+  res.send(result);
+});
+
 const getPlayersByTeam = catchAsync(async (req, res) => {
   const result = await playerService.queryPlayersByTeam({
     limit: req.query.limit,
@@ -87,6 +96,7 @@ const getActivePlayers = catchAsync(async (req, res) => {
 module.exports = {
   createPlayer,
   getPlayers,
+  getAllActivePlayers,
   getPlayersByTeam,
   getPlayerScore,
   getPlayer,

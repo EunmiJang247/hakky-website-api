@@ -29,6 +29,14 @@ const getPlayers = {
   }),
 };
 
+const getAllActivePlayers = {
+  query: Joi.object().keys({
+    keywords: Joi.string().allow('').required(),
+    limit: Joi.number().required(),
+    skip: Joi.number().required(),
+  }),
+};
+
 const getPlayersByTeam = {
   query: Joi.object().keys({
     limit: Joi.number().required(),
@@ -67,6 +75,7 @@ module.exports = {
   createPlayer,
   getPlayer,
   getPlayers,
+  getAllActivePlayers,
   getPlayersByTeam,
   updatePlayer,
   deletePlayer,
