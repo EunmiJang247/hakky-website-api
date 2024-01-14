@@ -8,11 +8,32 @@ const ApiError = require('../utils/ApiError');
  * @param {Object} youtubeBody
  * @returns {Promise<Youtube>}
  */
-const createYoutube = async (youtubeBody) => Youtube.create(youtubeBody);
+const createYoutube = async (youtubeBody) => {
+  const res = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtubeBody.link}&key=${process.env.YOUTUBE_API_KEY}
+  &part=snippet&part=statistics`);
+
+  if (!res.data.items[0] || !res.data.items[0].snippet) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'youtube not found');
+  }
+  Youtube.create(youtubeBody);
+};
 
 const youtubeSerializer = async (youtube) => {
   const res = await axios.get(`https://www.googleapis.com/youtube/v3/videos?id=${youtube.link}&key=${process.env.YOUTUBE_API_KEY}
   &part=snippet&part=statistics`);
+
+  if (!res.data.items[0] || !res.data.items[0].snippet) {
+    return {
+      id: '',
+      createdAt: '',
+      link: '',
+      thumbnail: '',
+      title: '',
+      viewCount: '',
+      publishedAt: '',
+      likeCount: '',
+    };
+  }
 
   return {
     id: youtube._id,

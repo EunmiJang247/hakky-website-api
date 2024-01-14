@@ -11,7 +11,7 @@ const leagueSerializer = async (league) => {
   const leagueFromServer = await League.findById(league.id);
 
   let tournamentId;
-  if (leagueFromServer.leagueType === 'student') {
+  if (leagueFromServer.leagueType === 'student' && divisionsFromServer.length > 0) {
     const tournamentFromServer = await Tournament.find({ divisionId: divisionsFromServer[0]._id });
     if (tournamentFromServer.length > 0) {
       tournamentId = tournamentFromServer[0].id;
