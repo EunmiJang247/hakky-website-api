@@ -54,7 +54,7 @@ const youtubeSerializer = async (youtube) => {
  * @returns {Promise<QueryResult>}
  */
 const queryYoutubes = async ({ limit, skip }) => {
-  const youtubes = await Youtube.find().limit(limit).skip(skip);
+  const youtubes = await Youtube.find().sort({"_id": -1}).limit(limit).skip(skip);
   const result = await Promise.all(youtubes.map(youtubeSerializer));
 
   const count = await Youtube.countDocuments();
