@@ -7,6 +7,18 @@ const youtubeSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    thumbnail: {
+      type: String,
+      required: false,
+    },
+    title: {
+      type: String,
+      required: false,
+    },
+    publishedAt: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

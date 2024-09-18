@@ -15,7 +15,15 @@ const createYoutube = async (youtubeBody) => {
   if (!res.data.items[0] || !res.data.items[0].snippet) {
     throw new ApiError(httpStatus.NOT_FOUND, 'youtube not found');
   }
-  Youtube.create(youtubeBody);
+  const data = {
+    link: youtubeBody.link,
+    thumbnail: res.data.items[0].snippet.thumbnails.standard.url,
+    title: res.data.items[0].snippet.title,
+    viewCount: res.data.items[0].statistics.viewCount,
+    publishedAt: res.data.items[0].snippet.publishedAt,
+    likeCount: res.data.items[0].statistics.likeCount,
+  };
+  Youtube.create(data);
 };
 
 const youtubeSerializer = async (youtube) => {
@@ -64,6 +72,17 @@ const queryYoutubes = async ({ limit, skip }) => {
   };
 };
 
+const queryYoutubesMainPage = async ({ limit, skip }) => {
+  // 메인페이지에서 유튜브 가져오기
+  const youtubes = await Youtube.find().sort({ createdAt: -1 }).limit(limit).skip(skip);
+
+  const count = await Youtube.countDocuments();
+  return {
+    result: youtubes,
+    count,
+  };
+};
+
 /**
  * Get youtube by id
  * @param {ObjectId} id
@@ -108,4 +127,5 @@ module.exports = {
   getYoutubeById,
   updateYoutbeById,
   deleteYoutubeById,
+  queryYoutubesMainPage,
 };

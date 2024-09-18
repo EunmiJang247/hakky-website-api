@@ -16,6 +16,14 @@ const getYoutubes = catchAsync(async (req, res) => {
   res.send(result);
 });
 
+const getYoutubesMain = catchAsync(async (req, res) => {
+  const result = await youtubeService.queryYoutubesMainPage({
+    limit: req.query.limit,
+    skip: req.query.skip,
+  });
+  res.send(result);
+});
+
 const getYoutube = catchAsync(async (req, res) => {
   const youtube = await youtubeService.getYoutubeById(req.params.youtubeId);
   if (!youtube) {
@@ -40,4 +48,5 @@ module.exports = {
   getYoutube,
   updateYoutube,
   deleteYoutube,
+  getYoutubesMain,
 };
