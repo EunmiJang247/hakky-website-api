@@ -26,6 +26,7 @@ const getPlayers = {
   query: Joi.object().keys({
     limit: Joi.number().required(),
     skip: Joi.number().required(),
+    searchParam: Joi.string().allow(''),
   }),
 };
 

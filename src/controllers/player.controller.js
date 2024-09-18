@@ -13,6 +13,7 @@ const getPlayers = catchAsync(async (req, res) => {
   const result = await playerService.queryPlayers({
     limit: req.query.limit,
     skip: req.query.skip,
+    searchParam: req.query.searchParam,
   });
   res.send(result);
 });

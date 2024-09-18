@@ -15,9 +15,15 @@ const createTeam = async (teamBody) => Team.create(teamBody);
  * @param {Object} options - Query options
  * @returns {Promise<QueryResult>}
  */
-const queryTeams = async ({ limit, skip }) => {
-  const teams = await Team.find().sort({ _id: -1 }).limit(limit).skip(skip);
-  const count = await Team.countDocuments();
+const queryTeams = async ({ limit, skip, searchParam }) => {
+  const searchQuery = searchParam
+    ? { name: { $regex: searchParam, $options: 'i' } }
+    : {};
+  const teams = await Team.find(searchQuery)
+    .sort({ _id: -1 })
+    .limit(limit)
+    .skip(skip);
+  const count = await Team.countDocuments(searchQuery);
   return {
     result: teams,
     count,

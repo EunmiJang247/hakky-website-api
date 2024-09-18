@@ -13,6 +13,7 @@ const getTeams = catchAsync(async (req, res) => {
   const result = await teamService.queryTeams({
     limit: req.query.limit,
     skip: req.query.skip,
+    searchParam: req.query.searchParam,
   });
   res.send(result);
 });

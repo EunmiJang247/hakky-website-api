@@ -15,13 +15,16 @@ const createPlayer = async (playerBody) => Player.create(playerBody);
  * @param {Object} options - Query options
  * @returns {Promise<QueryResult>}
  */
-const queryPlayers = async ({ limit, skip }) => {
-  const players = await Player.find()
+const queryPlayers = async ({ limit, skip, searchParam }) => {
+  const searchQuery = searchParam
+    ? { name: { $regex: searchParam, $options: 'i' } }
+    : {};
+  const players = await Player.find(searchQuery)
     .sort({ createdAt: -1 })
     .limit(limit)
     .skip(skip)
     .populate('teamId', 'name');
-  const count = await Player.countDocuments();
+  const count = await Player.countDocuments(searchQuery);
   return {
     result: players,
     count,
