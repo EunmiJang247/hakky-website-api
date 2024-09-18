@@ -16,7 +16,7 @@ const createTeam = async (teamBody) => Team.create(teamBody);
  * @returns {Promise<QueryResult>}
  */
 const queryTeams = async ({ limit, skip }) => {
-  const teams = await Team.find().limit(limit).skip(skip);
+  const teams = await Team.find().sort({ _id: -1 }).limit(limit).skip(skip);
   const count = await Team.countDocuments();
   return {
     result: teams,

@@ -16,7 +16,11 @@ const createPlayer = async (playerBody) => Player.create(playerBody);
  * @returns {Promise<QueryResult>}
  */
 const queryPlayers = async ({ limit, skip }) => {
-  const players = await Player.find().limit(limit).skip(skip).populate('teamId', 'name');
+  const players = await Player.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(skip)
+    .populate('teamId', 'name');
   const count = await Player.countDocuments();
   return {
     result: players,

@@ -56,7 +56,10 @@ const divisionSerializer = async (division) => {
 };
 
 const queryDivisions = async ({ limit, skip }) => {
-  const divisions = await Division.find().limit(limit).skip(skip);
+  const divisions = await Division.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(skip);
   const count = await Division.countDocuments();
   const result = await Promise.all(divisions.map(divisionSerializer));
   return {

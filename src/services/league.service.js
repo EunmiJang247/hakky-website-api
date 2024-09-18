@@ -16,10 +16,13 @@ const createLeague = async (teamBody) => League.create(teamBody);
  * @returns {Promise<QueryResult>}
  */
 const queryLeagues = async ({ limit, skip }) => {
-  const teams = await League.find().limit(limit).skip(skip);
+  const leagues = await League.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(skip);
   const count = await League.countDocuments();
   return {
-    result: teams,
+    result: leagues,
     count,
   };
 };
