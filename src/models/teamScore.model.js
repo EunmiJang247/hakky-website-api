@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { toJSON, paginate } = require('./plugins');
 
-const leagueSchema = mongoose.Schema(
+const teamScoreSchema = mongoose.Schema(
   {
     teamId: {
       type: mongoose.Types.ObjectId,
@@ -55,12 +55,12 @@ const leagueSchema = mongoose.Schema(
 );
 
 // add plugin that converts mongoose to json
-leagueSchema.plugin(toJSON);
-leagueSchema.plugin(paginate);
+teamScoreSchema.plugin(toJSON);
+teamScoreSchema.plugin(paginate);
 
 /**
  * @typedef Token
  */
-const League = mongoose.model('League', leagueSchema);
+const TeamScore = mongoose.model('TeamScore', teamScoreSchema);
 
-module.exports = League;
+module.exports = TeamScore;

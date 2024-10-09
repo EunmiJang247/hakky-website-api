@@ -307,260 +307,252 @@ const deleteTournamentById = async (tournamentId) => {
 };
 
 const tournamentParse = (req) => {
-  const players = [];
-  const teams = [];
+  const players = []; // 선수들의 점수를 기록할 배열
+  const teams = []; // 팀들의 점수를 기록할 배열
 
+  // 홈팀의 선수 정보를 가져옴
   req.body.optionsPlayersHome.forEach((playerHome) => {
-    const index = players.findIndex(((player) => player.playerId === playerHome.playerId));
+    const index = players.findIndex(((player) => player.playerId === playerHome.id));
     if (index === -1) {
-      players.push({ playerId: playerHome.playerId, score: { goal: 0 } });
+      // 기존에 기록된 선수가 없으면 새로운 선수 추가, 초기 골 값 0
+      players.push({ playerId: playerHome.id, score: { goal: 0 } });
     }
   });
-
-  req.body.optionsPlayersAway.forEach((playerHome) => {
-    const index = players.findIndex(((player) => player.playerId === playerHome.playerId));
+  // 어웨이팀의 선수 정보를 가져옴
+  req.body.optionsPlayersAway.forEach((playerAway) => {
+    const index = players.findIndex(((player) => player.playerId === playerAway.id));
     if (index === -1) {
-      players.push({ playerId: playerHome.playerId, score: { goal: 0 } });
+      // 기존에 기록된 선수가 없으면 새로운 선수 추가, 초기 골 값 0
+      players.push({ playerId: playerAway.id, score: { goal: 0 } });
     }
   });
-
+  // 홈팀의 팀 정보
   if (req.body.homeTeamId) {
     const index = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
     if (index === -1) {
+      // 팀이 기록되지 않았다면 새로운 팀을 추가, 초기 골 값 0
       teams.push({ teamId: req.body.homeTeamId, score: { goal: 0 } });
     }
   }
-
+  // 어웨이팀의 팀 정보
   if (req.body.awayTeamId) {
     const index = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
     if (index === -1) {
+      // 팀이 기록되지 않았다면 새로운 팀을 추가, 초기 골 값 0
       teams.push({ teamId: req.body.awayTeamId, score: { goal: 0 } });
     }
   }
-
+  // !! 홈팀의 골 기록을 처리
   req.body.optionsGoalsHome.forEach((goalHome) => {
+    // 연장전 골(OT) 처리
+    // console.log(req.body.optionsGoalsHome)는 아래와 같음.
+    // {
+    //   p: 'P1',
+    //   time: '',
+    //   goal: '659593adc55396557e81e28e',
+    //   a1: '',
+    //   a2: ''
+    // }
     if (goalHome.p === 'OT' && goalHome.goal !== undefined) {
       if (goalHome.goal) {
-        const index = players.findIndex(((player) => player.playerId === goalHome.goal));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
-        // 홈팀에서 골을 넣은 경우 어웨이 팀에 ga를 올리기.
+        const indexplayer = players.findIndex(((player) => player.playerId === goalHome.goal));
+        const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
         const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalHome.goal, score: { goal: 1 } });
-        } else {
-          const goal = players[index].score.goal ? players[index].score.goal + 1 : 1;
-          players[index].score.goal = goal;
-        }
+        // 골을 넣은 선수의 골에 1추가
+        players[indexplayer].score.goal = players[indexplayer].score.goal ? players[indexplayer].score.goal + 1 : 1;
 
-        if (indexTeam === -1) {
+        // 홈팀의 연장전 골 기록
+        if (indexHomeTeam === -1) {
           teams.push({ teamId: req.body.homeTeamId, score: { otGoal: 1 } });
         } else {
-          const otGoalScroe = teams[indexTeam].score.otGoal ? teams[indexTeam].score.otGoal + 1 : 1;
-          teams[indexTeam].score.otGoal = otGoalScroe;
+          teams[indexHomeTeam].score.otGoal = teams[indexHomeTeam].score.otGoal ? teams[indexHomeTeam].score.otGoal + 1 : 1;
 
-          const goalsAgainstScore = teams[indexAwayTeam].score.goalsAgainst ? teams[indexAwayTeam].score.goalsAgainst + 1 : 1;
-          teams[indexAwayTeam].score.goalsAgainst = goalsAgainstScore;
+          // 홈팀이 골을 넣었을 경우 어웨이팀의 실점(goalsAgainst)을 기록
+          if (indexAwayTeam !== -1) {
+            teams[indexAwayTeam].score.goalsAgainst = teams[indexAwayTeam].score.goalsAgainst ? teams[indexAwayTeam].score.goalsAgainst + 1 : 1;
+          }
         }
       }
     } else {
+      // 연장전에 넣은 골이 아닐 때
       if (goalHome.goal) {
-        const index = players.findIndex(((player) => player.playerId === goalHome.goal));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
-        // 홈팀에서 골을 넣은 경우 어웨이 팀에 ga를 올리기.
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalHome.goal));
+        const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
         const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalHome.goal, score: { goal: 1 } });
-        } else {
-          const goal = players[index].score.goal ? players[index].score.goal + 1 : 1;
-          players[index].score.goal = goal;
-        }
+        // 선수의 goal스코어에 1을 더함
+        players[indexPlayer].score.goal = players[indexPlayer].score.goal ? players[indexPlayer].score.goal + 1 : 1;
 
-        if (indexTeam === -1) {
+        if (indexHomeTeam === -1) {
+          // 홈팀이 등록되어있지 않으면 등록하고 goal에 1을 넣음
           teams.push({ teamId: req.body.homeTeamId, score: { goal: 1 } });
         } else {
-          const goalTeam = teams[indexTeam].score.goal ? teams[indexTeam].score.goal + 1 : 1;
-          teams[indexTeam].score.goal = goalTeam;
+          // 등록되어있으면 goal에 1을 더함
+          teams[indexHomeTeam].score.goal = teams[indexHomeTeam].score.goal ? teams[indexHomeTeam].score.goal + 1 : 1;
 
-          const goalsAgainstScore = teams[indexAwayTeam].score.goalsAgainst ? teams[indexAwayTeam].score.goalsAgainst + 1 : 1;
-          teams[indexAwayTeam].score.goalsAgainst = goalsAgainstScore;
+          if (indexAwayTeam !== -1) {
+            // 어웨이 팀에는 먹힌골(goalsAgainst)에 1을 더함
+            teams[indexAwayTeam].score.goalsAgainst = teams[indexAwayTeam].score.goalsAgainst ? teams[indexAwayTeam].score.goalsAgainst + 1 : 1;
+          }
         }
       }
       if (goalHome.a1) {
-        const index = players.findIndex(((player) => player.playerId === goalHome.a1));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
+        // 어시스트 a1이 있으면
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalHome.a1));
+        const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalHome.a1, score: { a1: 1 } });
-        } else {
-          const a1 = players[index].score.a1 ? players[index].score.a1 + 1 : 1;
-          players[index].score.a1 = a1;
-        }
+        // 선수의 a1에 1점을 올림
+        players[indexPlayer].score.a1 = players[indexPlayer].score.a1 ? players[indexPlayer].score.a1 + 1 : 1;
 
-        if (indexTeam === -1) {
+        // 홈팀에 a1스코어를 1점을 올림
+        if (indexHomeTeam === -1) {
           teams.push({ teamId: req.body.homeTeamId, score: { a1: 1 } });
         } else {
-          const goalTeam = teams[indexTeam].score.a1 ? teams[indexTeam].score.a1 + 1 : 1;
-          teams[indexTeam].score.a1 = goalTeam;
+          teams[indexHomeTeam].score.a1 = teams[indexHomeTeam].score.a1 ? teams[indexHomeTeam].score.a1 + 1 : 1;
         }
       }
 
       if (goalHome.a2) {
-        const index = players.findIndex(((player) => player.playerId === goalHome.a2));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
+        // a2가 있을 때
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalHome.a2));
+        const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalHome.a2, score: { a2: 1 } });
-        } else {
-          const a2 = players[index].score.a2 ? players[index].score.a2 + 1 : 1;
-          players[index].score.a2 = a2;
-        }
+        players[indexPlayer].score.a2 = players[indexPlayer].score.a2 ? players[indexPlayer].score.a2 + 1 : 1;
 
-        if (indexTeam === -1) {
+        // 선수의 a2에 1점을 올림
+        if (indexHomeTeam === -1) {
           teams.push({ teamId: req.body.homeTeamId, score: { a2: 1 } });
         } else {
-          const goalTeam = teams[indexTeam].score.a2 ? teams[indexTeam].score.a2 + 1 : 1;
-          teams[indexTeam].score.a2 = goalTeam;
+          // 홈팀의 a2를 늘림
+          teams[indexHomeTeam].score.a2 = teams[indexHomeTeam].score.a2 ? teams[indexHomeTeam].score.a2 + 1 : 1;
         }
       }
     }
   });
 
+  // 어웨이 팀의 골을 계산하는 경우
   req.body.optionsGoalsAway.forEach((goalAway) => {
     if (goalAway.p === 'OT' && goalAway.goal !== undefined) {
+    // 연장전 골(OT) 처리
+    // console.log(req.body.optionsGoalsHome)는 아래와 같음.
+    // {
+    //   p: 'P1',
+    //   time: '',
+    //   goal: '659593adc55396557e81e28e',
+    //   a1: '',
+    //   a2: ''
+    // }
       if (goalAway.goal) {
-        const index = players.findIndex(((player) => player.playerId === goalAway.goal));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
-        // 홈팀에서 골을 넣은 경우 홈 팀에 ga를 올리기.
+        // 어웨이 팀이 골을 득점하면
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalAway.goal));
+        const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
         const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalAway.goal, score: { goal: 1 } });
-        } else {
-          const goal = players[index].score.goal ? players[index].score.goal + 1 : 1;
-          players[index].score.goal = goal;
-        }
+        players[indexPlayer].score.goal = players[indexPlayer].score.goal ? players[indexPlayer].score.goal + 1 : 1;
 
-        if (indexTeam === -1) {
+        if (indexAwayTeam === -1) {
+          // 어웨이 팀이 등록안되어 있으면 otGoal에 1일 넣고
           teams.push({ teamId: req.body.awayTeamId, score: { otGoal: 1 } });
         } else {
-          const otGoalScore = teams[indexTeam].score.otGoal ? teams[indexTeam].score.otGoal + 1 : 1;
-          teams[indexTeam].score.otGoal = otGoalScore;
+          // 등록이 되어있으면 otGoal에 1을 추가한다
+          teams[indexAwayTeam].score.otGoal = teams[indexAwayTeam].score.otGoal ? teams[indexAwayTeam].score.otGoal + 1 : 1;
 
-          const goalsAgainstScore = teams[indexHomeTeam].score.goalsAgainst ? teams[indexHomeTeam].score.goalsAgainst + 1 : 1;
-          teams[indexHomeTeam].score.goalsAgainst = goalsAgainstScore;
+          if (indexHomeTeam !== -1) {
+            // 홈팀에는 goalsAgainst에 1을 추가한다
+            teams[indexHomeTeam].score.goalsAgainst = teams[indexHomeTeam].score.goalsAgainst ? teams[indexHomeTeam].score.goalsAgainst + 1 : 1;
+          }
         }
       }
     } else {
+      // 연장전 골이 아니면
       if (goalAway.goal) {
-        const index = players.findIndex(((player) => player.playerId === goalAway.goal));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
-        // 홈팀에서 골을 넣은 경우 홈 팀에 ga를 올리기.
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalAway.goal));
+        const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
         const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalAway.goal, score: { goal: 1 } });
-        } else {
-          const goal = players[index].score.goal ? players[index].score.goal + 1 : 1;
-          players[index].score.goal = goal;
-        }
+        // 플레이어에게 goal + 1을 함
+        players[indexPlayer].score.goal = players[indexPlayer].score.goal ? players[indexPlayer].score.goal + 1 : 1;
 
-        if (indexTeam === -1) {
+        if (indexAwayTeam === -1) {
+          // 어웨이 팀이 없으면 배열에 추가해주고
           teams.push({ teamId: req.body.awayTeamId, score: { goal: 1 } });
         } else {
-          const goalsAgainstScore = teams[indexHomeTeam].score.goalsAgainst ? teams[indexHomeTeam].score.goalsAgainst + 1 : 1;
-          const goalTeam = teams[indexTeam].score.goal ? teams[indexTeam].score.goal + 1 : 1;
-          teams[indexTeam].score.goal = goalTeam;
-          teams[indexHomeTeam].score.goalsAgainst = goalsAgainstScore;
+          // 어웨이 팀 배열이 있으면 어웨이 팀 goal에 1을 추가
+          teams[indexAwayTeam].score.goal = teams[indexAwayTeam].score.goal ? teams[indexAwayTeam].score.goal + 1 : 1;
+
+          if (indexHomeTeam !== -1) {
+            // 홈팀에는 goalsAgainst을 1 추가한다
+            teams[indexHomeTeam].score.goalsAgainst = teams[indexHomeTeam].score.goalsAgainst ? teams[indexHomeTeam].score.goalsAgainst + 1 : 1;
+          }
         }
       }
       if (goalAway.a1) {
-        const index = players.findIndex(((player) => player.playerId === goalAway.a1));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
+        // 어웨이팀 a1이 있으면
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalAway.a1));
+        const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalAway.a1, score: { a1: 1 } });
-        } else {
-          const a1 = players[index].score.a1 ? players[index].score.a1 + 1 : 1;
-          players[index].score.a1 = a1;
-        }
+        // 선수에 a1을 추가
+        players[indexPlayer].score.a1 = players[indexPlayer].score.a1 ? players[indexPlayer].score.a1 + 1 : 1;
 
-        if (indexTeam === -1) {
+        if (indexAwayTeam === -1) {
           teams.push({ teamId: req.body.awayTeamId, score: { a1: 1 } });
         } else {
-          const goalTeam = teams[indexTeam].score.a1 ? teams[indexTeam].score.a1 + 1 : 1;
-          teams[indexTeam].score.a1 = goalTeam;
+          teams[indexAwayTeam].score.a1 = teams[indexAwayTeam].score.a1 ? teams[indexAwayTeam].score.a1 + 1 : 1;
         }
       }
 
       if (goalAway.a2) {
-        const index = players.findIndex(((player) => player.playerId === goalAway.a2));
-        const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
+        // 어웨이팀 a2발생한 경우
+        const indexPlayer = players.findIndex(((player) => player.playerId === goalAway.a2));
+        const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
-        if (index === -1) {
-          players.push({ playerId: goalAway.a2, score: { a2: 1 } });
-        } else {
-          const a2 = players[index].score.a2 ? players[index].score.a2 + 1 : 1;
-          players[index].score.a2 = a2;
-        }
+        players[indexPlayer].score.a2 = players[indexPlayer].score.a2 ? players[indexPlayer].score.a2 + 1 : 1;
 
-        if (indexTeam === -1) {
+        if (indexAwayTeam === -1) {
           teams.push({ teamId: req.body.awayTeamId, score: { a2: 1 } });
         } else {
-          const goalTeam = teams[indexTeam].score.a2 ? teams[indexTeam].score.a2 + 1 : 1;
-          teams[indexTeam].score.a2 = goalTeam;
+          teams[indexAwayTeam].score.a2 = teams[indexAwayTeam].score.a2 ? teams[indexAwayTeam].score.a2 + 1 : 1;
         }
       }
     }
   });
 
   req.body.optionPaneltiesHome.forEach((paneltyHome) => {
+    // 홈팀의 패널티가 발생한 경우
     if (paneltyHome.no) {
-      const index = players.findIndex(((player) => player.playerId === paneltyHome.no));
-      const indexTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
+      const indexPlayer = players.findIndex(((player) => player.playerId === paneltyHome.no));
+      const indexHomeTeam = teams.findIndex(((team) => team.teamId === req.body.homeTeamId));
 
-      if (index === -1) {
-        players.push({ playerId: paneltyHome.no, score: { penaltyMin: Number(paneltyHome.min), penaltyCount: 1 } });
-      } else {
-        const penaltyMin = players[index].score.penaltyMin ? Number(players[index].score.penaltyMin) + Number(paneltyHome.min) : Number(paneltyHome.min);
-        const penaltyCount = players[index].score.penaltyCount ? Number(players[index].score.penaltyCount) + 1 : 1;
-        players[index].score.penaltyMin = penaltyMin;
-        players[index].score.penaltyCount = penaltyCount;
-      }
+      // 선수에 penaltyMin과 penaltyCount을 추가한다
+      players[indexPlayer].score.penaltyMin = players[indexPlayer].score.penaltyMin ? Number(players[indexPlayer].score.penaltyMin) + Number(paneltyHome.min) : Number(paneltyHome.min);
+      players[indexPlayer].score.penaltyCount = players[indexPlayer].score.penaltyCount ? Number(players[indexPlayer].score.penaltyCount) + 1 : 1;
 
-      if (indexTeam === -1) {
+      if (indexHomeTeam === -1) {
         teams.push({ teamId: req.body.homeTeamId, score: { penaltyMin: Number(paneltyHome.min) } });
       } else {
-        const penaltyMin = teams[indexTeam].score.penaltyMin ? Number(teams[indexTeam].score.penaltyMin) + Number(paneltyHome.min) : Number(paneltyHome.min);
-        const penaltyCount = teams[indexTeam].score.penaltyCount ? Number(teams[indexTeam].score.penaltyCount) + 1 : 1;
-        teams[indexTeam].score.penaltyMin = penaltyMin;
-        teams[indexTeam].score.penaltyCount = penaltyCount;
+        // 홈 팀에 penaltyMin와 penaltyCount을 추가한다
+        teams[indexHomeTeam].score.penaltyMin = teams[indexHomeTeam].score.penaltyMin ? Number(teams[indexHomeTeam].score.penaltyMin) + Number(paneltyHome.min) : Number(paneltyHome.min);
+        teams[indexHomeTeam].score.penaltyCount = teams[indexHomeTeam].score.penaltyCount ? Number(teams[indexHomeTeam].score.penaltyCount) + 1 : 1;
       }
     }
   });
 
   req.body.optionPaneltiesAway.forEach((paneltyAway) => {
+    // 어웨이 팀에 패널티가 발생한 경우
     if (paneltyAway.no) {
-      const index = players.findIndex(((player) => player.playerId === paneltyAway.no));
-      const indexTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
+      const indexPlayer = players.findIndex(((player) => player.playerId === paneltyAway.no));
+      const indexAwayTeam = teams.findIndex(((team) => team.teamId === req.body.awayTeamId));
 
-      if (index === -1) {
-        players.push({ playerId: paneltyAway.no, score: { penaltyMin: Number(paneltyAway.min), penaltyCount: 1 } });
-      } else {
-        const penaltyMin = players[index].score.penaltyMin ? Number(players[index].score.penaltyMin) + Number(paneltyAway.min) : Number(paneltyAway.min);
-        const penaltyCount = players[index].score.penaltyCount ? Number(players[index].score.penaltyCount) + 1 : 1;
-        players[index].score.penaltyMin = penaltyMin;
-        players[index].score.penaltyCount = penaltyCount;
-      }
+      // 플레이어에 penaltyMin, penaltyCount를 더함.
+      players[indexPlayer].score.penaltyMin = players[indexPlayer].score.penaltyMin ? Number(players[indexPlayer].score.penaltyMin) + Number(paneltyAway.min) : Number(paneltyAway.min);
+      players[indexPlayer].score.penaltyCount = players[indexPlayer].score.penaltyCount ? Number(players[indexPlayer].score.penaltyCount) + 1 : 1;
 
-      if (indexTeam === -1) {
+      if (indexAwayTeam === -1) {
         teams.push({ teamId: req.body.awayTeamId, score: { penaltyMin: Number(paneltyAway.min), penaltyCount: 1 } });
       } else {
-        const penaltyMin = teams[indexTeam].score.penaltyMin ? Number(teams[indexTeam].score.penaltyMin) + Number(paneltyAway.min) : Number(paneltyAway.min);
-        const penaltyCount = teams[indexTeam].score.penaltyCount ? Number(teams[indexTeam].score.penaltyCount) + 1 : 1;
-        teams[indexTeam].score.penaltyMin = penaltyMin;
-        teams[indexTeam].score.penaltyCount = penaltyCount;
+        teams[indexAwayTeam].score.penaltyMin = teams[indexAwayTeam].score.penaltyMin ? Number(teams[indexAwayTeam].score.penaltyMin) + Number(paneltyAway.min) : Number(paneltyAway.min);
+        teams[indexAwayTeam].score.penaltyCount = teams[indexAwayTeam].score.penaltyCount ? Number(teams[indexAwayTeam].score.penaltyCount) + 1 : 1;
       }
     }
   });
